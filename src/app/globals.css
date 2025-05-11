@@ -2,20 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 98.82%;
+    --foreground: 0 0% 9.02%;
+    --card: 0 0% 98.82%;
+    --card-foreground: 0 0% 9.02%;
+    --popover: 0 0% 98.82%;
+    --popover-foreground: 0 0% 32.16%;
+    --primary: 151.34 39.64% 66.86%;
+    --primary-foreground: 156 7.25% 13.53%;
+    --secondary: 0 0% 99.22%;
+    --secondary-foreground: 0 0% 9.02%;
+    --muted: 0 0% 92.94%;
+    --muted-foreground: 0 0% 12.55%;
+    --accent: 0 0% 92.94%;
+    --accent-foreground: 0 0% 12.55%;
+    --destructive: 9.82 49.55% 43.53%;
+    --destructive-foreground: 0 33.33% 99.41%;
+    --border: 0 0% 87.45%;
+    --input: 0 0% 96.47%;
+    --ring: 151.34 39.64% 66.86%;
+    --chart-1: 151.34 39.64% 66.86%;
+    --chart-2: 217.17 55.12% 59.8%;
+    --chart-3: 258.26 53.49% 66.27%;
+    --chart-4: 37.71 55.12% 50.2%;
+    --chart-5: 160.4 50.25% 39.41%;
+    --sidebar: 0 0% 98.82%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --font-sans: Outfit, sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: monospace;
+    --radius: 0.5rem;
+    --shadow-2xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
+    --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
+    --shadow-sm: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+    --shadow: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+    --shadow-md: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 2px 4px -1px hsl(0 0% 0% / 0.17);
+    --shadow-lg: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 4px 6px -1px hsl(0 0% 0% / 0.17);
+    --shadow-xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 8px 10px -1px hsl(0 0% 0% / 0.17);
+    --shadow-2xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.43);
+    --tracking-normal: 0.025em;
+    --sidebar-background: 0 0% 98%;
+  }
+
+  .dark {
+    --background: 0 0% 7.06%;
+    --foreground: 217.5 18.18% 91.37%;
+    --card: 0 0% 9.02%;
+    --card-foreground: 217.5 18.18% 91.37%;
+    --popover: 0 0% 14.12%;
+    --popover-foreground: 0 0% 66.27%;
+    --primary: 155.17 59.18% 19.22%;
+    --primary-foreground: 154.29 12.28% 88.82%;
+    --secondary: 0 0% 14.12%;
+    --secondary-foreground: 0 0% 98.04%;
+    --muted: 0 0% 12.16%;
+    --muted-foreground: 0 0% 63.53%;
+    --accent: 0 0% 19.22%;
+    --accent-foreground: 0 0% 98.04%;
+    --destructive: 6.49 35.24% 20.59%;
+    --destructive-foreground: 20 7.32% 91.96%;
+    --border: 0 0% 16.08%;
+    --input: 0 0% 14.12%;
+    --ring: 141.82 41.12% 58.04%;
+    --chart-1: 141.82 41.12% 58.04%;
+    --chart-2: 213.26 56.1% 67.84%;
+    --chart-3: 255.22 55.37% 76.27%;
+    --chart-4: 43.26 57.85% 56.27%;
+    --chart-5: 172.28 39.92% 50.39%;
+    --sidebar: 0 0% 7.06%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --font-sans: Outfit, sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: monospace;
+    --radius: 0.5rem;
+    --shadow-2xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
+    --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
+    --shadow-sm: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+    --shadow: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+    --shadow-md: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 2px 4px -1px hsl(0 0% 0% / 0.17);
+    --shadow-lg: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 4px 6px -1px hsl(0 0% 0% / 0.17);
+    --shadow-xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.17),
+      0px 8px 10px -1px hsl(0 0% 0% / 0.17);
+    --shadow-2xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.43);
+    --sidebar-background: 240 5.9% 10%;
+  }
+
+  body {
+    letter-spacing: var(--tracking-normal);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
