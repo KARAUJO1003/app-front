@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -14,12 +21,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ArrowLeft, Calendar, CheckCircle2, Clock, DollarSign, Edit, Share2, Trash2, Users } from "lucide-react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  ArrowLeft,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  DollarSign,
+  Edit,
+  Share2,
+  Trash2,
+  Users,
+} from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 export default function MetaDetalhes({ params }: { params: { id: string } }) {
   const [parcelas, setParcelas] = useState([
@@ -143,21 +160,24 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
       responsavel: "ambos",
       dataPagamento: null,
     },
-  ])
+  ]);
 
-  const [parcelaAtual, setParcelaAtual] = useState<any>(null)
-  const [valorPago, setValorPago] = useState("")
+  const [parcelaAtual, setParcelaAtual] = useState<any>(null);
+  const [valorPago, setValorPago] = useState("");
 
-  const totalParcelas = parcelas.length
-  const parcelasPagas = parcelas.filter((p) => p.status === "Paga").length
-  const valorTotal = parcelas.reduce((acc, p) => acc + p.valor, 0)
-  const valorPagoTotal = parcelas.reduce((acc, p) => acc + (p.valorPago || 0), 0)
-  const progresso = (parcelasPagas / totalParcelas) * 100
+  const totalParcelas = parcelas.length;
+  const parcelasPagas = parcelas.filter((p) => p.status === "Paga").length;
+  const valorTotal = parcelas.reduce((acc, p) => acc + p.valor, 0);
+  const valorPagoTotal = parcelas.reduce(
+    (acc, p) => acc + (p.valorPago || 0),
+    0
+  );
+  const progresso = (parcelasPagas / totalParcelas) * 100;
 
   const handleMarcarPago = (parcela: any) => {
-    setParcelaAtual(parcela)
-    setValorPago(parcela.valor.toString())
-  }
+    setParcelaAtual(parcela);
+    setValorPago(parcela.valor.toString());
+  };
 
   const confirmarPagamento = () => {
     if (parcelaAtual) {
@@ -168,32 +188,41 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
             status: "Paga",
             valorPago: Number.parseFloat(valorPago),
             dataPagamento: new Date().toLocaleDateString("pt-BR"),
-          }
+          };
         }
-        return p
-      })
+        return p;
+      });
 
-      setParcelas(novasParcelas)
-      setParcelaAtual(null)
+      setParcelas(novasParcelas);
+      setParcelaAtual(null);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex items-center mb-6">
         <Link href="/">
-          <Button variant="ghost" size="sm">
+          <Button
+            variant="ghost"
+            size="sm"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
           </Button>
         </Link>
         <h1 className="text-2xl font-bold ml-4">Viagem de Férias</h1>
         <div className="ml-auto flex space-x-2">
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+          >
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </Button>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+          >
             <Share2 className="mr-2 h-4 w-4" />
             Compartilhar
           </Button>
@@ -205,7 +234,9 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
           <Card>
             <CardHeader>
               <CardTitle>Resumo da Meta</CardTitle>
-              <CardDescription>Acompanhe o progresso da sua meta financeira</CardDescription>
+              <CardDescription>
+                Acompanhe o progresso da sua meta financeira
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
@@ -226,8 +257,12 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                         <DollarSign className="h-6 w-6 text-green-700 dark:text-green-300" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Valor Total</p>
-                        <p className="text-2xl font-bold">R$ {valorTotal.toFixed(2)}</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Valor Total
+                        </p>
+                        <p className="text-2xl font-bold">
+                          R$ {valorTotal.toFixed(2)}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -240,8 +275,12 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                         <CheckCircle2 className="h-6 w-6 text-blue-700 dark:text-blue-300" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Valor Acumulado</p>
-                        <p className="text-2xl font-bold">R$ {valorPagoTotal.toFixed(2)}</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Valor Acumulado
+                        </p>
+                        <p className="text-2xl font-bold">
+                          R$ {valorPagoTotal.toFixed(2)}
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -250,16 +289,23 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Categoria</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Categoria
+                  </p>
                   <div className="flex items-center">
-                    <Badge variant="outline" className="mr-2">
+                    <Badge
+                      variant="outline"
+                      className="mr-2"
+                    >
                       Viagem
                     </Badge>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Frequência</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Frequência
+                  </p>
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
                     <span>Mensal (todo dia 10)</span>
@@ -267,12 +313,16 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Valor por Parcela</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Valor por Parcela
+                  </p>
                   <p className="font-medium">R$ 500,00</p>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">Participantes</p>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Participantes
+                  </p>
                   <div className="flex items-center">
                     <div className="flex -space-x-2">
                       <Avatar className="h-8 w-8 border-2 border-background">
@@ -292,22 +342,37 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
           <Card>
             <CardHeader>
               <CardTitle>Parcelas</CardTitle>
-              <CardDescription>Gerencie as parcelas da sua meta financeira</CardDescription>
+              <CardDescription>
+                Gerencie as parcelas da sua meta financeira
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="todas">
                 <TabsList className="mb-4">
-                  <TabsTrigger value="todas">Todas ({parcelas.length})</TabsTrigger>
-                  <TabsTrigger value="pendentes">
-                    Pendentes ({parcelas.filter((p) => p.status === "Pendente").length})
+                  <TabsTrigger value="todas">
+                    Todas ({parcelas.length})
                   </TabsTrigger>
-                  <TabsTrigger value="pagas">Pagas ({parcelas.filter((p) => p.status === "Paga").length})</TabsTrigger>
+                  <TabsTrigger value="pendentes">
+                    Pendentes (
+                    {parcelas.filter((p) => p.status === "Pendente").length})
+                  </TabsTrigger>
+                  <TabsTrigger value="pagas">
+                    Pagas ({parcelas.filter((p) => p.status === "Paga").length})
+                  </TabsTrigger>
                   <TabsTrigger value="minhas">
-                    Minhas ({parcelas.filter((p) => p.responsavel === "usuario1").length})
+                    Minhas (
+                    {
+                      parcelas.filter((p) => p.responsavel === "usuario1")
+                        .length
+                    }
+                    )
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="todas" className="space-y-4">
+                <TabsContent
+                  value="todas"
+                  className="space-y-4"
+                >
                   {parcelas.map((parcela) => (
                     <Card key={parcela.id}>
                       <CardContent className="p-4">
@@ -327,17 +392,23 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                               )}
                             </div>
                             <div>
-                              <p className="font-medium">Parcela {parcela.numero}</p>
+                              <p className="font-medium">
+                                Parcela {parcela.numero}
+                              </p>
                               <div className="flex items-center text-sm text-muted-foreground">
                                 <Calendar className="h-3 w-3 mr-1" />
-                                <span>Vencimento: {parcela.dataVencimento}</span>
+                                <span>
+                                  Vencimento: {parcela.dataVencimento}
+                                </span>
                               </div>
                             </div>
                           </div>
 
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
-                              <p className="font-medium">R$ {parcela.valor.toFixed(2)}</p>
+                              <p className="font-medium">
+                                R$ {parcela.valor.toFixed(2)}
+                              </p>
                               {parcela.status === "Paga" && (
                                 <p className="text-sm text-muted-foreground">
                                   Pago: R$ {parcela.valorPago?.toFixed(2)}
@@ -349,42 +420,61 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                               {parcela.status === "Pendente" ? (
                                 <Dialog>
                                   <DialogTrigger asChild>
-                                    <Button variant="outline" size="sm" onClick={() => handleMarcarPago(parcela)}>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => handleMarcarPago(parcela)}
+                                    >
                                       Marcar como pago
                                     </Button>
                                   </DialogTrigger>
                                   <DialogContent>
                                     <DialogHeader>
-                                      <DialogTitle>Marcar parcela como paga</DialogTitle>
+                                      <DialogTitle>
+                                        Marcar parcela como paga
+                                      </DialogTitle>
                                       <DialogDescription>
-                                        Informe o valor que foi depositado para esta parcela.
+                                        Informe o valor que foi depositado para
+                                        esta parcela.
                                       </DialogDescription>
                                     </DialogHeader>
                                     <div className="space-y-4 py-4">
                                       <div className="space-y-2">
-                                        <Label htmlFor="valorPago">Valor pago (R$)</Label>
+                                        <Label htmlFor="valorPago">
+                                          Valor pago (R$)
+                                        </Label>
                                         <Input
                                           id="valorPago"
                                           type="number"
                                           min="0"
                                           step="0.01"
                                           value={valorPago}
-                                          onChange={(e) => setValorPago(e.target.value)}
+                                          onChange={(e) =>
+                                            setValorPago(e.target.value)
+                                          }
                                         />
                                       </div>
 
                                       <div className="flex items-center space-x-2">
-                                        <div className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}>
+                                        <div
+                                          className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}
+                                        >
                                           <DollarSign className="h-4 w-4 text-gray-500" />
                                         </div>
                                         <div>
-                                          <p className="text-sm text-muted-foreground">Valor esperado</p>
-                                          <p className="font-medium">R$ {parcela.valor.toFixed(2)}</p>
+                                          <p className="text-sm text-muted-foreground">
+                                            Valor esperado
+                                          </p>
+                                          <p className="font-medium">
+                                            R$ {parcela.valor.toFixed(2)}
+                                          </p>
                                         </div>
                                       </div>
                                     </div>
                                     <DialogFooter>
-                                      <Button onClick={confirmarPagamento}>Confirmar pagamento</Button>
+                                      <Button onClick={confirmarPagamento}>
+                                        Confirmar pagamento
+                                      </Button>
                                     </DialogFooter>
                                   </DialogContent>
                                 </Dialog>
@@ -404,7 +494,10 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                   ))}
                 </TabsContent>
 
-                <TabsContent value="pendentes" className="space-y-4">
+                <TabsContent
+                  value="pendentes"
+                  className="space-y-4"
+                >
                   {parcelas
                     .filter((p) => p.status === "Pendente")
                     .map((parcela) => (
@@ -416,57 +509,82 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                               </div>
                               <div>
-                                <p className="font-medium">Parcela {parcela.numero}</p>
+                                <p className="font-medium">
+                                  Parcela {parcela.numero}
+                                </p>
                                 <div className="flex items-center text-sm text-muted-foreground">
                                   <Calendar className="h-3 w-3 mr-1" />
-                                  <span>Vencimento: {parcela.dataVencimento}</span>
+                                  <span>
+                                    Vencimento: {parcela.dataVencimento}
+                                  </span>
                                 </div>
                               </div>
                             </div>
 
                             <div className="flex items-center space-x-4">
                               <div className="text-right">
-                                <p className="font-medium">R$ {parcela.valor.toFixed(2)}</p>
+                                <p className="font-medium">
+                                  R$ {parcela.valor.toFixed(2)}
+                                </p>
                               </div>
 
                               <Dialog>
                                 <DialogTrigger asChild>
-                                  <Button variant="outline" size="sm" onClick={() => handleMarcarPago(parcela)}>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleMarcarPago(parcela)}
+                                  >
                                     Marcar como pago
                                   </Button>
                                 </DialogTrigger>
                                 <DialogContent>
                                   <DialogHeader>
-                                    <DialogTitle>Marcar parcela como paga</DialogTitle>
+                                    <DialogTitle>
+                                      Marcar parcela como paga
+                                    </DialogTitle>
                                     <DialogDescription>
-                                      Informe o valor que foi depositado para esta parcela.
+                                      Informe o valor que foi depositado para
+                                      esta parcela.
                                     </DialogDescription>
                                   </DialogHeader>
                                   <div className="space-y-4 py-4">
                                     <div className="space-y-2">
-                                      <Label htmlFor="valorPago">Valor pago (R$)</Label>
+                                      <Label htmlFor="valorPago">
+                                        Valor pago (R$)
+                                      </Label>
                                       <Input
                                         id="valorPago"
                                         type="number"
                                         min="0"
                                         step="0.01"
                                         value={valorPago}
-                                        onChange={(e) => setValorPago(e.target.value)}
+                                        onChange={(e) =>
+                                          setValorPago(e.target.value)
+                                        }
                                       />
                                     </div>
 
                                     <div className="flex items-center space-x-2">
-                                      <div className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}>
+                                      <div
+                                        className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}
+                                      >
                                         <DollarSign className="h-4 w-4 text-gray-500" />
                                       </div>
                                       <div>
-                                        <p className="text-sm text-muted-foreground">Valor esperado</p>
-                                        <p className="font-medium">R$ {parcela.valor.toFixed(2)}</p>
+                                        <p className="text-sm text-muted-foreground">
+                                          Valor esperado
+                                        </p>
+                                        <p className="font-medium">
+                                          R$ {parcela.valor.toFixed(2)}
+                                        </p>
                                       </div>
                                     </div>
                                   </div>
                                   <DialogFooter>
-                                    <Button onClick={confirmarPagamento}>Confirmar pagamento</Button>
+                                    <Button onClick={confirmarPagamento}>
+                                      Confirmar pagamento
+                                    </Button>
                                   </DialogFooter>
                                 </DialogContent>
                               </Dialog>
@@ -477,7 +595,10 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                     ))}
                 </TabsContent>
 
-                <TabsContent value="pagas" className="space-y-4">
+                <TabsContent
+                  value="pagas"
+                  className="space-y-4"
+                >
                   {parcelas
                     .filter((p) => p.status === "Paga")
                     .map((parcela) => (
@@ -489,17 +610,23 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
                               </div>
                               <div>
-                                <p className="font-medium">Parcela {parcela.numero}</p>
+                                <p className="font-medium">
+                                  Parcela {parcela.numero}
+                                </p>
                                 <div className="flex items-center text-sm text-muted-foreground">
                                   <Calendar className="h-3 w-3 mr-1" />
-                                  <span>Vencimento: {parcela.dataVencimento}</span>
+                                  <span>
+                                    Vencimento: {parcela.dataVencimento}
+                                  </span>
                                 </div>
                               </div>
                             </div>
 
                             <div className="flex items-center space-x-4">
                               <div className="text-right">
-                                <p className="font-medium">R$ {parcela.valor.toFixed(2)}</p>
+                                <p className="font-medium">
+                                  R$ {parcela.valor.toFixed(2)}
+                                </p>
                                 <p className="text-sm text-muted-foreground">
                                   Pago: R$ {parcela.valorPago?.toFixed(2)}
                                 </p>
@@ -518,7 +645,10 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                     ))}
                 </TabsContent>
 
-                <TabsContent value="minhas" className="space-y-4">
+                <TabsContent
+                  value="minhas"
+                  className="space-y-4"
+                >
                   {parcelas
                     .filter((p) => p.responsavel === "usuario1")
                     .map((parcela) => (
@@ -540,17 +670,23 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 )}
                               </div>
                               <div>
-                                <p className="font-medium">Parcela {parcela.numero}</p>
+                                <p className="font-medium">
+                                  Parcela {parcela.numero}
+                                </p>
                                 <div className="flex items-center text-sm text-muted-foreground">
                                   <Calendar className="h-3 w-3 mr-1" />
-                                  <span>Vencimento: {parcela.dataVencimento}</span>
+                                  <span>
+                                    Vencimento: {parcela.dataVencimento}
+                                  </span>
                                 </div>
                               </div>
                             </div>
 
                             <div className="flex items-center space-x-4">
                               <div className="text-right">
-                                <p className="font-medium">R$ {parcela.valor.toFixed(2)}</p>
+                                <p className="font-medium">
+                                  R$ {parcela.valor.toFixed(2)}
+                                </p>
                                 {parcela.status === "Paga" && (
                                   <p className="text-sm text-muted-foreground">
                                     Pago: R$ {parcela.valorPago?.toFixed(2)}
@@ -562,42 +698,63 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 {parcela.status === "Pendente" ? (
                                   <Dialog>
                                     <DialogTrigger asChild>
-                                      <Button variant="outline" size="sm" onClick={() => handleMarcarPago(parcela)}>
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                          handleMarcarPago(parcela)
+                                        }
+                                      >
                                         Marcar como pago
                                       </Button>
                                     </DialogTrigger>
                                     <DialogContent>
                                       <DialogHeader>
-                                        <DialogTitle>Marcar parcela como paga</DialogTitle>
+                                        <DialogTitle>
+                                          Marcar parcela como paga
+                                        </DialogTitle>
                                         <DialogDescription>
-                                          Informe o valor que foi depositado para esta parcela.
+                                          Informe o valor que foi depositado
+                                          para esta parcela.
                                         </DialogDescription>
                                       </DialogHeader>
                                       <div className="space-y-4 py-4">
                                         <div className="space-y-2">
-                                          <Label htmlFor="valorPago">Valor pago (R$)</Label>
+                                          <Label htmlFor="valorPago">
+                                            Valor pago (R$)
+                                          </Label>
                                           <Input
                                             id="valorPago"
                                             type="number"
                                             min="0"
                                             step="0.01"
                                             value={valorPago}
-                                            onChange={(e) => setValorPago(e.target.value)}
+                                            onChange={(e) =>
+                                              setValorPago(e.target.value)
+                                            }
                                           />
                                         </div>
 
                                         <div className="flex items-center space-x-2">
-                                          <div className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}>
+                                          <div
+                                            className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}
+                                          >
                                             <DollarSign className="h-4 w-4 text-gray-500" />
                                           </div>
                                           <div>
-                                            <p className="text-sm text-muted-foreground">Valor esperado</p>
-                                            <p className="font-medium">R$ {parcela.valor.toFixed(2)}</p>
+                                            <p className="text-sm text-muted-foreground">
+                                              Valor esperado
+                                            </p>
+                                            <p className="font-medium">
+                                              R$ {parcela.valor.toFixed(2)}
+                                            </p>
                                           </div>
                                         </div>
                                       </div>
                                       <DialogFooter>
-                                        <Button onClick={confirmarPagamento}>Confirmar pagamento</Button>
+                                        <Button onClick={confirmarPagamento}>
+                                          Confirmar pagamento
+                                        </Button>
                                       </DialogFooter>
                                     </DialogContent>
                                   </Dialog>
@@ -648,14 +805,19 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                   </Avatar>
                   <div>
                     <p className="font-medium">Maria Costa</p>
-                    <p className="text-sm text-muted-foreground">maria@exemplo.com</p>
+                    <p className="text-sm text-muted-foreground">
+                      maria@exemplo.com
+                    </p>
                   </div>
                 </div>
                 <Badge variant="outline">Participante</Badge>
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" className="w-full">
+              <Button
+                variant="outline"
+                className="w-full"
+              >
                 <Users className="mr-2 h-4 w-4" />
                 Convidar Participante
               </Button>
@@ -667,11 +829,17 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
               <CardTitle>Ações</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+              >
                 <Edit className="mr-2 h-4 w-4" />
                 Editar Meta
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+              >
                 <Share2 className="mr-2 h-4 w-4" />
                 Compartilhar Meta
               </Button>
@@ -687,5 +855,5 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
