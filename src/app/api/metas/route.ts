@@ -1,99 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
+import prisma from '@/lib/prisma';
 import { NextResponse } from "next/server";
-import { criarMetaSchema, metaSchema, parcelaSchema } from "./schemas";
+import { criarMetaSchema, metaSchema, ParcelaType } from "./schemas";
 
-// Tipos para o modelo de dados
-type Parcela = {
-  id: string;
-  metaId: string;
-  numero: number;
-  valor: number;
-  dataVencimento: string;
-  status: "Pendente" | "Paga";
-  valorPago: number | null;
-  responsavel: "usuario1" | "usuario2" | "ambos";
-  dataPagamento: string | null;
-};
-
-type Meta = {
-  id: string;
-  titulo: string;
-  descricao: string | null;
-  categoria: string;
-  valorTotal: number;
-  valorParcela: number;
-  numParcelas: number;
-  recorrente: boolean;
-  frequencia?: "diaria" | "semanal" | "mensal";
-  diaVencimento?: number;
-  diaSemana?: string;
-  horario?: string;
-  dataInicio: string;
-  dataFim?: string;
-  numExecucoes?: number;
-  usuarioCriador: string;
-  participantes: string[];
-  dataCriacao: string;
-};
-
-// Simulação de banco de dados em memória
-const metas: Meta[] = [];
-let parcelas: Parcela[] = [];
-
-// Função para gerar parcelas com base nas configurações da meta
-function gerarParcelas(meta: Meta): Parcela[] {
-  const parcelasGeradas: Parcela[] = [];
-  const dataInicio = new Date(meta.dataInicio);
-
-  for (let i = 0; i < meta.numParcelas; i++) {
-    const dataVencimento = new Date(dataInicio);
-
-    if (meta.recorrente) {
-      if (meta.frequencia === "diaria") {
-        dataVencimento.setDate(dataVencimento.getDate() + i);
-      } else if (meta.frequencia === "semanal") {
-        dataVencimento.setDate(dataVencimento.getDate() + i * 7);
-      } else if (meta.frequencia === "mensal") {
-        dataVencimento.setMonth(dataVencimento.getMonth() + i);
-        if (meta.diaVencimento) {
-          dataVencimento.setDate(meta.diaVencimento);
-        }
-      }
-    } else {
-      // Para metas não recorrentes, apenas incrementa o mês
-      dataVencimento.setMonth(dataVencimento.getMonth() + i);
-    }
-
-    // Alterna responsáveis para distribuir as parcelas
-    let responsavel: "usuario1" | "usuario2" | "ambos";
-    if (i % 3 === 0) {
-      responsavel = "ambos";
-    } else if (i % 3 === 1) {
-      responsavel = "usuario1";
-    } else {
-      responsavel = "usuario2";
-    }
-
-    parcelasGeradas.push({
-      id: `parcela_${Date.now()}_${i}`,
-      metaId: meta.id,
-      numero: i + 1,
-      valor: meta.valorParcela,
-      dataVencimento: dataVencimento.toISOString().split("T")[0],
-      status: "Pendente",
-      valorPago: null,
-      responsavel,
-      dataPagamento: null,
-    });
-  }
-
-  return parcelasGeradas;
-}
-
-// Endpoint para criar uma nova meta
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+
+    console.log("Body da requisição:", body);
 
     // Validação do corpo da requisição
     const dadosValidados = criarMetaSchema.parse(body);
@@ -104,8 +19,9 @@ export async function POST(request: Request) {
       dadosValidados.valorTotal / dadosValidados.numParcelas;
 
     // Criação da meta
+    const metaId = `meta_${Date.now()}`;
     const novaMeta = {
-      id: `meta_${Date.now()}`,
+      id: metaId,
       titulo: dadosValidados.titulo,
       descricao: dadosValidados.descricao || null,
       categoria: dadosValidados.categoria || "outro",
@@ -129,21 +45,53 @@ export async function POST(request: Request) {
     // Validação da meta criada
     metaSchema.parse(novaMeta);
 
-    // Adiciona a meta ao "banco de dados"
-    metas.push(novaMeta);
+    // Criação das parcelas
 
-    // Gera as parcelas com base nas configurações da meta
-    const novasParcelas = gerarParcelas(novaMeta);
+    console.log("Dados validados:", dadosValidados);
 
-    // Validação das parcelas geradas
-    novasParcelas.forEach((parcela) => parcelaSchema.parse(parcela));
+    const createParcelas = dadosValidados.parcelas?.map((parcela: ParcelaType, index) => ({
+      id: `parcela_${Date.now()}_${index}`, // Gera um ID único para cada parcela
+      metaId: metaId, // Associa a parcela à meta
+      numero: parcela.numero,
+      valor: parcela.valor,
+      dataVencimento: parcela.dataVencimento,
+      status: parcela.status,
+      valorPago: parcela.valorPago || null,
+      responsavelId: Array.isArray(parcela.responsavel)
+        ? parcela.responsavel.join(",") // Converte array para string, se necessário
+        : parcela.responsavel,
+      dataPagamento: parcela.dataPagamento || null,
+    }));
 
-    parcelas = [...parcelas, ...novasParcelas];
+    console.log("Parcelas criadas:", createParcelas);
+    let createdParcelas = [];
+    if (createParcelas) {
+      createdParcelas = await prisma.parcela.createMany({
+        data: createParcelas,
+      }) as any
+
+    }
+
+    // Vincula os IDs das parcelas criadas à meta
+    const parcelasIds = await prisma.parcela.findMany({
+      where: { metaId: metaId },
+      select: { id: true },
+    });
+
+    // Salva a meta no banco de dados com os IDs das parcelas associadas
+    const createdMeta = await prisma.meta.create({
+      data: {
+        ...novaMeta,
+        parcelas: {
+          connect: parcelasIds.map((parcela) => ({ id: parcela.id })),
+        },
+      } as any,
+    });
 
     return NextResponse.json(
       {
-        meta: novaMeta,
-        parcelas: novasParcelas,
+        meta: createdMeta,
+        parcelas: parcelasIds,
       },
       { status: 201 }
     );
@@ -161,32 +109,57 @@ export async function POST(request: Request) {
 
 // Endpoint para listar todas as metas
 export async function GET() {
+
+  const metas = await prisma.meta.findMany({
+    include: {
+      usuarioCriador: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          avatar: true,
+
+        },
+      },
+      participantes: {
+        select: {
+          id: true,
+          usuario: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              avatar: true,
+            },
+          }
+        },
+      },
+      parcelas: {
+        select: {
+          id: true,
+          metaId: true,
+          numero: true,
+          valor: true,
+          dataVencimento: true,
+          status: true,
+          valorPago: true,
+          responsavel: true,
+          dataPagamento: true,
+        },
+      },
+    },
+  });
+
   try {
-    // Retorna todas as metas com informações resumidas
-    const metasResumidas = metas.map((meta) => {
-      const metaParcelas = parcelas.filter((p) => p.metaId === meta.id);
-      const parcelasPagas = metaParcelas.filter(
-        (p) => p.status === "Paga"
-      ).length;
-      const valorPago = metaParcelas
-        .filter((p) => p.status === "Paga")
-        .reduce((total, parcela) => total + (parcela.valorPago || 0), 0);
 
-      return {
-        id: meta.id,
-        titulo: meta.titulo,
-        categoria: meta.categoria,
-        valorTotal: meta.valorTotal,
-        valorPago,
-        numParcelas: meta.numParcelas,
-        parcelasPagas,
-        recorrente: meta.recorrente,
-        frequencia: meta.frequencia,
-        progresso: (parcelasPagas / meta.numParcelas) * 100,
-      };
+
+
+
+    return NextResponse.json({
+      message: "Metas listadas com sucesso",
+      total: metas.length,
+      metas,
     });
-
-    return NextResponse.json(metasResumidas);
   } catch (error) {
     console.error("Erro ao listar metas:", error);
     return NextResponse.json(

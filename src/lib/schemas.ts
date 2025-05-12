@@ -52,6 +52,7 @@ export const metaSchema = z.object({
     .positive({ message: "O número de parcelas deve ser maior que zero" }),
   recorrente: z.boolean(),
   dataInicio: z.string(),
+  metodoCalculo: z.enum(["total", "parcela"]),
   distribuicaoTipo: z.enum(["igual", "crescente", "decrescente", "aleatoria"]),
   valorMinParcela: z.number().optional(),
   valorMaxParcela: z.number().optional(),

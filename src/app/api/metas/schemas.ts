@@ -9,7 +9,7 @@ export const parcelaSchema = z.object({
   dataVencimento: z.string(),
   status: z.enum(["Pendente", "Paga"]),
   valorPago: z.number().nullable(),
-  responsavel: z.enum(["usuario1", "usuario2", "ambos"]),
+  responsavel: z.array(z.string()),
   dataPagamento: z.string().nullable(),
 })
 
@@ -52,5 +52,11 @@ export const criarMetaSchema = z.object({
   dataFim: z.string().optional(),
   numExecucoes: z.number().optional(),
   usuarioCriador: z.string().optional(),
+  parcelas: z.array(parcelaSchema).optional(),
   participantes: z.array(z.string()).optional(),
 })
+
+
+export type ParcelaType = z.infer<typeof parcelaSchema>
+export type MetaType = z.infer<typeof metaSchema>
+export type CriarMetaType = z.infer<typeof criarMetaSchema>

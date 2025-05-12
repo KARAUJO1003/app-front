@@ -11,32 +11,41 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { PlusCircle, ArrowRight } from "lucide-react";
+import { Parcela } from "@/lib/types";
+
+async function getData() {
+  const res = await fetch("http://localhost:3000/api/metas");
+  const data = await res.json();
+  return data;
+}
 
 export const metadata: Metadata = {
   title: "Metas Financeiras",
   description: "Sistema de gestão de metas financeiras para casais",
 };
 
-export default function Home() {
+export default async function Home() {
+  const data = await getData();
+
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex flex-col w-full min-h-screen">
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+        <section className="py-12 md:py-24 lg:py-32 w-full">
+          <div className="px-4 md:px-6 container">
+            <div className="flex flex-col justify-center items-center space-y-4 text-center">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl tracking-tighter">
                   Gestão de Metas Financeiras para Casais
                 </h1>
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                <p className="mx-auto max-w-[700px] text-gray-500 dark:text-gray-400 md:text-xl">
                   Planeje e acompanhe suas metas financeiras em conjunto. Defina
                   objetivos, parcele valores e monitore o progresso.
                 </p>
               </div>
-              <div className="w-full max-w-sm space-y-2">
+              <div className="space-y-2 w-full max-w-sm">
                 <Link href="/metas/nova">
                   <Button className="w-full">
-                    <PlusCircle className="mr-2 h-4 w-4" />
+                    <PlusCircle className="mr-2 w-4 h-4" />
                     Nova Meta
                   </Button>
                 </Link>
@@ -44,106 +53,85 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-secondary/20">
-          <div className="container px-4 md:px-6">
-            <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl mb-8">
+        <section className="bg-secondary/20 py-12 md:py-24 lg:py-32 w-full">
+          <div className="px-4 md:px-6 container">
+            <h2 className="mb-8 font-bold text-2xl sm:text-3xl tracking-tighter">
               Metas Ativas
             </h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Viagem de Férias</CardTitle>
-                  <CardDescription>Meta mensal - 12 parcelas</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Progresso</span>
-                        <span className="text-sm font-medium">
-                          3/12 parcelas
-                        </span>
+            <div className="gap-6 grid sm:grid-cols-2 lg:grid-cols-3">
+              {data.metas.map((meta: any) => (
+                <Card key={meta.id}>
+                  <CardHeader>
+                    <CardTitle>{meta.titulo}</CardTitle>
+                    <CardDescription>{meta.descricao}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium text-sm">Progresso</span>
+                          <span className="font-medium text-sm">
+                            {
+                              meta.parcelas.filter(
+                                (p: Parcela) => p.status === "Paga"
+                              ).length
+                            }
+                            /{meta.parcelas.length} parcelas
+                          </span>
+                        </div>
+                        <Progress
+                          value={Math.round(
+                            (meta.parcelas.filter(
+                              (p: Parcela) => p.status === "Paga"
+                            ).length /
+                              meta.parcelas.length) *
+                              100
+                          )}
+                        />
                       </div>
-                      <Progress value={25} />
+                      <div className="gap-4 grid grid-cols-2">
+                        <div>
+                          <span className="font-medium text-gray-500 text-sm">
+                            Valor Total
+                          </span>
+                          <p className="font-bold text-lg">
+                            R$ {meta.valorTotal}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-500 text-sm">
+                            Valor Acumulado
+                          </span>
+                          <p className="font-bold text-lg">
+                            R${" "}
+                            {meta.parcelas.reduce(
+                              (acc: number, parcela: Parcela) =>
+                                parcela.status === "Paga"
+                                  ? acc + (parcela?.valorPago ?? 0)
+                                  : acc,
+                              0
+                            )}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <span className="text-sm font-medium text-gray-500">
-                          Valor Total
-                        </span>
-                        <p className="text-lg font-bold">R$ 6.000,00</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-medium text-gray-500">
-                          Valor Acumulado
-                        </span>
-                        <p className="text-lg font-bold">R$ 1.500,00</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Link
-                    href="/metas/1"
-                    className="w-full"
-                  >
-                    <Button
-                      variant="outline"
+                  </CardContent>
+                  <CardFooter>
+                    <Link
+                      href={`/metas/${meta.id}`}
                       className="w-full"
                     >
-                      Ver Detalhes
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Reserva de Emergência</CardTitle>
-                  <CardDescription>Meta semanal - 24 parcelas</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Progresso</span>
-                        <span className="text-sm font-medium">
-                          8/24 parcelas
-                        </span>
-                      </div>
-                      <Progress value={33} />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <span className="text-sm font-medium text-gray-500">
-                          Valor Total
-                        </span>
-                        <p className="text-lg font-bold">R$ 12.000,00</p>
-                      </div>
-                      <div>
-                        <span className="text-sm font-medium text-gray-500">
-                          Valor Acumulado
-                        </span>
-                        <p className="text-lg font-bold">R$ 4.000,00</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Link
-                    href="/metas/2"
-                    className="w-full"
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Ver Detalhes
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                      >
+                        Ver Detalhes
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+              ))}
             </div>
           </div>
         </section>

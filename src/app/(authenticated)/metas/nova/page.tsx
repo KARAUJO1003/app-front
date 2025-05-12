@@ -82,6 +82,7 @@ export default function NovaMeta() {
       descricao: "",
       categoria: "viagem",
       valorTotal: 0,
+      metodoCalculo: "total",
       valorParcela: 0,
       numParcelas: 12,
       recorrente: false,
@@ -122,7 +123,7 @@ export default function NovaMeta() {
 
   const { control, watch, setValue, handleSubmit } = form;
 
-  const metodoCalculo = watch("valorTotal") > 0 ? "valorTotal" : "valorParcela";
+  const metodoCalculo = watch("metodoCalculo");
   const recorrente = watch("recorrente");
   const valorTotal = watch("valorTotal");
   const valorParcela = watch("valorParcela");
@@ -171,18 +172,14 @@ export default function NovaMeta() {
 
   // Atualiza o valor da parcela quando o valor total ou número de parcelas muda
   useEffect(() => {
-    if (metodoCalculo === "valorTotal" && valorTotal > 0 && numParcelas > 0) {
+    if (metodoCalculo === "total" && valorTotal > 0 && numParcelas > 0) {
       setValue("valorParcela", valorTotal / numParcelas);
     }
   }, [valorTotal, numParcelas, metodoCalculo, setValue]);
 
   // Atualiza o valor total quando o valor da parcela ou número de parcelas muda
   useEffect(() => {
-    if (
-      metodoCalculo === "valorParcela" &&
-      valorParcela > 0 &&
-      numParcelas > 0
-    ) {
+    if (metodoCalculo === "parcela" && valorParcela > 0 && numParcelas > 0) {
       setValue("valorTotal", valorParcela * numParcelas);
     }
   }, [valorParcela, numParcelas, metodoCalculo, setValue]);
@@ -370,7 +367,7 @@ export default function NovaMeta() {
         },
         body: JSON.stringify({
           ...data,
-
+          parcelas: previewParcelas,
           participantes: data.participantes.map(
             (p) => p.id
             // percentual: p.percentual,
@@ -395,31 +392,25 @@ export default function NovaMeta() {
     }
   };
 
-  // useEffect(() => {
-  //   setIsClient(true);
-  // }, []);
-
-  // if (!isClient) return null;
-
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto px-4 py-8 container">
       <div className="flex items-center mb-6">
         <Link href="/">
           <Button
             variant="ghost"
             size="sm"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft className="mr-2 w-4 h-4" />
             Voltar
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold ml-4">Nova Meta Financeira</h1>
+        <h1 className="ml-4 font-bold text-2xl">Nova Meta Financeira</h1>
       </div>
 
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-8 md:grid-cols-3">
-            <div className="md:col-span-2 space-y-8">
+          <div className="gap-8 grid md:grid-cols-3">
+            <div className="space-y-8 md:col-span-2">
               <Card>
                 <CardHeader>
                   <CardTitle>Informações Básicas</CardTitle>
@@ -541,201 +532,236 @@ export default function NovaMeta() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <RadioGroup
-                    value={metodoCalculo}
-                    onValueChange={(value) => {
-                      if (value === "valorTotal") {
-                        setValue("valorParcela", 0);
-                      } else {
-                        setValue("valorTotal", 0);
-                      }
-                    }}
-                    className="space-y-4"
-                  >
-                    <div className="flex items-start space-x-2">
-                      <RadioGroupItem
-                        value="valorTotal"
-                        id="valorTotal"
-                      />
-                      <div className="grid gap-1.5 w-full">
-                        <Label
-                          htmlFor="valorTotal"
-                          className="font-medium"
-                        >
-                          Definir valor total
-                        </Label>
-                        <p className="text-sm text-muted-foreground">
-                          Defina o valor total da meta e divida em parcelas
-                        </p>
+                  <FormField
+                    control={form.control}
+                    name="metodoCalculo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <RadioGroup
+                            value={field.value}
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              if (value === "valorTotal") {
+                                setValue("valorParcela", 0);
+                              } else {
+                                setValue("valorTotal", 0);
+                              }
+                            }}
+                            className="space-y-4"
+                          >
+                            <div className="flex items-start space-x-2">
+                              <RadioGroupItem
+                                value="total"
+                                id="total"
+                              />
+                              <div className="gap-1.5 grid w-full">
+                                <Label
+                                  htmlFor="total"
+                                  className="font-medium"
+                                >
+                                  Definir valor total
+                                </Label>
+                                <p className="text-muted-foreground text-sm">
+                                  Defina o valor total da meta e divida em
+                                  parcelas
+                                </p>
 
-                        {metodoCalculo === "valorTotal" && (
-                          <div className="mt-4 grid gap-4">
-                            <FormField
-                              control={control}
-                              name="valorTotal"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>
-                                    Valor Total (R$){" "}
-                                    <span className="text-red-500">*</span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="number"
-                                      min="0"
-                                      step="0.01"
-                                      placeholder="0,00"
-                                      {...field}
-                                      onChange={(e) =>
-                                        field.onChange(
-                                          Number.parseFloat(e.target.value) || 0
-                                        )
-                                      }
+                                {metodoCalculo === "total" && (
+                                  <div className="gap-4 grid mt-4">
+                                    <FormField
+                                      control={control}
+                                      name="valorTotal"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>
+                                            Valor Total (R$){" "}
+                                            <span className="text-red-500">
+                                              *
+                                            </span>
+                                          </FormLabel>
+                                          <FormControl>
+                                            <Input
+                                              type="number"
+                                              min="0"
+                                              step="0.01"
+                                              placeholder="0,00"
+                                              {...field}
+                                              onChange={(e) =>
+                                                field.onChange(
+                                                  Number.parseFloat(
+                                                    e.target.value
+                                                  ) || 0
+                                                )
+                                              }
+                                            />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
                                     />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
 
-                            <FormField
-                              control={control}
-                              name="numParcelas"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>
-                                    Número de Parcelas{" "}
-                                    <span className="text-red-500">*</span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="number"
-                                      min="1"
-                                      {...field}
-                                      onChange={(e) =>
-                                        field.onChange(
-                                          Number.parseInt(e.target.value) || 1
-                                        )
-                                      }
+                                    <FormField
+                                      control={control}
+                                      name="numParcelas"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>
+                                            Número de Parcelas{" "}
+                                            <span className="text-red-500">
+                                              *
+                                            </span>
+                                          </FormLabel>
+                                          <FormControl>
+                                            <Input
+                                              type="number"
+                                              min="1"
+                                              {...field}
+                                              onChange={(e) =>
+                                                field.onChange(
+                                                  Number.parseInt(
+                                                    e.target.value
+                                                  ) || 1
+                                                )
+                                              }
+                                            />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
                                     />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
 
-                            {valorTotal > 0 && numParcelas > 0 && (
-                              <div className="p-3 bg-muted rounded-md">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium">
-                                    Valor por parcela:
-                                  </span>
-                                  <span className="font-bold">
-                                    R$ {(valorTotal / numParcelas).toFixed(2)}
-                                  </span>
-                                </div>
+                                    {valorTotal > 0 && numParcelas > 0 && (
+                                      <div className="bg-muted p-3 rounded-md">
+                                        <div className="flex justify-between items-center">
+                                          <span className="font-medium text-sm">
+                                            Valor por parcela:
+                                          </span>
+                                          <span className="font-bold">
+                                            R${" "}
+                                            {(valorTotal / numParcelas).toFixed(
+                                              2
+                                            )}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                            </div>
 
-                    <div className="flex items-start space-x-2">
-                      <RadioGroupItem
-                        value="valorParcela"
-                        id="valorParcela"
-                      />
-                      <div className="grid gap-1.5 w-full">
-                        <Label
-                          htmlFor="valorParcela"
-                          className="font-medium"
-                        >
-                          Definir valor da parcela
-                        </Label>
-                        <p className="text-sm text-muted-foreground">
-                          Defina quanto pode pagar por parcela e o número de
-                          parcelas
-                        </p>
+                            <div className="flex items-start space-x-2">
+                              <RadioGroupItem
+                                value="parcela"
+                                id="parcela"
+                              />
+                              <div className="gap-1.5 grid w-full">
+                                <Label
+                                  htmlFor="parcela"
+                                  className="font-medium"
+                                >
+                                  Definir valor da parcela
+                                </Label>
+                                <p className="text-muted-foreground text-sm">
+                                  Defina quanto pode pagar por parcela e o
+                                  número de parcelas
+                                </p>
 
-                        {metodoCalculo === "valorParcela" && (
-                          <div className="mt-4 grid gap-4">
-                            <FormField
-                              control={control}
-                              name="valorParcela"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>
-                                    Valor da Parcela (R$){" "}
-                                    <span className="text-red-500">*</span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="number"
-                                      min="0"
-                                      step="0.01"
-                                      placeholder="0,00"
-                                      {...field}
-                                      onChange={(e) =>
-                                        field.onChange(
-                                          Number.parseFloat(e.target.value) || 0
-                                        )
-                                      }
+                                {metodoCalculo === "parcela" && (
+                                  <div className="gap-4 grid mt-4">
+                                    <FormField
+                                      control={control}
+                                      name="valorParcela"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>
+                                            Valor da Parcela (R$){" "}
+                                            <span className="text-red-500">
+                                              *
+                                            </span>
+                                          </FormLabel>
+                                          <FormControl>
+                                            <Input
+                                              type="number"
+                                              min="0"
+                                              step="0.01"
+                                              placeholder="0,00"
+                                              {...field}
+                                              onChange={(e) =>
+                                                field.onChange(
+                                                  Number.parseFloat(
+                                                    e.target.value
+                                                  ) || 0
+                                                )
+                                              }
+                                            />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
                                     />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
 
-                            <FormField
-                              control={control}
-                              name="numParcelas"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>
-                                    Número de Parcelas{" "}
-                                    <span className="text-red-500">*</span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      type="number"
-                                      min="1"
-                                      {...field}
-                                      onChange={(e) =>
-                                        field.onChange(
-                                          Number.parseInt(e.target.value) || 1
-                                        )
-                                      }
+                                    <FormField
+                                      control={control}
+                                      name="numParcelas"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>
+                                            Número de Parcelas{" "}
+                                            <span className="text-red-500">
+                                              *
+                                            </span>
+                                          </FormLabel>
+                                          <FormControl>
+                                            <Input
+                                              type="number"
+                                              min="1"
+                                              {...field}
+                                              onChange={(e) =>
+                                                field.onChange(
+                                                  Number.parseInt(
+                                                    e.target.value
+                                                  ) || 1
+                                                )
+                                              }
+                                            />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
                                     />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
 
-                            {valorParcela > 0 && numParcelas > 0 && (
-                              <div className="p-3 bg-muted rounded-md">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium">
-                                    Valor total:
-                                  </span>
-                                  <span className="font-bold">
-                                    R$ {(valorParcela * numParcelas).toFixed(2)}
-                                  </span>
-                                </div>
+                                    {valorParcela > 0 && numParcelas > 0 && (
+                                      <div className="bg-muted p-3 rounded-md">
+                                        <div className="flex justify-between items-center">
+                                          <span className="font-medium text-sm">
+                                            Valor total:
+                                          </span>
+                                          <span className="font-bold">
+                                            R${" "}
+                                            {(
+                                              valorParcela * numParcelas
+                                            ).toFixed(2)}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </RadioGroup>
+                            </div>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <Separator />
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
+                    <div className="flex justify-between items-center">
                       <Label className="font-medium">
                         Distribuição de Valores
                       </Label>
@@ -745,9 +771,9 @@ export default function NovaMeta() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-6 w-6"
+                              className="w-6 h-6"
                             >
-                              <HelpCircle className="h-4 w-4" />
+                              <HelpCircle className="w-4 h-4" />
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent className="max-w-xs">
@@ -769,7 +795,7 @@ export default function NovaMeta() {
                             <RadioGroup
                               onValueChange={field.onChange}
                               defaultValue={field.value}
-                              className="grid grid-cols-2 gap-4"
+                              className="gap-4 grid grid-cols-2"
                             >
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem
@@ -807,17 +833,17 @@ export default function NovaMeta() {
                     />
 
                     {distribuicaoTipo !== "igual" && (
-                      <div className="space-y-4 p-4 bg-muted rounded-md mt-2">
+                      <div className="space-y-4 bg-muted mt-2 p-4 rounded-md">
                         <FormField
                           control={control}
                           name="valorMinParcela"
                           render={({ field }) => (
                             <FormItem className="space-y-2">
-                              <div className="flex items-center justify-between">
+                              <div className="flex justify-between items-center">
                                 <FormLabel>
                                   Valor mínimo da parcela (R$)
                                 </FormLabel>
-                                <span className="text-sm font-medium">
+                                <span className="font-medium text-sm">
                                   {field.value?.toFixed(2) || "0.00"}
                                 </span>
                               </div>
@@ -842,11 +868,11 @@ export default function NovaMeta() {
                           name="valorMaxParcela"
                           render={({ field }) => (
                             <FormItem className="space-y-2">
-                              <div className="flex items-center justify-between">
+                              <div className="flex justify-between items-center">
                                 <FormLabel>
                                   Valor máximo da parcela (R$)
                                 </FormLabel>
-                                <span className="text-sm font-medium">
+                                <span className="font-medium text-sm">
                                   {field.value?.toFixed(2) || "0.00"}
                                 </span>
                               </div>
@@ -881,27 +907,27 @@ export default function NovaMeta() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-3">
                         <Avatar>
                           <AvatarFallback>JD</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-medium">João Doe</p>
-                          <p className="text-sm text-muted-foreground">Você</p>
+                          <p className="text-muted-foreground text-sm">Você</p>
                         </div>
                       </div>
                       <Badge>Criador</Badge>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-3">
                         <Avatar>
                           <AvatarFallback>MC</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-medium">Maria Costa</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-muted-foreground text-sm">
                             maria@exemplo.com
                           </p>
                         </div>
@@ -916,11 +942,11 @@ export default function NovaMeta() {
                     </div>
 
                     {incluirParceiro && (
-                      <div className="space-y-4 p-4 bg-muted rounded-md">
+                      <div className="space-y-4 bg-muted p-4 rounded-md">
                         <Label className="font-medium">
                           Distribuição de Responsabilidades
                         </Label>
-                        <p className="text-sm text-muted-foreground mb-4">
+                        <p className="mb-4 text-muted-foreground text-sm">
                           Defina a porcentagem do valor total que cada
                           participante será responsável
                         </p>
@@ -931,7 +957,7 @@ export default function NovaMeta() {
                               key={participante.id}
                               className="space-y-2"
                             >
-                              <div className="flex items-center justify-between">
+                              <div className="flex justify-between items-center">
                                 <Label
                                 // htmlFor={`percentual-${participante.id}`}
                                 >
@@ -958,7 +984,7 @@ export default function NovaMeta() {
                         </div>
 
                         <Alert className="mt-4">
-                          <Info className="h-4 w-4" />
+                          <Info className="w-4 h-4" />
                           <AlertDescription>
                             Cada participante terá suas próprias parcelas para
                             pagar de acordo com sua porcentagem.
@@ -969,9 +995,9 @@ export default function NovaMeta() {
 
                     <Button
                       variant="outline"
-                      className="w-full mt-2"
+                      className="mt-2 w-full"
                     >
-                      <Users className="mr-2 h-4 w-4" />
+                      <Users className="mr-2 w-4 h-4" />
                       Convidar Outro Participante
                     </Button>
                   </div>
@@ -1007,7 +1033,7 @@ export default function NovaMeta() {
             </div>
 
             <div>
-              <Card className="sticky top-4">
+              <Card className="top-4 sticky">
                 <CardHeader>
                   <CardTitle>Prévia das Parcelas</CardTitle>
                   <CardDescription>
@@ -1016,9 +1042,9 @@ export default function NovaMeta() {
                 </CardHeader>
                 <CardContent>
                   {previewParcelas.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                      <Info className="h-10 w-10 text-muted-foreground mb-4" />
-                      <p className="text-sm text-muted-foreground mb-4">
+                    <div className="flex flex-col justify-center items-center py-8 text-center">
+                      <Info className="mb-4 w-10 h-10 text-muted-foreground" />
+                      <p className="mb-4 text-muted-foreground text-sm">
                         Configure sua meta para visualizar as parcelas
                       </p>
                       <Button
@@ -1031,14 +1057,14 @@ export default function NovaMeta() {
                   ) : (
                     <div className="space-y-4">
                       <Alert>
-                        <AlertCircle className="h-4 w-4" />
+                        <AlertCircle className="w-4 h-4" />
                         <AlertDescription>
                           Cada participante terá suas próprias parcelas para
                           pagar.
                         </AlertDescription>
                       </Alert>
 
-                      <div className="max-h-[400px] overflow-y-auto pr-2 space-y-3">
+                      <div className="space-y-3 pr-2 max-h-[400px] overflow-y-auto">
                         <Tabs defaultValue="todas">
                           <TabsList className="w-full">
                             <TabsTrigger
@@ -1098,7 +1124,7 @@ export default function NovaMeta() {
                                       : "Maria"}
                                   </Badge>
                                 </div>
-                                <div className="grid grid-cols-2 gap-2 text-sm">
+                                <div className="gap-2 grid grid-cols-2 text-sm">
                                   <div>
                                     <span className="text-muted-foreground">
                                       Valor:
@@ -1125,7 +1151,7 @@ export default function NovaMeta() {
                               .map((parcela, index) => (
                                 <div
                                   key={`${parcela.numero}-${parcela.responsavel}-${index}`}
-                                  className="p-3 border rounded-md bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
+                                  className="bg-blue-50 dark:bg-blue-950 p-3 border border-blue-200 dark:border-blue-800 rounded-md"
                                 >
                                   <div className="flex justify-between items-center mb-2">
                                     <span className="font-medium">
@@ -1133,7 +1159,7 @@ export default function NovaMeta() {
                                     </span>
                                     <Badge variant="outline">Você</Badge>
                                   </div>
-                                  <div className="grid grid-cols-2 gap-2 text-sm">
+                                  <div className="gap-2 grid grid-cols-2 text-sm">
                                     <div>
                                       <span className="text-muted-foreground">
                                         Valor:
@@ -1161,7 +1187,7 @@ export default function NovaMeta() {
                                 .map((parcela, index) => (
                                   <div
                                     key={`${parcela.numero}-${parcela.responsavel}-${index}`}
-                                    className="p-3 border rounded-md bg-pink-50 border-pink-200 dark:bg-pink-950 dark:border-pink-800"
+                                    className="bg-pink-50 dark:bg-pink-950 p-3 border border-pink-200 dark:border-pink-800 rounded-md"
                                   >
                                     <div className="flex justify-between items-center mb-2">
                                       <span className="font-medium">
@@ -1169,7 +1195,7 @@ export default function NovaMeta() {
                                       </span>
                                       <Badge variant="outline">Maria</Badge>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2 text-sm">
+                                    <div className="gap-2 grid grid-cols-2 text-sm">
                                       <div>
                                         <span className="text-muted-foreground">
                                           Valor:
@@ -1191,13 +1217,13 @@ export default function NovaMeta() {
                       </div>
 
                       {previewParcelas.length > 0 && (
-                        <div className="pt-3 border-t space-y-2">
-                          <div className="flex justify-between text-sm font-medium">
+                        <div className="space-y-2 pt-3 border-t">
+                          <div className="flex justify-between font-medium text-sm">
                             <span>Total de parcelas:</span>
                             <span>{previewParcelas.length}</span>
                           </div>
 
-                          <div className="flex justify-between text-sm font-medium">
+                          <div className="flex justify-between font-medium text-sm">
                             <span>Valor total:</span>
                             <span>R$ {valorTotal.toFixed(2)}</span>
                           </div>
@@ -1242,7 +1268,7 @@ export default function NovaMeta() {
             </div>
           </div>
 
-          <div className="mt-8 flex justify-end space-x-4">
+          <div className="flex justify-end space-x-4 mt-8">
             <Link href="/">
               <Button
                 type="button"
@@ -1257,7 +1283,7 @@ export default function NovaMeta() {
               disabled={isSubmitting}
             >
               {isSubmitting && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 w-4 h-4 animate-spin" />
               )}
               Criar Meta
             </Button>

@@ -13,7 +13,7 @@ export async function registerUser(data: {
   password: string;
 }) {
   const response = await axios.post(
-    "http://localhost:3002/api/users/register",
+    "http://localhost:3000/api/users/register",
     {
       ...data,
     }
@@ -23,7 +23,7 @@ export async function registerUser(data: {
 
 export async function loginUser(data: { email: string; password: string }) {
   await axios
-    .post("http://localhost:3002/api/users/login", {
+    .post("http://localhost:3000/api/users/login", {
       ...data,
     })
     .then(async (res) => {
