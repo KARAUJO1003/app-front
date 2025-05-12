@@ -121,8 +121,8 @@ export async function POST(request: Request) {
         dadosValidados.dataInicio || new Date().toISOString().split("T")[0],
       dataFim: dadosValidados.dataFim,
       numExecucoes: dadosValidados.numExecucoes,
-      usuarioCriador: dadosValidados.usuarioCriador || "usuario1",
-      participantes: dadosValidados.participantes || ["usuario1", "usuario2"],
+      usuarioCriador: dadosValidados.usuarioCriador,
+      participantes: dadosValidados.participantes,
       dataCriacao: new Date().toISOString(),
     };
 

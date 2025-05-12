@@ -24,53 +24,15 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Meta = $Result.DefaultSelection<Prisma.$MetaPayload>
 /**
+ * Model Participante
+ * 
+ */
+export type Participante = $Result.DefaultSelection<Prisma.$ParticipantePayload>
+/**
  * Model Parcela
  * 
  */
 export type Parcela = $Result.DefaultSelection<Prisma.$ParcelaPayload>
-
-/**
- * Enums
- */
-export namespace $Enums {
-  export const Frequencia: {
-  diaria: 'diaria',
-  semanal: 'semanal',
-  mensal: 'mensal'
-};
-
-export type Frequencia = (typeof Frequencia)[keyof typeof Frequencia]
-
-
-export const Status: {
-  Pendente: 'Pendente',
-  Paga: 'Paga'
-};
-
-export type Status = (typeof Status)[keyof typeof Status]
-
-
-export const Responsavel: {
-  usuario1: 'usuario1',
-  usuario2: 'usuario2',
-  ambos: 'ambos'
-};
-
-export type Responsavel = (typeof Responsavel)[keyof typeof Responsavel]
-
-}
-
-export type Frequencia = $Enums.Frequencia
-
-export const Frequencia: typeof $Enums.Frequencia
-
-export type Status = $Enums.Status
-
-export const Status: typeof $Enums.Status
-
-export type Responsavel = $Enums.Responsavel
-
-export const Responsavel: typeof $Enums.Responsavel
 
 /**
  * ##  Prisma Client ʲˢ
@@ -216,6 +178,16 @@ export class PrismaClient<
     * ```
     */
   get meta(): Prisma.MetaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.participante`: Exposes CRUD operations for the **Participante** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Participantes
+    * const participantes = await prisma.participante.findMany()
+    * ```
+    */
+  get participante(): Prisma.ParticipanteDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.parcela`: Exposes CRUD operations for the **Parcela** model.
@@ -668,6 +640,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Meta: 'Meta',
+    Participante: 'Participante',
     Parcela: 'Parcela'
   };
 
@@ -687,7 +660,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "meta" | "parcela"
+      modelProps: "user" | "meta" | "participante" | "parcela"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -836,6 +809,80 @@ export namespace Prisma {
           count: {
             args: Prisma.MetaCountArgs<ExtArgs>
             result: $Utils.Optional<MetaCountAggregateOutputType> | number
+          }
+        }
+      }
+      Participante: {
+        payload: Prisma.$ParticipantePayload<ExtArgs>
+        fields: Prisma.ParticipanteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ParticipanteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ParticipanteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>
+          }
+          findFirst: {
+            args: Prisma.ParticipanteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ParticipanteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>
+          }
+          findMany: {
+            args: Prisma.ParticipanteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>[]
+          }
+          create: {
+            args: Prisma.ParticipanteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>
+          }
+          createMany: {
+            args: Prisma.ParticipanteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ParticipanteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>[]
+          }
+          delete: {
+            args: Prisma.ParticipanteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>
+          }
+          update: {
+            args: Prisma.ParticipanteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>
+          }
+          deleteMany: {
+            args: Prisma.ParticipanteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ParticipanteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ParticipanteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>[]
+          }
+          upsert: {
+            args: Prisma.ParticipanteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ParticipantePayload>
+          }
+          aggregate: {
+            args: Prisma.ParticipanteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateParticipante>
+          }
+          groupBy: {
+            args: Prisma.ParticipanteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ParticipanteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ParticipanteCountArgs<ExtArgs>
+            result: $Utils.Optional<ParticipanteCountAggregateOutputType> | number
           }
         }
       }
@@ -999,6 +1046,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     meta?: MetaOmit
+    participante?: ParticipanteOmit
     parcela?: ParcelaOmit
   }
 
@@ -1095,12 +1143,14 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     metasCriadas: number
-    metas: number
+    participacoes: number
+    parcelas: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     metasCriadas?: boolean | UserCountOutputTypeCountMetasCriadasArgs
-    metas?: boolean | UserCountOutputTypeCountMetasArgs
+    participacoes?: boolean | UserCountOutputTypeCountParticipacoesArgs
+    parcelas?: boolean | UserCountOutputTypeCountParcelasArgs
   }
 
   // Custom InputTypes
@@ -1124,8 +1174,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountMetasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MetaWhereInput
+  export type UserCountOutputTypeCountParticipacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParticipanteWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountParcelasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParcelaWhereInput
   }
 
 
@@ -1158,7 +1215,7 @@ export namespace Prisma {
    * MetaCountOutputType without action
    */
   export type MetaCountOutputTypeCountParticipantesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
+    where?: ParticipanteWhereInput
   }
 
   /**
@@ -1188,6 +1245,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     password: string | null
+    avatar: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1197,6 +1255,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     password: string | null
+    avatar: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1206,6 +1265,7 @@ export namespace Prisma {
     name: number
     email: number
     password: number
+    avatar: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1217,6 +1277,7 @@ export namespace Prisma {
     name?: true
     email?: true
     password?: true
+    avatar?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1226,6 +1287,7 @@ export namespace Prisma {
     name?: true
     email?: true
     password?: true
+    avatar?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1235,6 +1297,7 @@ export namespace Prisma {
     name?: true
     email?: true
     password?: true
+    avatar?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1317,6 +1380,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     password: string | null
+    avatar: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1343,10 +1407,12 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
+    avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     metasCriadas?: boolean | User$metasCriadasArgs<ExtArgs>
-    metas?: boolean | User$metasArgs<ExtArgs>
+    participacoes?: boolean | User$participacoesArgs<ExtArgs>
+    parcelas?: boolean | User$parcelasArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1355,6 +1421,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
+    avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1364,6 +1431,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
+    avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1373,14 +1441,16 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
+    avatar?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "avatar" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     metasCriadas?: boolean | User$metasCriadasArgs<ExtArgs>
-    metas?: boolean | User$metasArgs<ExtArgs>
+    participacoes?: boolean | User$participacoesArgs<ExtArgs>
+    parcelas?: boolean | User$parcelasArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1390,13 +1460,15 @@ export namespace Prisma {
     name: "User"
     objects: {
       metasCriadas: Prisma.$MetaPayload<ExtArgs>[]
-      metas: Prisma.$MetaPayload<ExtArgs>[]
+      participacoes: Prisma.$ParticipantePayload<ExtArgs>[]
+      parcelas: Prisma.$ParcelaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string | null
       email: string | null
       password: string | null
+      avatar: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -1794,7 +1866,8 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     metasCriadas<T extends User$metasCriadasArgs<ExtArgs> = {}>(args?: Subset<T, User$metasCriadasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MetaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    metas<T extends User$metasArgs<ExtArgs> = {}>(args?: Subset<T, User$metasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MetaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    participacoes<T extends User$participacoesArgs<ExtArgs> = {}>(args?: Subset<T, User$participacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    parcelas<T extends User$parcelasArgs<ExtArgs> = {}>(args?: Subset<T, User$parcelasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParcelaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1828,6 +1901,7 @@ export namespace Prisma {
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly avatar: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -2240,27 +2314,51 @@ export namespace Prisma {
   }
 
   /**
-   * User.metas
+   * User.participacoes
    */
-  export type User$metasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$participacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Meta
+     * Select specific fields to fetch from the Participante
      */
-    select?: MetaSelect<ExtArgs> | null
+    select?: ParticipanteSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Meta
+     * Omit specific fields from the Participante
      */
-    omit?: MetaOmit<ExtArgs> | null
+    omit?: ParticipanteOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MetaInclude<ExtArgs> | null
-    where?: MetaWhereInput
-    orderBy?: MetaOrderByWithRelationInput | MetaOrderByWithRelationInput[]
-    cursor?: MetaWhereUniqueInput
+    include?: ParticipanteInclude<ExtArgs> | null
+    where?: ParticipanteWhereInput
+    orderBy?: ParticipanteOrderByWithRelationInput | ParticipanteOrderByWithRelationInput[]
+    cursor?: ParticipanteWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: MetaScalarFieldEnum | MetaScalarFieldEnum[]
+    distinct?: ParticipanteScalarFieldEnum | ParticipanteScalarFieldEnum[]
+  }
+
+  /**
+   * User.parcelas
+   */
+  export type User$parcelasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Parcela
+     */
+    select?: ParcelaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Parcela
+     */
+    omit?: ParcelaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParcelaInclude<ExtArgs> | null
+    where?: ParcelaWhereInput
+    orderBy?: ParcelaOrderByWithRelationInput | ParcelaOrderByWithRelationInput[]
+    cursor?: ParcelaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ParcelaScalarFieldEnum | ParcelaScalarFieldEnum[]
   }
 
   /**
@@ -2298,16 +2396,22 @@ export namespace Prisma {
     valorTotal: number | null
     valorParcela: number | null
     numParcelas: number | null
+    intervalo: number | null
     diaVencimento: number | null
     numExecucoes: number | null
+    valorMinParcela: number | null
+    valorMaxParcela: number | null
   }
 
   export type MetaSumAggregateOutputType = {
     valorTotal: number | null
     valorParcela: number | null
     numParcelas: number | null
+    intervalo: number | null
     diaVencimento: number | null
     numExecucoes: number | null
+    valorMinParcela: number | null
+    valorMaxParcela: number | null
   }
 
   export type MetaMinAggregateOutputType = {
@@ -2319,15 +2423,20 @@ export namespace Prisma {
     valorParcela: number | null
     numParcelas: number | null
     recorrente: boolean | null
-    frequencia: $Enums.Frequencia | null
+    frequencia: string | null
+    intervalo: number | null
     diaVencimento: number | null
     diaSemana: string | null
     horario: string | null
     dataInicio: Date | null
     dataFim: Date | null
     numExecucoes: number | null
+    distribuicaoTipo: string | null
+    valorMinParcela: number | null
+    valorMaxParcela: number | null
     usuarioCriadorId: string | null
-    dataCriacao: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MetaMaxAggregateOutputType = {
@@ -2339,15 +2448,20 @@ export namespace Prisma {
     valorParcela: number | null
     numParcelas: number | null
     recorrente: boolean | null
-    frequencia: $Enums.Frequencia | null
+    frequencia: string | null
+    intervalo: number | null
     diaVencimento: number | null
     diaSemana: string | null
     horario: string | null
     dataInicio: Date | null
     dataFim: Date | null
     numExecucoes: number | null
+    distribuicaoTipo: string | null
+    valorMinParcela: number | null
+    valorMaxParcela: number | null
     usuarioCriadorId: string | null
-    dataCriacao: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type MetaCountAggregateOutputType = {
@@ -2360,14 +2474,19 @@ export namespace Prisma {
     numParcelas: number
     recorrente: number
     frequencia: number
+    intervalo: number
     diaVencimento: number
     diaSemana: number
     horario: number
     dataInicio: number
     dataFim: number
     numExecucoes: number
+    distribuicaoTipo: number
+    valorMinParcela: number
+    valorMaxParcela: number
     usuarioCriadorId: number
-    dataCriacao: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -2376,16 +2495,22 @@ export namespace Prisma {
     valorTotal?: true
     valorParcela?: true
     numParcelas?: true
+    intervalo?: true
     diaVencimento?: true
     numExecucoes?: true
+    valorMinParcela?: true
+    valorMaxParcela?: true
   }
 
   export type MetaSumAggregateInputType = {
     valorTotal?: true
     valorParcela?: true
     numParcelas?: true
+    intervalo?: true
     diaVencimento?: true
     numExecucoes?: true
+    valorMinParcela?: true
+    valorMaxParcela?: true
   }
 
   export type MetaMinAggregateInputType = {
@@ -2398,14 +2523,19 @@ export namespace Prisma {
     numParcelas?: true
     recorrente?: true
     frequencia?: true
+    intervalo?: true
     diaVencimento?: true
     diaSemana?: true
     horario?: true
     dataInicio?: true
     dataFim?: true
     numExecucoes?: true
+    distribuicaoTipo?: true
+    valorMinParcela?: true
+    valorMaxParcela?: true
     usuarioCriadorId?: true
-    dataCriacao?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MetaMaxAggregateInputType = {
@@ -2418,14 +2548,19 @@ export namespace Prisma {
     numParcelas?: true
     recorrente?: true
     frequencia?: true
+    intervalo?: true
     diaVencimento?: true
     diaSemana?: true
     horario?: true
     dataInicio?: true
     dataFim?: true
     numExecucoes?: true
+    distribuicaoTipo?: true
+    valorMinParcela?: true
+    valorMaxParcela?: true
     usuarioCriadorId?: true
-    dataCriacao?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type MetaCountAggregateInputType = {
@@ -2438,14 +2573,19 @@ export namespace Prisma {
     numParcelas?: true
     recorrente?: true
     frequencia?: true
+    intervalo?: true
     diaVencimento?: true
     diaSemana?: true
     horario?: true
     dataInicio?: true
     dataFim?: true
     numExecucoes?: true
+    distribuicaoTipo?: true
+    valorMinParcela?: true
+    valorMaxParcela?: true
     usuarioCriadorId?: true
-    dataCriacao?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -2544,15 +2684,20 @@ export namespace Prisma {
     valorParcela: number
     numParcelas: number
     recorrente: boolean
-    frequencia: $Enums.Frequencia | null
+    frequencia: string | null
+    intervalo: number | null
     diaVencimento: number | null
     diaSemana: string | null
     horario: string | null
     dataInicio: Date
     dataFim: Date | null
     numExecucoes: number | null
+    distribuicaoTipo: string
+    valorMinParcela: number | null
+    valorMaxParcela: number | null
     usuarioCriadorId: string
-    dataCriacao: Date
+    createdAt: Date
+    updatedAt: Date
     _count: MetaCountAggregateOutputType | null
     _avg: MetaAvgAggregateOutputType | null
     _sum: MetaSumAggregateOutputType | null
@@ -2584,14 +2729,19 @@ export namespace Prisma {
     numParcelas?: boolean
     recorrente?: boolean
     frequencia?: boolean
+    intervalo?: boolean
     diaVencimento?: boolean
     diaSemana?: boolean
     horario?: boolean
     dataInicio?: boolean
     dataFim?: boolean
     numExecucoes?: boolean
+    distribuicaoTipo?: boolean
+    valorMinParcela?: boolean
+    valorMaxParcela?: boolean
     usuarioCriadorId?: boolean
-    dataCriacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     usuarioCriador?: boolean | UserDefaultArgs<ExtArgs>
     participantes?: boolean | Meta$participantesArgs<ExtArgs>
     parcelas?: boolean | Meta$parcelasArgs<ExtArgs>
@@ -2608,14 +2758,19 @@ export namespace Prisma {
     numParcelas?: boolean
     recorrente?: boolean
     frequencia?: boolean
+    intervalo?: boolean
     diaVencimento?: boolean
     diaSemana?: boolean
     horario?: boolean
     dataInicio?: boolean
     dataFim?: boolean
     numExecucoes?: boolean
+    distribuicaoTipo?: boolean
+    valorMinParcela?: boolean
+    valorMaxParcela?: boolean
     usuarioCriadorId?: boolean
-    dataCriacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     usuarioCriador?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["meta"]>
 
@@ -2629,14 +2784,19 @@ export namespace Prisma {
     numParcelas?: boolean
     recorrente?: boolean
     frequencia?: boolean
+    intervalo?: boolean
     diaVencimento?: boolean
     diaSemana?: boolean
     horario?: boolean
     dataInicio?: boolean
     dataFim?: boolean
     numExecucoes?: boolean
+    distribuicaoTipo?: boolean
+    valorMinParcela?: boolean
+    valorMaxParcela?: boolean
     usuarioCriadorId?: boolean
-    dataCriacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     usuarioCriador?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["meta"]>
 
@@ -2650,17 +2810,22 @@ export namespace Prisma {
     numParcelas?: boolean
     recorrente?: boolean
     frequencia?: boolean
+    intervalo?: boolean
     diaVencimento?: boolean
     diaSemana?: boolean
     horario?: boolean
     dataInicio?: boolean
     dataFim?: boolean
     numExecucoes?: boolean
+    distribuicaoTipo?: boolean
+    valorMinParcela?: boolean
+    valorMaxParcela?: boolean
     usuarioCriadorId?: boolean
-    dataCriacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type MetaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "descricao" | "categoria" | "valorTotal" | "valorParcela" | "numParcelas" | "recorrente" | "frequencia" | "diaVencimento" | "diaSemana" | "horario" | "dataInicio" | "dataFim" | "numExecucoes" | "usuarioCriadorId" | "dataCriacao", ExtArgs["result"]["meta"]>
+  export type MetaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "descricao" | "categoria" | "valorTotal" | "valorParcela" | "numParcelas" | "recorrente" | "frequencia" | "intervalo" | "diaVencimento" | "diaSemana" | "horario" | "dataInicio" | "dataFim" | "numExecucoes" | "distribuicaoTipo" | "valorMinParcela" | "valorMaxParcela" | "usuarioCriadorId" | "createdAt" | "updatedAt", ExtArgs["result"]["meta"]>
   export type MetaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     usuarioCriador?: boolean | UserDefaultArgs<ExtArgs>
     participantes?: boolean | Meta$participantesArgs<ExtArgs>
@@ -2678,7 +2843,7 @@ export namespace Prisma {
     name: "Meta"
     objects: {
       usuarioCriador: Prisma.$UserPayload<ExtArgs>
-      participantes: Prisma.$UserPayload<ExtArgs>[]
+      participantes: Prisma.$ParticipantePayload<ExtArgs>[]
       parcelas: Prisma.$ParcelaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2690,15 +2855,20 @@ export namespace Prisma {
       valorParcela: number
       numParcelas: number
       recorrente: boolean
-      frequencia: $Enums.Frequencia | null
+      frequencia: string | null
+      intervalo: number | null
       diaVencimento: number | null
       diaSemana: string | null
       horario: string | null
       dataInicio: Date
       dataFim: Date | null
       numExecucoes: number | null
+      distribuicaoTipo: string
+      valorMinParcela: number | null
+      valorMaxParcela: number | null
       usuarioCriadorId: string
-      dataCriacao: Date
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["meta"]>
     composites: {}
   }
@@ -3094,7 +3264,7 @@ export namespace Prisma {
   export interface Prisma__MetaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     usuarioCriador<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    participantes<T extends Meta$participantesArgs<ExtArgs> = {}>(args?: Subset<T, Meta$participantesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    participantes<T extends Meta$participantesArgs<ExtArgs> = {}>(args?: Subset<T, Meta$participantesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     parcelas<T extends Meta$parcelasArgs<ExtArgs> = {}>(args?: Subset<T, Meta$parcelasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParcelaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3133,15 +3303,20 @@ export namespace Prisma {
     readonly valorParcela: FieldRef<"Meta", 'Float'>
     readonly numParcelas: FieldRef<"Meta", 'Int'>
     readonly recorrente: FieldRef<"Meta", 'Boolean'>
-    readonly frequencia: FieldRef<"Meta", 'Frequencia'>
+    readonly frequencia: FieldRef<"Meta", 'String'>
+    readonly intervalo: FieldRef<"Meta", 'Int'>
     readonly diaVencimento: FieldRef<"Meta", 'Int'>
     readonly diaSemana: FieldRef<"Meta", 'String'>
     readonly horario: FieldRef<"Meta", 'String'>
     readonly dataInicio: FieldRef<"Meta", 'DateTime'>
     readonly dataFim: FieldRef<"Meta", 'DateTime'>
     readonly numExecucoes: FieldRef<"Meta", 'Int'>
+    readonly distribuicaoTipo: FieldRef<"Meta", 'String'>
+    readonly valorMinParcela: FieldRef<"Meta", 'Float'>
+    readonly valorMaxParcela: FieldRef<"Meta", 'Float'>
     readonly usuarioCriadorId: FieldRef<"Meta", 'String'>
-    readonly dataCriacao: FieldRef<"Meta", 'DateTime'>
+    readonly createdAt: FieldRef<"Meta", 'DateTime'>
+    readonly updatedAt: FieldRef<"Meta", 'DateTime'>
   }
     
 
@@ -3540,23 +3715,23 @@ export namespace Prisma {
    */
   export type Meta$participantesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Participante
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: ParticipanteSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
+     * Omit specific fields from the Participante
      */
-    omit?: UserOmit<ExtArgs> | null
+    omit?: ParticipanteOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
+    include?: ParticipanteInclude<ExtArgs> | null
+    where?: ParticipanteWhereInput
+    orderBy?: ParticipanteOrderByWithRelationInput | ParticipanteOrderByWithRelationInput[]
+    cursor?: ParticipanteWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    distinct?: ParticipanteScalarFieldEnum | ParticipanteScalarFieldEnum[]
   }
 
   /**
@@ -3603,6 +3778,1117 @@ export namespace Prisma {
 
 
   /**
+   * Model Participante
+   */
+
+  export type AggregateParticipante = {
+    _count: ParticipanteCountAggregateOutputType | null
+    _avg: ParticipanteAvgAggregateOutputType | null
+    _sum: ParticipanteSumAggregateOutputType | null
+    _min: ParticipanteMinAggregateOutputType | null
+    _max: ParticipanteMaxAggregateOutputType | null
+  }
+
+  export type ParticipanteAvgAggregateOutputType = {
+    percentual: number | null
+  }
+
+  export type ParticipanteSumAggregateOutputType = {
+    percentual: number | null
+  }
+
+  export type ParticipanteMinAggregateOutputType = {
+    id: string | null
+    metaId: string | null
+    usuarioId: string | null
+    percentual: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ParticipanteMaxAggregateOutputType = {
+    id: string | null
+    metaId: string | null
+    usuarioId: string | null
+    percentual: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ParticipanteCountAggregateOutputType = {
+    id: number
+    metaId: number
+    usuarioId: number
+    percentual: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ParticipanteAvgAggregateInputType = {
+    percentual?: true
+  }
+
+  export type ParticipanteSumAggregateInputType = {
+    percentual?: true
+  }
+
+  export type ParticipanteMinAggregateInputType = {
+    id?: true
+    metaId?: true
+    usuarioId?: true
+    percentual?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ParticipanteMaxAggregateInputType = {
+    id?: true
+    metaId?: true
+    usuarioId?: true
+    percentual?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ParticipanteCountAggregateInputType = {
+    id?: true
+    metaId?: true
+    usuarioId?: true
+    percentual?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ParticipanteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Participante to aggregate.
+     */
+    where?: ParticipanteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Participantes to fetch.
+     */
+    orderBy?: ParticipanteOrderByWithRelationInput | ParticipanteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ParticipanteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Participantes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Participantes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Participantes
+    **/
+    _count?: true | ParticipanteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ParticipanteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ParticipanteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ParticipanteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ParticipanteMaxAggregateInputType
+  }
+
+  export type GetParticipanteAggregateType<T extends ParticipanteAggregateArgs> = {
+        [P in keyof T & keyof AggregateParticipante]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateParticipante[P]>
+      : GetScalarType<T[P], AggregateParticipante[P]>
+  }
+
+
+
+
+  export type ParticipanteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ParticipanteWhereInput
+    orderBy?: ParticipanteOrderByWithAggregationInput | ParticipanteOrderByWithAggregationInput[]
+    by: ParticipanteScalarFieldEnum[] | ParticipanteScalarFieldEnum
+    having?: ParticipanteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ParticipanteCountAggregateInputType | true
+    _avg?: ParticipanteAvgAggregateInputType
+    _sum?: ParticipanteSumAggregateInputType
+    _min?: ParticipanteMinAggregateInputType
+    _max?: ParticipanteMaxAggregateInputType
+  }
+
+  export type ParticipanteGroupByOutputType = {
+    id: string
+    metaId: string
+    usuarioId: string
+    percentual: number
+    createdAt: Date
+    updatedAt: Date
+    _count: ParticipanteCountAggregateOutputType | null
+    _avg: ParticipanteAvgAggregateOutputType | null
+    _sum: ParticipanteSumAggregateOutputType | null
+    _min: ParticipanteMinAggregateOutputType | null
+    _max: ParticipanteMaxAggregateOutputType | null
+  }
+
+  type GetParticipanteGroupByPayload<T extends ParticipanteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ParticipanteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ParticipanteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ParticipanteGroupByOutputType[P]>
+            : GetScalarType<T[P], ParticipanteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ParticipanteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    metaId?: boolean
+    usuarioId?: boolean
+    percentual?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    meta?: boolean | MetaDefaultArgs<ExtArgs>
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["participante"]>
+
+  export type ParticipanteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    metaId?: boolean
+    usuarioId?: boolean
+    percentual?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    meta?: boolean | MetaDefaultArgs<ExtArgs>
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["participante"]>
+
+  export type ParticipanteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    metaId?: boolean
+    usuarioId?: boolean
+    percentual?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    meta?: boolean | MetaDefaultArgs<ExtArgs>
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["participante"]>
+
+  export type ParticipanteSelectScalar = {
+    id?: boolean
+    metaId?: boolean
+    usuarioId?: boolean
+    percentual?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ParticipanteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "metaId" | "usuarioId" | "percentual" | "createdAt" | "updatedAt", ExtArgs["result"]["participante"]>
+  export type ParticipanteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meta?: boolean | MetaDefaultArgs<ExtArgs>
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ParticipanteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meta?: boolean | MetaDefaultArgs<ExtArgs>
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ParticipanteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    meta?: boolean | MetaDefaultArgs<ExtArgs>
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ParticipantePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Participante"
+    objects: {
+      meta: Prisma.$MetaPayload<ExtArgs>
+      usuario: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      metaId: string
+      usuarioId: string
+      percentual: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["participante"]>
+    composites: {}
+  }
+
+  type ParticipanteGetPayload<S extends boolean | null | undefined | ParticipanteDefaultArgs> = $Result.GetResult<Prisma.$ParticipantePayload, S>
+
+  type ParticipanteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ParticipanteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ParticipanteCountAggregateInputType | true
+    }
+
+  export interface ParticipanteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Participante'], meta: { name: 'Participante' } }
+    /**
+     * Find zero or one Participante that matches the filter.
+     * @param {ParticipanteFindUniqueArgs} args - Arguments to find a Participante
+     * @example
+     * // Get one Participante
+     * const participante = await prisma.participante.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ParticipanteFindUniqueArgs>(args: SelectSubset<T, ParticipanteFindUniqueArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Participante that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ParticipanteFindUniqueOrThrowArgs} args - Arguments to find a Participante
+     * @example
+     * // Get one Participante
+     * const participante = await prisma.participante.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ParticipanteFindUniqueOrThrowArgs>(args: SelectSubset<T, ParticipanteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Participante that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParticipanteFindFirstArgs} args - Arguments to find a Participante
+     * @example
+     * // Get one Participante
+     * const participante = await prisma.participante.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ParticipanteFindFirstArgs>(args?: SelectSubset<T, ParticipanteFindFirstArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Participante that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParticipanteFindFirstOrThrowArgs} args - Arguments to find a Participante
+     * @example
+     * // Get one Participante
+     * const participante = await prisma.participante.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ParticipanteFindFirstOrThrowArgs>(args?: SelectSubset<T, ParticipanteFindFirstOrThrowArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Participantes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParticipanteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Participantes
+     * const participantes = await prisma.participante.findMany()
+     * 
+     * // Get first 10 Participantes
+     * const participantes = await prisma.participante.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const participanteWithIdOnly = await prisma.participante.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ParticipanteFindManyArgs>(args?: SelectSubset<T, ParticipanteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Participante.
+     * @param {ParticipanteCreateArgs} args - Arguments to create a Participante.
+     * @example
+     * // Create one Participante
+     * const Participante = await prisma.participante.create({
+     *   data: {
+     *     // ... data to create a Participante
+     *   }
+     * })
+     * 
+     */
+    create<T extends ParticipanteCreateArgs>(args: SelectSubset<T, ParticipanteCreateArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Participantes.
+     * @param {ParticipanteCreateManyArgs} args - Arguments to create many Participantes.
+     * @example
+     * // Create many Participantes
+     * const participante = await prisma.participante.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ParticipanteCreateManyArgs>(args?: SelectSubset<T, ParticipanteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Participantes and returns the data saved in the database.
+     * @param {ParticipanteCreateManyAndReturnArgs} args - Arguments to create many Participantes.
+     * @example
+     * // Create many Participantes
+     * const participante = await prisma.participante.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Participantes and only return the `id`
+     * const participanteWithIdOnly = await prisma.participante.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ParticipanteCreateManyAndReturnArgs>(args?: SelectSubset<T, ParticipanteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Participante.
+     * @param {ParticipanteDeleteArgs} args - Arguments to delete one Participante.
+     * @example
+     * // Delete one Participante
+     * const Participante = await prisma.participante.delete({
+     *   where: {
+     *     // ... filter to delete one Participante
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ParticipanteDeleteArgs>(args: SelectSubset<T, ParticipanteDeleteArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Participante.
+     * @param {ParticipanteUpdateArgs} args - Arguments to update one Participante.
+     * @example
+     * // Update one Participante
+     * const participante = await prisma.participante.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ParticipanteUpdateArgs>(args: SelectSubset<T, ParticipanteUpdateArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Participantes.
+     * @param {ParticipanteDeleteManyArgs} args - Arguments to filter Participantes to delete.
+     * @example
+     * // Delete a few Participantes
+     * const { count } = await prisma.participante.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ParticipanteDeleteManyArgs>(args?: SelectSubset<T, ParticipanteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Participantes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParticipanteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Participantes
+     * const participante = await prisma.participante.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ParticipanteUpdateManyArgs>(args: SelectSubset<T, ParticipanteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Participantes and returns the data updated in the database.
+     * @param {ParticipanteUpdateManyAndReturnArgs} args - Arguments to update many Participantes.
+     * @example
+     * // Update many Participantes
+     * const participante = await prisma.participante.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Participantes and only return the `id`
+     * const participanteWithIdOnly = await prisma.participante.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ParticipanteUpdateManyAndReturnArgs>(args: SelectSubset<T, ParticipanteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Participante.
+     * @param {ParticipanteUpsertArgs} args - Arguments to update or create a Participante.
+     * @example
+     * // Update or create a Participante
+     * const participante = await prisma.participante.upsert({
+     *   create: {
+     *     // ... data to create a Participante
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Participante we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ParticipanteUpsertArgs>(args: SelectSubset<T, ParticipanteUpsertArgs<ExtArgs>>): Prisma__ParticipanteClient<$Result.GetResult<Prisma.$ParticipantePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Participantes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParticipanteCountArgs} args - Arguments to filter Participantes to count.
+     * @example
+     * // Count the number of Participantes
+     * const count = await prisma.participante.count({
+     *   where: {
+     *     // ... the filter for the Participantes we want to count
+     *   }
+     * })
+    **/
+    count<T extends ParticipanteCountArgs>(
+      args?: Subset<T, ParticipanteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ParticipanteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Participante.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParticipanteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ParticipanteAggregateArgs>(args: Subset<T, ParticipanteAggregateArgs>): Prisma.PrismaPromise<GetParticipanteAggregateType<T>>
+
+    /**
+     * Group by Participante.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ParticipanteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ParticipanteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ParticipanteGroupByArgs['orderBy'] }
+        : { orderBy?: ParticipanteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ParticipanteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetParticipanteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Participante model
+   */
+  readonly fields: ParticipanteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Participante.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ParticipanteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    meta<T extends MetaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MetaDefaultArgs<ExtArgs>>): Prisma__MetaClient<$Result.GetResult<Prisma.$MetaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    usuario<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Participante model
+   */
+  interface ParticipanteFieldRefs {
+    readonly id: FieldRef<"Participante", 'String'>
+    readonly metaId: FieldRef<"Participante", 'String'>
+    readonly usuarioId: FieldRef<"Participante", 'String'>
+    readonly percentual: FieldRef<"Participante", 'Float'>
+    readonly createdAt: FieldRef<"Participante", 'DateTime'>
+    readonly updatedAt: FieldRef<"Participante", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Participante findUnique
+   */
+  export type ParticipanteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * Filter, which Participante to fetch.
+     */
+    where: ParticipanteWhereUniqueInput
+  }
+
+  /**
+   * Participante findUniqueOrThrow
+   */
+  export type ParticipanteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * Filter, which Participante to fetch.
+     */
+    where: ParticipanteWhereUniqueInput
+  }
+
+  /**
+   * Participante findFirst
+   */
+  export type ParticipanteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * Filter, which Participante to fetch.
+     */
+    where?: ParticipanteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Participantes to fetch.
+     */
+    orderBy?: ParticipanteOrderByWithRelationInput | ParticipanteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Participantes.
+     */
+    cursor?: ParticipanteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Participantes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Participantes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Participantes.
+     */
+    distinct?: ParticipanteScalarFieldEnum | ParticipanteScalarFieldEnum[]
+  }
+
+  /**
+   * Participante findFirstOrThrow
+   */
+  export type ParticipanteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * Filter, which Participante to fetch.
+     */
+    where?: ParticipanteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Participantes to fetch.
+     */
+    orderBy?: ParticipanteOrderByWithRelationInput | ParticipanteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Participantes.
+     */
+    cursor?: ParticipanteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Participantes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Participantes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Participantes.
+     */
+    distinct?: ParticipanteScalarFieldEnum | ParticipanteScalarFieldEnum[]
+  }
+
+  /**
+   * Participante findMany
+   */
+  export type ParticipanteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * Filter, which Participantes to fetch.
+     */
+    where?: ParticipanteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Participantes to fetch.
+     */
+    orderBy?: ParticipanteOrderByWithRelationInput | ParticipanteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Participantes.
+     */
+    cursor?: ParticipanteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Participantes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Participantes.
+     */
+    skip?: number
+    distinct?: ParticipanteScalarFieldEnum | ParticipanteScalarFieldEnum[]
+  }
+
+  /**
+   * Participante create
+   */
+  export type ParticipanteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Participante.
+     */
+    data: XOR<ParticipanteCreateInput, ParticipanteUncheckedCreateInput>
+  }
+
+  /**
+   * Participante createMany
+   */
+  export type ParticipanteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Participantes.
+     */
+    data: ParticipanteCreateManyInput | ParticipanteCreateManyInput[]
+  }
+
+  /**
+   * Participante createManyAndReturn
+   */
+  export type ParticipanteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * The data used to create many Participantes.
+     */
+    data: ParticipanteCreateManyInput | ParticipanteCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Participante update
+   */
+  export type ParticipanteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Participante.
+     */
+    data: XOR<ParticipanteUpdateInput, ParticipanteUncheckedUpdateInput>
+    /**
+     * Choose, which Participante to update.
+     */
+    where: ParticipanteWhereUniqueInput
+  }
+
+  /**
+   * Participante updateMany
+   */
+  export type ParticipanteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Participantes.
+     */
+    data: XOR<ParticipanteUpdateManyMutationInput, ParticipanteUncheckedUpdateManyInput>
+    /**
+     * Filter which Participantes to update
+     */
+    where?: ParticipanteWhereInput
+    /**
+     * Limit how many Participantes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Participante updateManyAndReturn
+   */
+  export type ParticipanteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * The data used to update Participantes.
+     */
+    data: XOR<ParticipanteUpdateManyMutationInput, ParticipanteUncheckedUpdateManyInput>
+    /**
+     * Filter which Participantes to update
+     */
+    where?: ParticipanteWhereInput
+    /**
+     * Limit how many Participantes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Participante upsert
+   */
+  export type ParticipanteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Participante to update in case it exists.
+     */
+    where: ParticipanteWhereUniqueInput
+    /**
+     * In case the Participante found by the `where` argument doesn't exist, create a new Participante with this data.
+     */
+    create: XOR<ParticipanteCreateInput, ParticipanteUncheckedCreateInput>
+    /**
+     * In case the Participante was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ParticipanteUpdateInput, ParticipanteUncheckedUpdateInput>
+  }
+
+  /**
+   * Participante delete
+   */
+  export type ParticipanteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+    /**
+     * Filter which Participante to delete.
+     */
+    where: ParticipanteWhereUniqueInput
+  }
+
+  /**
+   * Participante deleteMany
+   */
+  export type ParticipanteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Participantes to delete
+     */
+    where?: ParticipanteWhereInput
+    /**
+     * Limit how many Participantes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Participante without action
+   */
+  export type ParticipanteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Participante
+     */
+    select?: ParticipanteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Participante
+     */
+    omit?: ParticipanteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParticipanteInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Parcela
    */
 
@@ -3632,10 +4918,12 @@ export namespace Prisma {
     numero: number | null
     valor: number | null
     dataVencimento: Date | null
-    status: $Enums.Status | null
+    status: string | null
     valorPago: number | null
-    responsavel: $Enums.Responsavel | null
+    responsavelId: string | null
     dataPagamento: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ParcelaMaxAggregateOutputType = {
@@ -3644,10 +4932,12 @@ export namespace Prisma {
     numero: number | null
     valor: number | null
     dataVencimento: Date | null
-    status: $Enums.Status | null
+    status: string | null
     valorPago: number | null
-    responsavel: $Enums.Responsavel | null
+    responsavelId: string | null
     dataPagamento: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ParcelaCountAggregateOutputType = {
@@ -3658,8 +4948,10 @@ export namespace Prisma {
     dataVencimento: number
     status: number
     valorPago: number
-    responsavel: number
+    responsavelId: number
     dataPagamento: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -3684,8 +4976,10 @@ export namespace Prisma {
     dataVencimento?: true
     status?: true
     valorPago?: true
-    responsavel?: true
+    responsavelId?: true
     dataPagamento?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ParcelaMaxAggregateInputType = {
@@ -3696,8 +4990,10 @@ export namespace Prisma {
     dataVencimento?: true
     status?: true
     valorPago?: true
-    responsavel?: true
+    responsavelId?: true
     dataPagamento?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ParcelaCountAggregateInputType = {
@@ -3708,8 +5004,10 @@ export namespace Prisma {
     dataVencimento?: true
     status?: true
     valorPago?: true
-    responsavel?: true
+    responsavelId?: true
     dataPagamento?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -3805,10 +5103,12 @@ export namespace Prisma {
     numero: number
     valor: number
     dataVencimento: Date
-    status: $Enums.Status
+    status: string
     valorPago: number | null
-    responsavel: $Enums.Responsavel
+    responsavelId: string
     dataPagamento: Date | null
+    createdAt: Date
+    updatedAt: Date
     _count: ParcelaCountAggregateOutputType | null
     _avg: ParcelaAvgAggregateOutputType | null
     _sum: ParcelaSumAggregateOutputType | null
@@ -3838,9 +5138,12 @@ export namespace Prisma {
     dataVencimento?: boolean
     status?: boolean
     valorPago?: boolean
-    responsavel?: boolean
+    responsavelId?: boolean
     dataPagamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     meta?: boolean | MetaDefaultArgs<ExtArgs>
+    responsavel?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["parcela"]>
 
   export type ParcelaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3851,9 +5154,12 @@ export namespace Prisma {
     dataVencimento?: boolean
     status?: boolean
     valorPago?: boolean
-    responsavel?: boolean
+    responsavelId?: boolean
     dataPagamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     meta?: boolean | MetaDefaultArgs<ExtArgs>
+    responsavel?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["parcela"]>
 
   export type ParcelaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3864,9 +5170,12 @@ export namespace Prisma {
     dataVencimento?: boolean
     status?: boolean
     valorPago?: boolean
-    responsavel?: boolean
+    responsavelId?: boolean
     dataPagamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     meta?: boolean | MetaDefaultArgs<ExtArgs>
+    responsavel?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["parcela"]>
 
   export type ParcelaSelectScalar = {
@@ -3877,25 +5186,31 @@ export namespace Prisma {
     dataVencimento?: boolean
     status?: boolean
     valorPago?: boolean
-    responsavel?: boolean
+    responsavelId?: boolean
     dataPagamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ParcelaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "metaId" | "numero" | "valor" | "dataVencimento" | "status" | "valorPago" | "responsavel" | "dataPagamento", ExtArgs["result"]["parcela"]>
+  export type ParcelaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "metaId" | "numero" | "valor" | "dataVencimento" | "status" | "valorPago" | "responsavelId" | "dataPagamento" | "createdAt" | "updatedAt", ExtArgs["result"]["parcela"]>
   export type ParcelaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta?: boolean | MetaDefaultArgs<ExtArgs>
+    responsavel?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ParcelaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta?: boolean | MetaDefaultArgs<ExtArgs>
+    responsavel?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ParcelaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta?: boolean | MetaDefaultArgs<ExtArgs>
+    responsavel?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ParcelaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Parcela"
     objects: {
       meta: Prisma.$MetaPayload<ExtArgs>
+      responsavel: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3903,10 +5218,12 @@ export namespace Prisma {
       numero: number
       valor: number
       dataVencimento: Date
-      status: $Enums.Status
+      status: string
       valorPago: number | null
-      responsavel: $Enums.Responsavel
+      responsavelId: string
       dataPagamento: Date | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["parcela"]>
     composites: {}
   }
@@ -4302,6 +5619,7 @@ export namespace Prisma {
   export interface Prisma__ParcelaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     meta<T extends MetaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MetaDefaultArgs<ExtArgs>>): Prisma__MetaClient<$Result.GetResult<Prisma.$MetaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    responsavel<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4336,10 +5654,12 @@ export namespace Prisma {
     readonly numero: FieldRef<"Parcela", 'Int'>
     readonly valor: FieldRef<"Parcela", 'Float'>
     readonly dataVencimento: FieldRef<"Parcela", 'DateTime'>
-    readonly status: FieldRef<"Parcela", 'Status'>
+    readonly status: FieldRef<"Parcela", 'String'>
     readonly valorPago: FieldRef<"Parcela", 'Float'>
-    readonly responsavel: FieldRef<"Parcela", 'Responsavel'>
+    readonly responsavelId: FieldRef<"Parcela", 'String'>
     readonly dataPagamento: FieldRef<"Parcela", 'DateTime'>
+    readonly createdAt: FieldRef<"Parcela", 'DateTime'>
+    readonly updatedAt: FieldRef<"Parcela", 'DateTime'>
   }
     
 
@@ -4768,6 +6088,7 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     password: 'password',
+    avatar: 'avatar',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -4785,17 +6106,34 @@ export namespace Prisma {
     numParcelas: 'numParcelas',
     recorrente: 'recorrente',
     frequencia: 'frequencia',
+    intervalo: 'intervalo',
     diaVencimento: 'diaVencimento',
     diaSemana: 'diaSemana',
     horario: 'horario',
     dataInicio: 'dataInicio',
     dataFim: 'dataFim',
     numExecucoes: 'numExecucoes',
+    distribuicaoTipo: 'distribuicaoTipo',
+    valorMinParcela: 'valorMinParcela',
+    valorMaxParcela: 'valorMaxParcela',
     usuarioCriadorId: 'usuarioCriadorId',
-    dataCriacao: 'dataCriacao'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type MetaScalarFieldEnum = (typeof MetaScalarFieldEnum)[keyof typeof MetaScalarFieldEnum]
+
+
+  export const ParticipanteScalarFieldEnum: {
+    id: 'id',
+    metaId: 'metaId',
+    usuarioId: 'usuarioId',
+    percentual: 'percentual',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ParticipanteScalarFieldEnum = (typeof ParticipanteScalarFieldEnum)[keyof typeof ParticipanteScalarFieldEnum]
 
 
   export const ParcelaScalarFieldEnum: {
@@ -4806,8 +6144,10 @@ export namespace Prisma {
     dataVencimento: 'dataVencimento',
     status: 'status',
     valorPago: 'valorPago',
-    responsavel: 'responsavel',
-    dataPagamento: 'dataPagamento'
+    responsavelId: 'responsavelId',
+    dataPagamento: 'dataPagamento',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ParcelaScalarFieldEnum = (typeof ParcelaScalarFieldEnum)[keyof typeof ParcelaScalarFieldEnum]
@@ -4867,27 +6207,6 @@ export namespace Prisma {
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
-
-
-  /**
-   * Reference to a field of type 'Frequencia'
-   */
-  export type EnumFrequenciaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Frequencia'>
-    
-
-
-  /**
-   * Reference to a field of type 'Status'
-   */
-  export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
-    
-
-
-  /**
-   * Reference to a field of type 'Responsavel'
-   */
-  export type EnumResponsavelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Responsavel'>
-    
   /**
    * Deep Input Types
    */
@@ -4901,10 +6220,12 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     email?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
+    avatar?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     metasCriadas?: MetaListRelationFilter
-    metas?: MetaListRelationFilter
+    participacoes?: ParticipanteListRelationFilter
+    parcelas?: ParcelaListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4912,10 +6233,12 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     metasCriadas?: MetaOrderByRelationAggregateInput
-    metas?: MetaOrderByRelationAggregateInput
+    participacoes?: ParticipanteOrderByRelationAggregateInput
+    parcelas?: ParcelaOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4926,10 +6249,12 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
+    avatar?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     metasCriadas?: MetaListRelationFilter
-    metas?: MetaListRelationFilter
+    participacoes?: ParticipanteListRelationFilter
+    parcelas?: ParcelaListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -4937,6 +6262,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -4952,6 +6278,7 @@ export namespace Prisma {
     name?: StringNullableWithAggregatesFilter<"User"> | string | null
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
+    avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -4968,17 +6295,22 @@ export namespace Prisma {
     valorParcela?: FloatFilter<"Meta"> | number
     numParcelas?: IntFilter<"Meta"> | number
     recorrente?: BoolFilter<"Meta"> | boolean
-    frequencia?: EnumFrequenciaNullableFilter<"Meta"> | $Enums.Frequencia | null
+    frequencia?: StringNullableFilter<"Meta"> | string | null
+    intervalo?: IntNullableFilter<"Meta"> | number | null
     diaVencimento?: IntNullableFilter<"Meta"> | number | null
     diaSemana?: StringNullableFilter<"Meta"> | string | null
     horario?: StringNullableFilter<"Meta"> | string | null
     dataInicio?: DateTimeFilter<"Meta"> | Date | string
     dataFim?: DateTimeNullableFilter<"Meta"> | Date | string | null
     numExecucoes?: IntNullableFilter<"Meta"> | number | null
+    distribuicaoTipo?: StringFilter<"Meta"> | string
+    valorMinParcela?: FloatNullableFilter<"Meta"> | number | null
+    valorMaxParcela?: FloatNullableFilter<"Meta"> | number | null
     usuarioCriadorId?: StringFilter<"Meta"> | string
-    dataCriacao?: DateTimeFilter<"Meta"> | Date | string
+    createdAt?: DateTimeFilter<"Meta"> | Date | string
+    updatedAt?: DateTimeFilter<"Meta"> | Date | string
     usuarioCriador?: XOR<UserScalarRelationFilter, UserWhereInput>
-    participantes?: UserListRelationFilter
+    participantes?: ParticipanteListRelationFilter
     parcelas?: ParcelaListRelationFilter
   }
 
@@ -4992,16 +6324,21 @@ export namespace Prisma {
     numParcelas?: SortOrder
     recorrente?: SortOrder
     frequencia?: SortOrderInput | SortOrder
+    intervalo?: SortOrderInput | SortOrder
     diaVencimento?: SortOrderInput | SortOrder
     diaSemana?: SortOrderInput | SortOrder
     horario?: SortOrderInput | SortOrder
     dataInicio?: SortOrder
     dataFim?: SortOrderInput | SortOrder
     numExecucoes?: SortOrderInput | SortOrder
+    distribuicaoTipo?: SortOrder
+    valorMinParcela?: SortOrderInput | SortOrder
+    valorMaxParcela?: SortOrderInput | SortOrder
     usuarioCriadorId?: SortOrder
-    dataCriacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     usuarioCriador?: UserOrderByWithRelationInput
-    participantes?: UserOrderByRelationAggregateInput
+    participantes?: ParticipanteOrderByRelationAggregateInput
     parcelas?: ParcelaOrderByRelationAggregateInput
   }
 
@@ -5017,17 +6354,22 @@ export namespace Prisma {
     valorParcela?: FloatFilter<"Meta"> | number
     numParcelas?: IntFilter<"Meta"> | number
     recorrente?: BoolFilter<"Meta"> | boolean
-    frequencia?: EnumFrequenciaNullableFilter<"Meta"> | $Enums.Frequencia | null
+    frequencia?: StringNullableFilter<"Meta"> | string | null
+    intervalo?: IntNullableFilter<"Meta"> | number | null
     diaVencimento?: IntNullableFilter<"Meta"> | number | null
     diaSemana?: StringNullableFilter<"Meta"> | string | null
     horario?: StringNullableFilter<"Meta"> | string | null
     dataInicio?: DateTimeFilter<"Meta"> | Date | string
     dataFim?: DateTimeNullableFilter<"Meta"> | Date | string | null
     numExecucoes?: IntNullableFilter<"Meta"> | number | null
+    distribuicaoTipo?: StringFilter<"Meta"> | string
+    valorMinParcela?: FloatNullableFilter<"Meta"> | number | null
+    valorMaxParcela?: FloatNullableFilter<"Meta"> | number | null
     usuarioCriadorId?: StringFilter<"Meta"> | string
-    dataCriacao?: DateTimeFilter<"Meta"> | Date | string
+    createdAt?: DateTimeFilter<"Meta"> | Date | string
+    updatedAt?: DateTimeFilter<"Meta"> | Date | string
     usuarioCriador?: XOR<UserScalarRelationFilter, UserWhereInput>
-    participantes?: UserListRelationFilter
+    participantes?: ParticipanteListRelationFilter
     parcelas?: ParcelaListRelationFilter
   }, "id">
 
@@ -5041,14 +6383,19 @@ export namespace Prisma {
     numParcelas?: SortOrder
     recorrente?: SortOrder
     frequencia?: SortOrderInput | SortOrder
+    intervalo?: SortOrderInput | SortOrder
     diaVencimento?: SortOrderInput | SortOrder
     diaSemana?: SortOrderInput | SortOrder
     horario?: SortOrderInput | SortOrder
     dataInicio?: SortOrder
     dataFim?: SortOrderInput | SortOrder
     numExecucoes?: SortOrderInput | SortOrder
+    distribuicaoTipo?: SortOrder
+    valorMinParcela?: SortOrderInput | SortOrder
+    valorMaxParcela?: SortOrderInput | SortOrder
     usuarioCriadorId?: SortOrder
-    dataCriacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: MetaCountOrderByAggregateInput
     _avg?: MetaAvgOrderByAggregateInput
     _max?: MetaMaxOrderByAggregateInput
@@ -5068,15 +6415,86 @@ export namespace Prisma {
     valorParcela?: FloatWithAggregatesFilter<"Meta"> | number
     numParcelas?: IntWithAggregatesFilter<"Meta"> | number
     recorrente?: BoolWithAggregatesFilter<"Meta"> | boolean
-    frequencia?: EnumFrequenciaNullableWithAggregatesFilter<"Meta"> | $Enums.Frequencia | null
+    frequencia?: StringNullableWithAggregatesFilter<"Meta"> | string | null
+    intervalo?: IntNullableWithAggregatesFilter<"Meta"> | number | null
     diaVencimento?: IntNullableWithAggregatesFilter<"Meta"> | number | null
     diaSemana?: StringNullableWithAggregatesFilter<"Meta"> | string | null
     horario?: StringNullableWithAggregatesFilter<"Meta"> | string | null
     dataInicio?: DateTimeWithAggregatesFilter<"Meta"> | Date | string
     dataFim?: DateTimeNullableWithAggregatesFilter<"Meta"> | Date | string | null
     numExecucoes?: IntNullableWithAggregatesFilter<"Meta"> | number | null
+    distribuicaoTipo?: StringWithAggregatesFilter<"Meta"> | string
+    valorMinParcela?: FloatNullableWithAggregatesFilter<"Meta"> | number | null
+    valorMaxParcela?: FloatNullableWithAggregatesFilter<"Meta"> | number | null
     usuarioCriadorId?: StringWithAggregatesFilter<"Meta"> | string
-    dataCriacao?: DateTimeWithAggregatesFilter<"Meta"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Meta"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Meta"> | Date | string
+  }
+
+  export type ParticipanteWhereInput = {
+    AND?: ParticipanteWhereInput | ParticipanteWhereInput[]
+    OR?: ParticipanteWhereInput[]
+    NOT?: ParticipanteWhereInput | ParticipanteWhereInput[]
+    id?: StringFilter<"Participante"> | string
+    metaId?: StringFilter<"Participante"> | string
+    usuarioId?: StringFilter<"Participante"> | string
+    percentual?: FloatFilter<"Participante"> | number
+    createdAt?: DateTimeFilter<"Participante"> | Date | string
+    updatedAt?: DateTimeFilter<"Participante"> | Date | string
+    meta?: XOR<MetaScalarRelationFilter, MetaWhereInput>
+    usuario?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ParticipanteOrderByWithRelationInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    usuarioId?: SortOrder
+    percentual?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    meta?: MetaOrderByWithRelationInput
+    usuario?: UserOrderByWithRelationInput
+  }
+
+  export type ParticipanteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    metaId_usuarioId?: ParticipanteMetaIdUsuarioIdCompoundUniqueInput
+    AND?: ParticipanteWhereInput | ParticipanteWhereInput[]
+    OR?: ParticipanteWhereInput[]
+    NOT?: ParticipanteWhereInput | ParticipanteWhereInput[]
+    metaId?: StringFilter<"Participante"> | string
+    usuarioId?: StringFilter<"Participante"> | string
+    percentual?: FloatFilter<"Participante"> | number
+    createdAt?: DateTimeFilter<"Participante"> | Date | string
+    updatedAt?: DateTimeFilter<"Participante"> | Date | string
+    meta?: XOR<MetaScalarRelationFilter, MetaWhereInput>
+    usuario?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "metaId_usuarioId">
+
+  export type ParticipanteOrderByWithAggregationInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    usuarioId?: SortOrder
+    percentual?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ParticipanteCountOrderByAggregateInput
+    _avg?: ParticipanteAvgOrderByAggregateInput
+    _max?: ParticipanteMaxOrderByAggregateInput
+    _min?: ParticipanteMinOrderByAggregateInput
+    _sum?: ParticipanteSumOrderByAggregateInput
+  }
+
+  export type ParticipanteScalarWhereWithAggregatesInput = {
+    AND?: ParticipanteScalarWhereWithAggregatesInput | ParticipanteScalarWhereWithAggregatesInput[]
+    OR?: ParticipanteScalarWhereWithAggregatesInput[]
+    NOT?: ParticipanteScalarWhereWithAggregatesInput | ParticipanteScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Participante"> | string
+    metaId?: StringWithAggregatesFilter<"Participante"> | string
+    usuarioId?: StringWithAggregatesFilter<"Participante"> | string
+    percentual?: FloatWithAggregatesFilter<"Participante"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Participante"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Participante"> | Date | string
   }
 
   export type ParcelaWhereInput = {
@@ -5088,11 +6506,14 @@ export namespace Prisma {
     numero?: IntFilter<"Parcela"> | number
     valor?: FloatFilter<"Parcela"> | number
     dataVencimento?: DateTimeFilter<"Parcela"> | Date | string
-    status?: EnumStatusFilter<"Parcela"> | $Enums.Status
+    status?: StringFilter<"Parcela"> | string
     valorPago?: FloatNullableFilter<"Parcela"> | number | null
-    responsavel?: EnumResponsavelFilter<"Parcela"> | $Enums.Responsavel
+    responsavelId?: StringFilter<"Parcela"> | string
     dataPagamento?: DateTimeNullableFilter<"Parcela"> | Date | string | null
+    createdAt?: DateTimeFilter<"Parcela"> | Date | string
+    updatedAt?: DateTimeFilter<"Parcela"> | Date | string
     meta?: XOR<MetaScalarRelationFilter, MetaWhereInput>
+    responsavel?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type ParcelaOrderByWithRelationInput = {
@@ -5103,13 +6524,17 @@ export namespace Prisma {
     dataVencimento?: SortOrder
     status?: SortOrder
     valorPago?: SortOrderInput | SortOrder
-    responsavel?: SortOrder
+    responsavelId?: SortOrder
     dataPagamento?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     meta?: MetaOrderByWithRelationInput
+    responsavel?: UserOrderByWithRelationInput
   }
 
   export type ParcelaWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    metaId_numero_responsavelId?: ParcelaMetaIdNumeroResponsavelIdCompoundUniqueInput
     AND?: ParcelaWhereInput | ParcelaWhereInput[]
     OR?: ParcelaWhereInput[]
     NOT?: ParcelaWhereInput | ParcelaWhereInput[]
@@ -5117,12 +6542,15 @@ export namespace Prisma {
     numero?: IntFilter<"Parcela"> | number
     valor?: FloatFilter<"Parcela"> | number
     dataVencimento?: DateTimeFilter<"Parcela"> | Date | string
-    status?: EnumStatusFilter<"Parcela"> | $Enums.Status
+    status?: StringFilter<"Parcela"> | string
     valorPago?: FloatNullableFilter<"Parcela"> | number | null
-    responsavel?: EnumResponsavelFilter<"Parcela"> | $Enums.Responsavel
+    responsavelId?: StringFilter<"Parcela"> | string
     dataPagamento?: DateTimeNullableFilter<"Parcela"> | Date | string | null
+    createdAt?: DateTimeFilter<"Parcela"> | Date | string
+    updatedAt?: DateTimeFilter<"Parcela"> | Date | string
     meta?: XOR<MetaScalarRelationFilter, MetaWhereInput>
-  }, "id">
+    responsavel?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "metaId_numero_responsavelId">
 
   export type ParcelaOrderByWithAggregationInput = {
     id?: SortOrder
@@ -5132,8 +6560,10 @@ export namespace Prisma {
     dataVencimento?: SortOrder
     status?: SortOrder
     valorPago?: SortOrderInput | SortOrder
-    responsavel?: SortOrder
+    responsavelId?: SortOrder
     dataPagamento?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ParcelaCountOrderByAggregateInput
     _avg?: ParcelaAvgOrderByAggregateInput
     _max?: ParcelaMaxOrderByAggregateInput
@@ -5150,10 +6580,12 @@ export namespace Prisma {
     numero?: IntWithAggregatesFilter<"Parcela"> | number
     valor?: FloatWithAggregatesFilter<"Parcela"> | number
     dataVencimento?: DateTimeWithAggregatesFilter<"Parcela"> | Date | string
-    status?: EnumStatusWithAggregatesFilter<"Parcela"> | $Enums.Status
+    status?: StringWithAggregatesFilter<"Parcela"> | string
     valorPago?: FloatNullableWithAggregatesFilter<"Parcela"> | number | null
-    responsavel?: EnumResponsavelWithAggregatesFilter<"Parcela"> | $Enums.Responsavel
+    responsavelId?: StringWithAggregatesFilter<"Parcela"> | string
     dataPagamento?: DateTimeNullableWithAggregatesFilter<"Parcela"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Parcela"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Parcela"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -5161,10 +6593,12 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     password?: string | null
+    avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     metasCriadas?: MetaCreateNestedManyWithoutUsuarioCriadorInput
-    metas?: MetaCreateNestedManyWithoutParticipantesInput
+    participacoes?: ParticipanteCreateNestedManyWithoutUsuarioInput
+    parcelas?: ParcelaCreateNestedManyWithoutResponsavelInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -5172,10 +6606,12 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     password?: string | null
+    avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     metasCriadas?: MetaUncheckedCreateNestedManyWithoutUsuarioCriadorInput
-    metas?: MetaUncheckedCreateNestedManyWithoutParticipantesInput
+    participacoes?: ParticipanteUncheckedCreateNestedManyWithoutUsuarioInput
+    parcelas?: ParcelaUncheckedCreateNestedManyWithoutResponsavelInput
   }
 
   export type UserUpdateInput = {
@@ -5183,10 +6619,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     metasCriadas?: MetaUpdateManyWithoutUsuarioCriadorNestedInput
-    metas?: MetaUpdateManyWithoutParticipantesNestedInput
+    participacoes?: ParticipanteUpdateManyWithoutUsuarioNestedInput
+    parcelas?: ParcelaUpdateManyWithoutResponsavelNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -5194,10 +6632,12 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     metasCriadas?: MetaUncheckedUpdateManyWithoutUsuarioCriadorNestedInput
-    metas?: MetaUncheckedUpdateManyWithoutParticipantesNestedInput
+    participacoes?: ParticipanteUncheckedUpdateManyWithoutUsuarioNestedInput
+    parcelas?: ParcelaUncheckedUpdateManyWithoutResponsavelNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -5205,6 +6645,7 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     password?: string | null
+    avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5214,6 +6655,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5223,6 +6665,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5235,17 +6678,22 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
-    dataCriacao?: Date | string
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     usuarioCriador: UserCreateNestedOneWithoutMetasCriadasInput
-    participantes?: UserCreateNestedManyWithoutMetasInput
+    participantes?: ParticipanteCreateNestedManyWithoutMetaInput
     parcelas?: ParcelaCreateNestedManyWithoutMetaInput
   }
 
@@ -5257,17 +6705,22 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
     usuarioCriadorId: string
-    dataCriacao?: Date | string
-    participantes?: UserUncheckedCreateNestedManyWithoutMetasInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    participantes?: ParticipanteUncheckedCreateNestedManyWithoutMetaInput
     parcelas?: ParcelaUncheckedCreateNestedManyWithoutMetaInput
   }
 
@@ -5280,16 +6733,21 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usuarioCriador?: UserUpdateOneRequiredWithoutMetasCriadasNestedInput
-    participantes?: UserUpdateManyWithoutMetasNestedInput
+    participantes?: ParticipanteUpdateManyWithoutMetaNestedInput
     parcelas?: ParcelaUpdateManyWithoutMetaNestedInput
   }
 
@@ -5302,16 +6760,21 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
     usuarioCriadorId?: StringFieldUpdateOperationsInput | string
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
-    participantes?: UserUncheckedUpdateManyWithoutMetasNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participantes?: ParticipanteUncheckedUpdateManyWithoutMetaNestedInput
     parcelas?: ParcelaUncheckedUpdateManyWithoutMetaNestedInput
   }
 
@@ -5323,16 +6786,21 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
     usuarioCriadorId: string
-    dataCriacao?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MetaUpdateManyMutationInput = {
@@ -5344,14 +6812,19 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MetaUncheckedUpdateManyInput = {
@@ -5363,15 +6836,81 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
     usuarioCriadorId?: StringFieldUpdateOperationsInput | string
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParticipanteCreateInput = {
+    id?: string
+    percentual: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    meta: MetaCreateNestedOneWithoutParticipantesInput
+    usuario: UserCreateNestedOneWithoutParticipacoesInput
+  }
+
+  export type ParticipanteUncheckedCreateInput = {
+    id?: string
+    metaId: string
+    usuarioId: string
+    percentual: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ParticipanteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    meta?: MetaUpdateOneRequiredWithoutParticipantesNestedInput
+    usuario?: UserUpdateOneRequiredWithoutParticipacoesNestedInput
+  }
+
+  export type ParticipanteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    metaId?: StringFieldUpdateOperationsInput | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParticipanteCreateManyInput = {
+    id?: string
+    metaId: string
+    usuarioId: string
+    percentual: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ParticipanteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParticipanteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    metaId?: StringFieldUpdateOperationsInput | string
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ParcelaCreateInput = {
@@ -5379,11 +6918,13 @@ export namespace Prisma {
     numero: number
     valor: number
     dataVencimento: Date | string
-    status: $Enums.Status
+    status?: string
     valorPago?: number | null
-    responsavel: $Enums.Responsavel
     dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     meta: MetaCreateNestedOneWithoutParcelasInput
+    responsavel: UserCreateNestedOneWithoutParcelasInput
   }
 
   export type ParcelaUncheckedCreateInput = {
@@ -5392,10 +6933,12 @@ export namespace Prisma {
     numero: number
     valor: number
     dataVencimento: Date | string
-    status: $Enums.Status
+    status?: string
     valorPago?: number | null
-    responsavel: $Enums.Responsavel
+    responsavelId: string
     dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ParcelaUpdateInput = {
@@ -5403,11 +6946,13 @@ export namespace Prisma {
     numero?: IntFieldUpdateOperationsInput | number
     valor?: FloatFieldUpdateOperationsInput | number
     dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    status?: StringFieldUpdateOperationsInput | string
     valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
-    responsavel?: EnumResponsavelFieldUpdateOperationsInput | $Enums.Responsavel
     dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     meta?: MetaUpdateOneRequiredWithoutParcelasNestedInput
+    responsavel?: UserUpdateOneRequiredWithoutParcelasNestedInput
   }
 
   export type ParcelaUncheckedUpdateInput = {
@@ -5416,10 +6961,12 @@ export namespace Prisma {
     numero?: IntFieldUpdateOperationsInput | number
     valor?: FloatFieldUpdateOperationsInput | number
     dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    status?: StringFieldUpdateOperationsInput | string
     valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
-    responsavel?: EnumResponsavelFieldUpdateOperationsInput | $Enums.Responsavel
+    responsavelId?: StringFieldUpdateOperationsInput | string
     dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ParcelaCreateManyInput = {
@@ -5428,10 +6975,12 @@ export namespace Prisma {
     numero: number
     valor: number
     dataVencimento: Date | string
-    status: $Enums.Status
+    status?: string
     valorPago?: number | null
-    responsavel: $Enums.Responsavel
+    responsavelId: string
     dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ParcelaUpdateManyMutationInput = {
@@ -5439,10 +6988,11 @@ export namespace Prisma {
     numero?: IntFieldUpdateOperationsInput | number
     valor?: FloatFieldUpdateOperationsInput | number
     dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    status?: StringFieldUpdateOperationsInput | string
     valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
-    responsavel?: EnumResponsavelFieldUpdateOperationsInput | $Enums.Responsavel
     dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ParcelaUncheckedUpdateManyInput = {
@@ -5451,10 +7001,12 @@ export namespace Prisma {
     numero?: IntFieldUpdateOperationsInput | number
     valor?: FloatFieldUpdateOperationsInput | number
     dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    status?: StringFieldUpdateOperationsInput | string
     valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
-    responsavel?: EnumResponsavelFieldUpdateOperationsInput | $Enums.Responsavel
+    responsavelId?: StringFieldUpdateOperationsInput | string
     dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5502,6 +7054,18 @@ export namespace Prisma {
     none?: MetaWhereInput
   }
 
+  export type ParticipanteListRelationFilter = {
+    every?: ParticipanteWhereInput
+    some?: ParticipanteWhereInput
+    none?: ParticipanteWhereInput
+  }
+
+  export type ParcelaListRelationFilter = {
+    every?: ParcelaWhereInput
+    some?: ParcelaWhereInput
+    none?: ParcelaWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -5511,11 +7075,20 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ParticipanteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ParcelaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5525,6 +7098,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5534,6 +7108,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    avatar?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5613,13 +7188,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type EnumFrequenciaNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.Frequencia | EnumFrequenciaFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Frequencia[] | null
-    notIn?: $Enums.Frequencia[] | null
-    not?: NestedEnumFrequenciaNullableFilter<$PrismaModel> | $Enums.Frequencia | null
-  }
-
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -5642,29 +7210,20 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
-  }
-
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
-  }
-
-  export type ParcelaListRelationFilter = {
-    every?: ParcelaWhereInput
-    some?: ParcelaWhereInput
-    none?: ParcelaWhereInput
-  }
-
-  export type UserOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ParcelaOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type MetaCountOrderByAggregateInput = {
@@ -5677,22 +7236,30 @@ export namespace Prisma {
     numParcelas?: SortOrder
     recorrente?: SortOrder
     frequencia?: SortOrder
+    intervalo?: SortOrder
     diaVencimento?: SortOrder
     diaSemana?: SortOrder
     horario?: SortOrder
     dataInicio?: SortOrder
     dataFim?: SortOrder
     numExecucoes?: SortOrder
+    distribuicaoTipo?: SortOrder
+    valorMinParcela?: SortOrder
+    valorMaxParcela?: SortOrder
     usuarioCriadorId?: SortOrder
-    dataCriacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MetaAvgOrderByAggregateInput = {
     valorTotal?: SortOrder
     valorParcela?: SortOrder
     numParcelas?: SortOrder
+    intervalo?: SortOrder
     diaVencimento?: SortOrder
     numExecucoes?: SortOrder
+    valorMinParcela?: SortOrder
+    valorMaxParcela?: SortOrder
   }
 
   export type MetaMaxOrderByAggregateInput = {
@@ -5705,14 +7272,19 @@ export namespace Prisma {
     numParcelas?: SortOrder
     recorrente?: SortOrder
     frequencia?: SortOrder
+    intervalo?: SortOrder
     diaVencimento?: SortOrder
     diaSemana?: SortOrder
     horario?: SortOrder
     dataInicio?: SortOrder
     dataFim?: SortOrder
     numExecucoes?: SortOrder
+    distribuicaoTipo?: SortOrder
+    valorMinParcela?: SortOrder
+    valorMaxParcela?: SortOrder
     usuarioCriadorId?: SortOrder
-    dataCriacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MetaMinOrderByAggregateInput = {
@@ -5725,22 +7297,30 @@ export namespace Prisma {
     numParcelas?: SortOrder
     recorrente?: SortOrder
     frequencia?: SortOrder
+    intervalo?: SortOrder
     diaVencimento?: SortOrder
     diaSemana?: SortOrder
     horario?: SortOrder
     dataInicio?: SortOrder
     dataFim?: SortOrder
     numExecucoes?: SortOrder
+    distribuicaoTipo?: SortOrder
+    valorMinParcela?: SortOrder
+    valorMaxParcela?: SortOrder
     usuarioCriadorId?: SortOrder
-    dataCriacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type MetaSumOrderByAggregateInput = {
     valorTotal?: SortOrder
     valorParcela?: SortOrder
     numParcelas?: SortOrder
+    intervalo?: SortOrder
     diaVencimento?: SortOrder
     numExecucoes?: SortOrder
+    valorMinParcela?: SortOrder
+    valorMaxParcela?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -5783,16 +7363,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type EnumFrequenciaNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Frequencia | EnumFrequenciaFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Frequencia[] | null
-    notIn?: $Enums.Frequencia[] | null
-    not?: NestedEnumFrequenciaNullableWithAggregatesFilter<$PrismaModel> | $Enums.Frequencia | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumFrequenciaNullableFilter<$PrismaModel>
-    _max?: NestedEnumFrequenciaNullableFilter<$PrismaModel>
-  }
-
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -5823,94 +7393,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type EnumStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[]
-    notIn?: $Enums.Status[]
-    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
-  }
-
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type EnumResponsavelFilter<$PrismaModel = never> = {
-    equals?: $Enums.Responsavel | EnumResponsavelFieldRefInput<$PrismaModel>
-    in?: $Enums.Responsavel[]
-    notIn?: $Enums.Responsavel[]
-    not?: NestedEnumResponsavelFilter<$PrismaModel> | $Enums.Responsavel
-  }
-
-  export type MetaScalarRelationFilter = {
-    is?: MetaWhereInput
-    isNot?: MetaWhereInput
-  }
-
-  export type ParcelaCountOrderByAggregateInput = {
-    id?: SortOrder
-    metaId?: SortOrder
-    numero?: SortOrder
-    valor?: SortOrder
-    dataVencimento?: SortOrder
-    status?: SortOrder
-    valorPago?: SortOrder
-    responsavel?: SortOrder
-    dataPagamento?: SortOrder
-  }
-
-  export type ParcelaAvgOrderByAggregateInput = {
-    numero?: SortOrder
-    valor?: SortOrder
-    valorPago?: SortOrder
-  }
-
-  export type ParcelaMaxOrderByAggregateInput = {
-    id?: SortOrder
-    metaId?: SortOrder
-    numero?: SortOrder
-    valor?: SortOrder
-    dataVencimento?: SortOrder
-    status?: SortOrder
-    valorPago?: SortOrder
-    responsavel?: SortOrder
-    dataPagamento?: SortOrder
-  }
-
-  export type ParcelaMinOrderByAggregateInput = {
-    id?: SortOrder
-    metaId?: SortOrder
-    numero?: SortOrder
-    valor?: SortOrder
-    dataVencimento?: SortOrder
-    status?: SortOrder
-    valorPago?: SortOrder
-    responsavel?: SortOrder
-    dataPagamento?: SortOrder
-  }
-
-  export type ParcelaSumOrderByAggregateInput = {
-    numero?: SortOrder
-    valor?: SortOrder
-    valorPago?: SortOrder
-  }
-
-  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[]
-    notIn?: $Enums.Status[]
-    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusFilter<$PrismaModel>
-    _max?: NestedEnumStatusFilter<$PrismaModel>
-  }
-
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -5927,14 +7409,109 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type EnumResponsavelWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Responsavel | EnumResponsavelFieldRefInput<$PrismaModel>
-    in?: $Enums.Responsavel[]
-    notIn?: $Enums.Responsavel[]
-    not?: NestedEnumResponsavelWithAggregatesFilter<$PrismaModel> | $Enums.Responsavel
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumResponsavelFilter<$PrismaModel>
-    _max?: NestedEnumResponsavelFilter<$PrismaModel>
+  export type MetaScalarRelationFilter = {
+    is?: MetaWhereInput
+    isNot?: MetaWhereInput
+  }
+
+  export type ParticipanteMetaIdUsuarioIdCompoundUniqueInput = {
+    metaId: string
+    usuarioId: string
+  }
+
+  export type ParticipanteCountOrderByAggregateInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    usuarioId?: SortOrder
+    percentual?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ParticipanteAvgOrderByAggregateInput = {
+    percentual?: SortOrder
+  }
+
+  export type ParticipanteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    usuarioId?: SortOrder
+    percentual?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ParticipanteMinOrderByAggregateInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    usuarioId?: SortOrder
+    percentual?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ParticipanteSumOrderByAggregateInput = {
+    percentual?: SortOrder
+  }
+
+  export type ParcelaMetaIdNumeroResponsavelIdCompoundUniqueInput = {
+    metaId: string
+    numero: number
+    responsavelId: string
+  }
+
+  export type ParcelaCountOrderByAggregateInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    numero?: SortOrder
+    valor?: SortOrder
+    dataVencimento?: SortOrder
+    status?: SortOrder
+    valorPago?: SortOrder
+    responsavelId?: SortOrder
+    dataPagamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ParcelaAvgOrderByAggregateInput = {
+    numero?: SortOrder
+    valor?: SortOrder
+    valorPago?: SortOrder
+  }
+
+  export type ParcelaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    numero?: SortOrder
+    valor?: SortOrder
+    dataVencimento?: SortOrder
+    status?: SortOrder
+    valorPago?: SortOrder
+    responsavelId?: SortOrder
+    dataPagamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ParcelaMinOrderByAggregateInput = {
+    id?: SortOrder
+    metaId?: SortOrder
+    numero?: SortOrder
+    valor?: SortOrder
+    dataVencimento?: SortOrder
+    status?: SortOrder
+    valorPago?: SortOrder
+    responsavelId?: SortOrder
+    dataPagamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ParcelaSumOrderByAggregateInput = {
+    numero?: SortOrder
+    valor?: SortOrder
+    valorPago?: SortOrder
   }
 
   export type MetaCreateNestedManyWithoutUsuarioCriadorInput = {
@@ -5944,10 +7521,18 @@ export namespace Prisma {
     connect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
   }
 
-  export type MetaCreateNestedManyWithoutParticipantesInput = {
-    create?: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput> | MetaCreateWithoutParticipantesInput[] | MetaUncheckedCreateWithoutParticipantesInput[]
-    connectOrCreate?: MetaCreateOrConnectWithoutParticipantesInput | MetaCreateOrConnectWithoutParticipantesInput[]
-    connect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
+  export type ParticipanteCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<ParticipanteCreateWithoutUsuarioInput, ParticipanteUncheckedCreateWithoutUsuarioInput> | ParticipanteCreateWithoutUsuarioInput[] | ParticipanteUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutUsuarioInput | ParticipanteCreateOrConnectWithoutUsuarioInput[]
+    createMany?: ParticipanteCreateManyUsuarioInputEnvelope
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+  }
+
+  export type ParcelaCreateNestedManyWithoutResponsavelInput = {
+    create?: XOR<ParcelaCreateWithoutResponsavelInput, ParcelaUncheckedCreateWithoutResponsavelInput> | ParcelaCreateWithoutResponsavelInput[] | ParcelaUncheckedCreateWithoutResponsavelInput[]
+    connectOrCreate?: ParcelaCreateOrConnectWithoutResponsavelInput | ParcelaCreateOrConnectWithoutResponsavelInput[]
+    createMany?: ParcelaCreateManyResponsavelInputEnvelope
+    connect?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
   }
 
   export type MetaUncheckedCreateNestedManyWithoutUsuarioCriadorInput = {
@@ -5957,10 +7542,18 @@ export namespace Prisma {
     connect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
   }
 
-  export type MetaUncheckedCreateNestedManyWithoutParticipantesInput = {
-    create?: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput> | MetaCreateWithoutParticipantesInput[] | MetaUncheckedCreateWithoutParticipantesInput[]
-    connectOrCreate?: MetaCreateOrConnectWithoutParticipantesInput | MetaCreateOrConnectWithoutParticipantesInput[]
-    connect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
+  export type ParticipanteUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<ParticipanteCreateWithoutUsuarioInput, ParticipanteUncheckedCreateWithoutUsuarioInput> | ParticipanteCreateWithoutUsuarioInput[] | ParticipanteUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutUsuarioInput | ParticipanteCreateOrConnectWithoutUsuarioInput[]
+    createMany?: ParticipanteCreateManyUsuarioInputEnvelope
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+  }
+
+  export type ParcelaUncheckedCreateNestedManyWithoutResponsavelInput = {
+    create?: XOR<ParcelaCreateWithoutResponsavelInput, ParcelaUncheckedCreateWithoutResponsavelInput> | ParcelaCreateWithoutResponsavelInput[] | ParcelaUncheckedCreateWithoutResponsavelInput[]
+    connectOrCreate?: ParcelaCreateOrConnectWithoutResponsavelInput | ParcelaCreateOrConnectWithoutResponsavelInput[]
+    createMany?: ParcelaCreateManyResponsavelInputEnvelope
+    connect?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5989,17 +7582,32 @@ export namespace Prisma {
     deleteMany?: MetaScalarWhereInput | MetaScalarWhereInput[]
   }
 
-  export type MetaUpdateManyWithoutParticipantesNestedInput = {
-    create?: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput> | MetaCreateWithoutParticipantesInput[] | MetaUncheckedCreateWithoutParticipantesInput[]
-    connectOrCreate?: MetaCreateOrConnectWithoutParticipantesInput | MetaCreateOrConnectWithoutParticipantesInput[]
-    upsert?: MetaUpsertWithWhereUniqueWithoutParticipantesInput | MetaUpsertWithWhereUniqueWithoutParticipantesInput[]
-    set?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    disconnect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    delete?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    connect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    update?: MetaUpdateWithWhereUniqueWithoutParticipantesInput | MetaUpdateWithWhereUniqueWithoutParticipantesInput[]
-    updateMany?: MetaUpdateManyWithWhereWithoutParticipantesInput | MetaUpdateManyWithWhereWithoutParticipantesInput[]
-    deleteMany?: MetaScalarWhereInput | MetaScalarWhereInput[]
+  export type ParticipanteUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<ParticipanteCreateWithoutUsuarioInput, ParticipanteUncheckedCreateWithoutUsuarioInput> | ParticipanteCreateWithoutUsuarioInput[] | ParticipanteUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutUsuarioInput | ParticipanteCreateOrConnectWithoutUsuarioInput[]
+    upsert?: ParticipanteUpsertWithWhereUniqueWithoutUsuarioInput | ParticipanteUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: ParticipanteCreateManyUsuarioInputEnvelope
+    set?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    disconnect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    delete?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    update?: ParticipanteUpdateWithWhereUniqueWithoutUsuarioInput | ParticipanteUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: ParticipanteUpdateManyWithWhereWithoutUsuarioInput | ParticipanteUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: ParticipanteScalarWhereInput | ParticipanteScalarWhereInput[]
+  }
+
+  export type ParcelaUpdateManyWithoutResponsavelNestedInput = {
+    create?: XOR<ParcelaCreateWithoutResponsavelInput, ParcelaUncheckedCreateWithoutResponsavelInput> | ParcelaCreateWithoutResponsavelInput[] | ParcelaUncheckedCreateWithoutResponsavelInput[]
+    connectOrCreate?: ParcelaCreateOrConnectWithoutResponsavelInput | ParcelaCreateOrConnectWithoutResponsavelInput[]
+    upsert?: ParcelaUpsertWithWhereUniqueWithoutResponsavelInput | ParcelaUpsertWithWhereUniqueWithoutResponsavelInput[]
+    createMany?: ParcelaCreateManyResponsavelInputEnvelope
+    set?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    disconnect?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    delete?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    connect?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    update?: ParcelaUpdateWithWhereUniqueWithoutResponsavelInput | ParcelaUpdateWithWhereUniqueWithoutResponsavelInput[]
+    updateMany?: ParcelaUpdateManyWithWhereWithoutResponsavelInput | ParcelaUpdateManyWithWhereWithoutResponsavelInput[]
+    deleteMany?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
   }
 
   export type MetaUncheckedUpdateManyWithoutUsuarioCriadorNestedInput = {
@@ -6016,17 +7624,32 @@ export namespace Prisma {
     deleteMany?: MetaScalarWhereInput | MetaScalarWhereInput[]
   }
 
-  export type MetaUncheckedUpdateManyWithoutParticipantesNestedInput = {
-    create?: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput> | MetaCreateWithoutParticipantesInput[] | MetaUncheckedCreateWithoutParticipantesInput[]
-    connectOrCreate?: MetaCreateOrConnectWithoutParticipantesInput | MetaCreateOrConnectWithoutParticipantesInput[]
-    upsert?: MetaUpsertWithWhereUniqueWithoutParticipantesInput | MetaUpsertWithWhereUniqueWithoutParticipantesInput[]
-    set?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    disconnect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    delete?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    connect?: MetaWhereUniqueInput | MetaWhereUniqueInput[]
-    update?: MetaUpdateWithWhereUniqueWithoutParticipantesInput | MetaUpdateWithWhereUniqueWithoutParticipantesInput[]
-    updateMany?: MetaUpdateManyWithWhereWithoutParticipantesInput | MetaUpdateManyWithWhereWithoutParticipantesInput[]
-    deleteMany?: MetaScalarWhereInput | MetaScalarWhereInput[]
+  export type ParticipanteUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<ParticipanteCreateWithoutUsuarioInput, ParticipanteUncheckedCreateWithoutUsuarioInput> | ParticipanteCreateWithoutUsuarioInput[] | ParticipanteUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutUsuarioInput | ParticipanteCreateOrConnectWithoutUsuarioInput[]
+    upsert?: ParticipanteUpsertWithWhereUniqueWithoutUsuarioInput | ParticipanteUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: ParticipanteCreateManyUsuarioInputEnvelope
+    set?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    disconnect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    delete?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    update?: ParticipanteUpdateWithWhereUniqueWithoutUsuarioInput | ParticipanteUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: ParticipanteUpdateManyWithWhereWithoutUsuarioInput | ParticipanteUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: ParticipanteScalarWhereInput | ParticipanteScalarWhereInput[]
+  }
+
+  export type ParcelaUncheckedUpdateManyWithoutResponsavelNestedInput = {
+    create?: XOR<ParcelaCreateWithoutResponsavelInput, ParcelaUncheckedCreateWithoutResponsavelInput> | ParcelaCreateWithoutResponsavelInput[] | ParcelaUncheckedCreateWithoutResponsavelInput[]
+    connectOrCreate?: ParcelaCreateOrConnectWithoutResponsavelInput | ParcelaCreateOrConnectWithoutResponsavelInput[]
+    upsert?: ParcelaUpsertWithWhereUniqueWithoutResponsavelInput | ParcelaUpsertWithWhereUniqueWithoutResponsavelInput[]
+    createMany?: ParcelaCreateManyResponsavelInputEnvelope
+    set?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    disconnect?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    delete?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    connect?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
+    update?: ParcelaUpdateWithWhereUniqueWithoutResponsavelInput | ParcelaUpdateWithWhereUniqueWithoutResponsavelInput[]
+    updateMany?: ParcelaUpdateManyWithWhereWithoutResponsavelInput | ParcelaUpdateManyWithWhereWithoutResponsavelInput[]
+    deleteMany?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutMetasCriadasInput = {
@@ -6035,10 +7658,11 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type UserCreateNestedManyWithoutMetasInput = {
-    create?: XOR<UserCreateWithoutMetasInput, UserUncheckedCreateWithoutMetasInput> | UserCreateWithoutMetasInput[] | UserUncheckedCreateWithoutMetasInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutMetasInput | UserCreateOrConnectWithoutMetasInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type ParticipanteCreateNestedManyWithoutMetaInput = {
+    create?: XOR<ParticipanteCreateWithoutMetaInput, ParticipanteUncheckedCreateWithoutMetaInput> | ParticipanteCreateWithoutMetaInput[] | ParticipanteUncheckedCreateWithoutMetaInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutMetaInput | ParticipanteCreateOrConnectWithoutMetaInput[]
+    createMany?: ParticipanteCreateManyMetaInputEnvelope
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
   }
 
   export type ParcelaCreateNestedManyWithoutMetaInput = {
@@ -6048,10 +7672,11 @@ export namespace Prisma {
     connect?: ParcelaWhereUniqueInput | ParcelaWhereUniqueInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutMetasInput = {
-    create?: XOR<UserCreateWithoutMetasInput, UserUncheckedCreateWithoutMetasInput> | UserCreateWithoutMetasInput[] | UserUncheckedCreateWithoutMetasInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutMetasInput | UserCreateOrConnectWithoutMetasInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type ParticipanteUncheckedCreateNestedManyWithoutMetaInput = {
+    create?: XOR<ParticipanteCreateWithoutMetaInput, ParticipanteUncheckedCreateWithoutMetaInput> | ParticipanteCreateWithoutMetaInput[] | ParticipanteUncheckedCreateWithoutMetaInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutMetaInput | ParticipanteCreateOrConnectWithoutMetaInput[]
+    createMany?: ParticipanteCreateManyMetaInputEnvelope
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
   }
 
   export type ParcelaUncheckedCreateNestedManyWithoutMetaInput = {
@@ -6081,10 +7706,6 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type NullableEnumFrequenciaFieldUpdateOperationsInput = {
-    set?: $Enums.Frequencia | null
-  }
-
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -6097,6 +7718,14 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutMetasCriadasNestedInput = {
     create?: XOR<UserCreateWithoutMetasCriadasInput, UserUncheckedCreateWithoutMetasCriadasInput>
     connectOrCreate?: UserCreateOrConnectWithoutMetasCriadasInput
@@ -6105,17 +7734,18 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMetasCriadasInput, UserUpdateWithoutMetasCriadasInput>, UserUncheckedUpdateWithoutMetasCriadasInput>
   }
 
-  export type UserUpdateManyWithoutMetasNestedInput = {
-    create?: XOR<UserCreateWithoutMetasInput, UserUncheckedCreateWithoutMetasInput> | UserCreateWithoutMetasInput[] | UserUncheckedCreateWithoutMetasInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutMetasInput | UserCreateOrConnectWithoutMetasInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutMetasInput | UserUpsertWithWhereUniqueWithoutMetasInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutMetasInput | UserUpdateWithWhereUniqueWithoutMetasInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutMetasInput | UserUpdateManyWithWhereWithoutMetasInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type ParticipanteUpdateManyWithoutMetaNestedInput = {
+    create?: XOR<ParticipanteCreateWithoutMetaInput, ParticipanteUncheckedCreateWithoutMetaInput> | ParticipanteCreateWithoutMetaInput[] | ParticipanteUncheckedCreateWithoutMetaInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutMetaInput | ParticipanteCreateOrConnectWithoutMetaInput[]
+    upsert?: ParticipanteUpsertWithWhereUniqueWithoutMetaInput | ParticipanteUpsertWithWhereUniqueWithoutMetaInput[]
+    createMany?: ParticipanteCreateManyMetaInputEnvelope
+    set?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    disconnect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    delete?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    update?: ParticipanteUpdateWithWhereUniqueWithoutMetaInput | ParticipanteUpdateWithWhereUniqueWithoutMetaInput[]
+    updateMany?: ParticipanteUpdateManyWithWhereWithoutMetaInput | ParticipanteUpdateManyWithWhereWithoutMetaInput[]
+    deleteMany?: ParticipanteScalarWhereInput | ParticipanteScalarWhereInput[]
   }
 
   export type ParcelaUpdateManyWithoutMetaNestedInput = {
@@ -6132,17 +7762,18 @@ export namespace Prisma {
     deleteMany?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
   }
 
-  export type UserUncheckedUpdateManyWithoutMetasNestedInput = {
-    create?: XOR<UserCreateWithoutMetasInput, UserUncheckedCreateWithoutMetasInput> | UserCreateWithoutMetasInput[] | UserUncheckedCreateWithoutMetasInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutMetasInput | UserCreateOrConnectWithoutMetasInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutMetasInput | UserUpsertWithWhereUniqueWithoutMetasInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutMetasInput | UserUpdateWithWhereUniqueWithoutMetasInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutMetasInput | UserUpdateManyWithWhereWithoutMetasInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type ParticipanteUncheckedUpdateManyWithoutMetaNestedInput = {
+    create?: XOR<ParticipanteCreateWithoutMetaInput, ParticipanteUncheckedCreateWithoutMetaInput> | ParticipanteCreateWithoutMetaInput[] | ParticipanteUncheckedCreateWithoutMetaInput[]
+    connectOrCreate?: ParticipanteCreateOrConnectWithoutMetaInput | ParticipanteCreateOrConnectWithoutMetaInput[]
+    upsert?: ParticipanteUpsertWithWhereUniqueWithoutMetaInput | ParticipanteUpsertWithWhereUniqueWithoutMetaInput[]
+    createMany?: ParticipanteCreateManyMetaInputEnvelope
+    set?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    disconnect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    delete?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    connect?: ParticipanteWhereUniqueInput | ParticipanteWhereUniqueInput[]
+    update?: ParticipanteUpdateWithWhereUniqueWithoutMetaInput | ParticipanteUpdateWithWhereUniqueWithoutMetaInput[]
+    updateMany?: ParticipanteUpdateManyWithWhereWithoutMetaInput | ParticipanteUpdateManyWithWhereWithoutMetaInput[]
+    deleteMany?: ParticipanteScalarWhereInput | ParticipanteScalarWhereInput[]
   }
 
   export type ParcelaUncheckedUpdateManyWithoutMetaNestedInput = {
@@ -6159,26 +7790,44 @@ export namespace Prisma {
     deleteMany?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
   }
 
+  export type MetaCreateNestedOneWithoutParticipantesInput = {
+    create?: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput>
+    connectOrCreate?: MetaCreateOrConnectWithoutParticipantesInput
+    connect?: MetaWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutParticipacoesInput = {
+    create?: XOR<UserCreateWithoutParticipacoesInput, UserUncheckedCreateWithoutParticipacoesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParticipacoesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MetaUpdateOneRequiredWithoutParticipantesNestedInput = {
+    create?: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput>
+    connectOrCreate?: MetaCreateOrConnectWithoutParticipantesInput
+    upsert?: MetaUpsertWithoutParticipantesInput
+    connect?: MetaWhereUniqueInput
+    update?: XOR<XOR<MetaUpdateToOneWithWhereWithoutParticipantesInput, MetaUpdateWithoutParticipantesInput>, MetaUncheckedUpdateWithoutParticipantesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutParticipacoesNestedInput = {
+    create?: XOR<UserCreateWithoutParticipacoesInput, UserUncheckedCreateWithoutParticipacoesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParticipacoesInput
+    upsert?: UserUpsertWithoutParticipacoesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutParticipacoesInput, UserUpdateWithoutParticipacoesInput>, UserUncheckedUpdateWithoutParticipacoesInput>
+  }
+
   export type MetaCreateNestedOneWithoutParcelasInput = {
     create?: XOR<MetaCreateWithoutParcelasInput, MetaUncheckedCreateWithoutParcelasInput>
     connectOrCreate?: MetaCreateOrConnectWithoutParcelasInput
     connect?: MetaWhereUniqueInput
   }
 
-  export type EnumStatusFieldUpdateOperationsInput = {
-    set?: $Enums.Status
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type EnumResponsavelFieldUpdateOperationsInput = {
-    set?: $Enums.Responsavel
+  export type UserCreateNestedOneWithoutParcelasInput = {
+    create?: XOR<UserCreateWithoutParcelasInput, UserUncheckedCreateWithoutParcelasInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParcelasInput
+    connect?: UserWhereUniqueInput
   }
 
   export type MetaUpdateOneRequiredWithoutParcelasNestedInput = {
@@ -6187,6 +7836,14 @@ export namespace Prisma {
     upsert?: MetaUpsertWithoutParcelasInput
     connect?: MetaWhereUniqueInput
     update?: XOR<XOR<MetaUpdateToOneWithWhereWithoutParcelasInput, MetaUpdateWithoutParcelasInput>, MetaUncheckedUpdateWithoutParcelasInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutParcelasNestedInput = {
+    create?: XOR<UserCreateWithoutParcelasInput, UserUncheckedCreateWithoutParcelasInput>
+    connectOrCreate?: UserCreateOrConnectWithoutParcelasInput
+    upsert?: UserUpsertWithoutParcelasInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutParcelasInput, UserUpdateWithoutParcelasInput>, UserUncheckedUpdateWithoutParcelasInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6314,13 +7971,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedEnumFrequenciaNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.Frequencia | EnumFrequenciaFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Frequencia[] | null
-    notIn?: $Enums.Frequencia[] | null
-    not?: NestedEnumFrequenciaNullableFilter<$PrismaModel> | $Enums.Frequencia | null
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -6330,6 +7980,17 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -6372,16 +8033,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedEnumFrequenciaNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Frequencia | EnumFrequenciaFieldRefInput<$PrismaModel> | null
-    in?: $Enums.Frequencia[] | null
-    notIn?: $Enums.Frequencia[] | null
-    not?: NestedEnumFrequenciaNullableWithAggregatesFilter<$PrismaModel> | $Enums.Frequencia | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumFrequenciaNullableFilter<$PrismaModel>
-    _max?: NestedEnumFrequenciaNullableFilter<$PrismaModel>
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -6398,17 +8049,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -6421,30 +8061,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[]
-    notIn?: $Enums.Status[]
-    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
-  }
-
-  export type NestedEnumResponsavelFilter<$PrismaModel = never> = {
-    equals?: $Enums.Responsavel | EnumResponsavelFieldRefInput<$PrismaModel>
-    in?: $Enums.Responsavel[]
-    notIn?: $Enums.Responsavel[]
-    not?: NestedEnumResponsavelFilter<$PrismaModel> | $Enums.Responsavel
-  }
-
-  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[]
-    notIn?: $Enums.Status[]
-    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusFilter<$PrismaModel>
-    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -6463,16 +8079,6 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumResponsavelWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Responsavel | EnumResponsavelFieldRefInput<$PrismaModel>
-    in?: $Enums.Responsavel[]
-    notIn?: $Enums.Responsavel[]
-    not?: NestedEnumResponsavelWithAggregatesFilter<$PrismaModel> | $Enums.Responsavel
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumResponsavelFilter<$PrismaModel>
-    _max?: NestedEnumResponsavelFilter<$PrismaModel>
-  }
-
   export type MetaCreateWithoutUsuarioCriadorInput = {
     id?: string
     titulo: string
@@ -6481,16 +8087,21 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
-    dataCriacao?: Date | string
-    participantes?: UserCreateNestedManyWithoutMetasInput
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    participantes?: ParticipanteCreateNestedManyWithoutMetaInput
     parcelas?: ParcelaCreateNestedManyWithoutMetaInput
   }
 
@@ -6502,16 +8113,21 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
-    dataCriacao?: Date | string
-    participantes?: UserUncheckedCreateNestedManyWithoutMetasInput
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    participantes?: ParticipanteUncheckedCreateNestedManyWithoutMetaInput
     parcelas?: ParcelaUncheckedCreateNestedManyWithoutMetaInput
   }
 
@@ -6524,51 +8140,64 @@ export namespace Prisma {
     data: MetaCreateManyUsuarioCriadorInput | MetaCreateManyUsuarioCriadorInput[]
   }
 
-  export type MetaCreateWithoutParticipantesInput = {
+  export type ParticipanteCreateWithoutUsuarioInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    categoria: string
-    valorTotal: number
-    valorParcela: number
-    numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
-    diaVencimento?: number | null
-    diaSemana?: string | null
-    horario?: string | null
-    dataInicio: Date | string
-    dataFim?: Date | string | null
-    numExecucoes?: number | null
-    dataCriacao?: Date | string
-    usuarioCriador: UserCreateNestedOneWithoutMetasCriadasInput
-    parcelas?: ParcelaCreateNestedManyWithoutMetaInput
+    percentual: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    meta: MetaCreateNestedOneWithoutParticipantesInput
   }
 
-  export type MetaUncheckedCreateWithoutParticipantesInput = {
+  export type ParticipanteUncheckedCreateWithoutUsuarioInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    categoria: string
-    valorTotal: number
-    valorParcela: number
-    numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
-    diaVencimento?: number | null
-    diaSemana?: string | null
-    horario?: string | null
-    dataInicio: Date | string
-    dataFim?: Date | string | null
-    numExecucoes?: number | null
-    usuarioCriadorId: string
-    dataCriacao?: Date | string
-    parcelas?: ParcelaUncheckedCreateNestedManyWithoutMetaInput
+    metaId: string
+    percentual: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type MetaCreateOrConnectWithoutParticipantesInput = {
-    where: MetaWhereUniqueInput
-    create: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput>
+  export type ParticipanteCreateOrConnectWithoutUsuarioInput = {
+    where: ParticipanteWhereUniqueInput
+    create: XOR<ParticipanteCreateWithoutUsuarioInput, ParticipanteUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type ParticipanteCreateManyUsuarioInputEnvelope = {
+    data: ParticipanteCreateManyUsuarioInput | ParticipanteCreateManyUsuarioInput[]
+  }
+
+  export type ParcelaCreateWithoutResponsavelInput = {
+    id?: string
+    numero: number
+    valor: number
+    dataVencimento: Date | string
+    status?: string
+    valorPago?: number | null
+    dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    meta: MetaCreateNestedOneWithoutParcelasInput
+  }
+
+  export type ParcelaUncheckedCreateWithoutResponsavelInput = {
+    id?: string
+    metaId: string
+    numero: number
+    valor: number
+    dataVencimento: Date | string
+    status?: string
+    valorPago?: number | null
+    dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ParcelaCreateOrConnectWithoutResponsavelInput = {
+    where: ParcelaWhereUniqueInput
+    create: XOR<ParcelaCreateWithoutResponsavelInput, ParcelaUncheckedCreateWithoutResponsavelInput>
+  }
+
+  export type ParcelaCreateManyResponsavelInputEnvelope = {
+    data: ParcelaCreateManyResponsavelInput | ParcelaCreateManyResponsavelInput[]
   }
 
   export type MetaUpsertWithWhereUniqueWithoutUsuarioCriadorInput = {
@@ -6599,31 +8228,81 @@ export namespace Prisma {
     valorParcela?: FloatFilter<"Meta"> | number
     numParcelas?: IntFilter<"Meta"> | number
     recorrente?: BoolFilter<"Meta"> | boolean
-    frequencia?: EnumFrequenciaNullableFilter<"Meta"> | $Enums.Frequencia | null
+    frequencia?: StringNullableFilter<"Meta"> | string | null
+    intervalo?: IntNullableFilter<"Meta"> | number | null
     diaVencimento?: IntNullableFilter<"Meta"> | number | null
     diaSemana?: StringNullableFilter<"Meta"> | string | null
     horario?: StringNullableFilter<"Meta"> | string | null
     dataInicio?: DateTimeFilter<"Meta"> | Date | string
     dataFim?: DateTimeNullableFilter<"Meta"> | Date | string | null
     numExecucoes?: IntNullableFilter<"Meta"> | number | null
+    distribuicaoTipo?: StringFilter<"Meta"> | string
+    valorMinParcela?: FloatNullableFilter<"Meta"> | number | null
+    valorMaxParcela?: FloatNullableFilter<"Meta"> | number | null
     usuarioCriadorId?: StringFilter<"Meta"> | string
-    dataCriacao?: DateTimeFilter<"Meta"> | Date | string
+    createdAt?: DateTimeFilter<"Meta"> | Date | string
+    updatedAt?: DateTimeFilter<"Meta"> | Date | string
   }
 
-  export type MetaUpsertWithWhereUniqueWithoutParticipantesInput = {
-    where: MetaWhereUniqueInput
-    update: XOR<MetaUpdateWithoutParticipantesInput, MetaUncheckedUpdateWithoutParticipantesInput>
-    create: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput>
+  export type ParticipanteUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: ParticipanteWhereUniqueInput
+    update: XOR<ParticipanteUpdateWithoutUsuarioInput, ParticipanteUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<ParticipanteCreateWithoutUsuarioInput, ParticipanteUncheckedCreateWithoutUsuarioInput>
   }
 
-  export type MetaUpdateWithWhereUniqueWithoutParticipantesInput = {
-    where: MetaWhereUniqueInput
-    data: XOR<MetaUpdateWithoutParticipantesInput, MetaUncheckedUpdateWithoutParticipantesInput>
+  export type ParticipanteUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: ParticipanteWhereUniqueInput
+    data: XOR<ParticipanteUpdateWithoutUsuarioInput, ParticipanteUncheckedUpdateWithoutUsuarioInput>
   }
 
-  export type MetaUpdateManyWithWhereWithoutParticipantesInput = {
-    where: MetaScalarWhereInput
-    data: XOR<MetaUpdateManyMutationInput, MetaUncheckedUpdateManyWithoutParticipantesInput>
+  export type ParticipanteUpdateManyWithWhereWithoutUsuarioInput = {
+    where: ParticipanteScalarWhereInput
+    data: XOR<ParticipanteUpdateManyMutationInput, ParticipanteUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type ParticipanteScalarWhereInput = {
+    AND?: ParticipanteScalarWhereInput | ParticipanteScalarWhereInput[]
+    OR?: ParticipanteScalarWhereInput[]
+    NOT?: ParticipanteScalarWhereInput | ParticipanteScalarWhereInput[]
+    id?: StringFilter<"Participante"> | string
+    metaId?: StringFilter<"Participante"> | string
+    usuarioId?: StringFilter<"Participante"> | string
+    percentual?: FloatFilter<"Participante"> | number
+    createdAt?: DateTimeFilter<"Participante"> | Date | string
+    updatedAt?: DateTimeFilter<"Participante"> | Date | string
+  }
+
+  export type ParcelaUpsertWithWhereUniqueWithoutResponsavelInput = {
+    where: ParcelaWhereUniqueInput
+    update: XOR<ParcelaUpdateWithoutResponsavelInput, ParcelaUncheckedUpdateWithoutResponsavelInput>
+    create: XOR<ParcelaCreateWithoutResponsavelInput, ParcelaUncheckedCreateWithoutResponsavelInput>
+  }
+
+  export type ParcelaUpdateWithWhereUniqueWithoutResponsavelInput = {
+    where: ParcelaWhereUniqueInput
+    data: XOR<ParcelaUpdateWithoutResponsavelInput, ParcelaUncheckedUpdateWithoutResponsavelInput>
+  }
+
+  export type ParcelaUpdateManyWithWhereWithoutResponsavelInput = {
+    where: ParcelaScalarWhereInput
+    data: XOR<ParcelaUpdateManyMutationInput, ParcelaUncheckedUpdateManyWithoutResponsavelInput>
+  }
+
+  export type ParcelaScalarWhereInput = {
+    AND?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
+    OR?: ParcelaScalarWhereInput[]
+    NOT?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
+    id?: StringFilter<"Parcela"> | string
+    metaId?: StringFilter<"Parcela"> | string
+    numero?: IntFilter<"Parcela"> | number
+    valor?: FloatFilter<"Parcela"> | number
+    dataVencimento?: DateTimeFilter<"Parcela"> | Date | string
+    status?: StringFilter<"Parcela"> | string
+    valorPago?: FloatNullableFilter<"Parcela"> | number | null
+    responsavelId?: StringFilter<"Parcela"> | string
+    dataPagamento?: DateTimeNullableFilter<"Parcela"> | Date | string | null
+    createdAt?: DateTimeFilter<"Parcela"> | Date | string
+    updatedAt?: DateTimeFilter<"Parcela"> | Date | string
   }
 
   export type UserCreateWithoutMetasCriadasInput = {
@@ -6631,9 +8310,11 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     password?: string | null
+    avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    metas?: MetaCreateNestedManyWithoutParticipantesInput
+    participacoes?: ParticipanteCreateNestedManyWithoutUsuarioInput
+    parcelas?: ParcelaCreateNestedManyWithoutResponsavelInput
   }
 
   export type UserUncheckedCreateWithoutMetasCriadasInput = {
@@ -6641,9 +8322,11 @@ export namespace Prisma {
     name?: string | null
     email?: string | null
     password?: string | null
+    avatar?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    metas?: MetaUncheckedCreateNestedManyWithoutParticipantesInput
+    participacoes?: ParticipanteUncheckedCreateNestedManyWithoutUsuarioInput
+    parcelas?: ParcelaUncheckedCreateNestedManyWithoutResponsavelInput
   }
 
   export type UserCreateOrConnectWithoutMetasCriadasInput = {
@@ -6651,29 +8334,29 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutMetasCriadasInput, UserUncheckedCreateWithoutMetasCriadasInput>
   }
 
-  export type UserCreateWithoutMetasInput = {
+  export type ParticipanteCreateWithoutMetaInput = {
     id?: string
-    name?: string | null
-    email?: string | null
-    password?: string | null
+    percentual: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    metasCriadas?: MetaCreateNestedManyWithoutUsuarioCriadorInput
+    usuario: UserCreateNestedOneWithoutParticipacoesInput
   }
 
-  export type UserUncheckedCreateWithoutMetasInput = {
+  export type ParticipanteUncheckedCreateWithoutMetaInput = {
     id?: string
-    name?: string | null
-    email?: string | null
-    password?: string | null
+    usuarioId: string
+    percentual: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    metasCriadas?: MetaUncheckedCreateNestedManyWithoutUsuarioCriadorInput
   }
 
-  export type UserCreateOrConnectWithoutMetasInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutMetasInput, UserUncheckedCreateWithoutMetasInput>
+  export type ParticipanteCreateOrConnectWithoutMetaInput = {
+    where: ParticipanteWhereUniqueInput
+    create: XOR<ParticipanteCreateWithoutMetaInput, ParticipanteUncheckedCreateWithoutMetaInput>
+  }
+
+  export type ParticipanteCreateManyMetaInputEnvelope = {
+    data: ParticipanteCreateManyMetaInput | ParticipanteCreateManyMetaInput[]
   }
 
   export type ParcelaCreateWithoutMetaInput = {
@@ -6681,10 +8364,12 @@ export namespace Prisma {
     numero: number
     valor: number
     dataVencimento: Date | string
-    status: $Enums.Status
+    status?: string
     valorPago?: number | null
-    responsavel: $Enums.Responsavel
     dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    responsavel: UserCreateNestedOneWithoutParcelasInput
   }
 
   export type ParcelaUncheckedCreateWithoutMetaInput = {
@@ -6692,10 +8377,12 @@ export namespace Prisma {
     numero: number
     valor: number
     dataVencimento: Date | string
-    status: $Enums.Status
+    status?: string
     valorPago?: number | null
-    responsavel: $Enums.Responsavel
+    responsavelId: string
     dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ParcelaCreateOrConnectWithoutMetaInput = {
@@ -6723,9 +8410,11 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    metas?: MetaUpdateManyWithoutParticipantesNestedInput
+    participacoes?: ParticipanteUpdateManyWithoutUsuarioNestedInput
+    parcelas?: ParcelaUpdateManyWithoutResponsavelNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMetasCriadasInput = {
@@ -6733,37 +8422,27 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    metas?: MetaUncheckedUpdateManyWithoutParticipantesNestedInput
+    participacoes?: ParticipanteUncheckedUpdateManyWithoutUsuarioNestedInput
+    parcelas?: ParcelaUncheckedUpdateManyWithoutResponsavelNestedInput
   }
 
-  export type UserUpsertWithWhereUniqueWithoutMetasInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutMetasInput, UserUncheckedUpdateWithoutMetasInput>
-    create: XOR<UserCreateWithoutMetasInput, UserUncheckedCreateWithoutMetasInput>
+  export type ParticipanteUpsertWithWhereUniqueWithoutMetaInput = {
+    where: ParticipanteWhereUniqueInput
+    update: XOR<ParticipanteUpdateWithoutMetaInput, ParticipanteUncheckedUpdateWithoutMetaInput>
+    create: XOR<ParticipanteCreateWithoutMetaInput, ParticipanteUncheckedCreateWithoutMetaInput>
   }
 
-  export type UserUpdateWithWhereUniqueWithoutMetasInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutMetasInput, UserUncheckedUpdateWithoutMetasInput>
+  export type ParticipanteUpdateWithWhereUniqueWithoutMetaInput = {
+    where: ParticipanteWhereUniqueInput
+    data: XOR<ParticipanteUpdateWithoutMetaInput, ParticipanteUncheckedUpdateWithoutMetaInput>
   }
 
-  export type UserUpdateManyWithWhereWithoutMetasInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutMetasInput>
-  }
-
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: StringFilter<"User"> | string
-    name?: StringNullableFilter<"User"> | string | null
-    email?: StringNullableFilter<"User"> | string | null
-    password?: StringNullableFilter<"User"> | string | null
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeFilter<"User"> | Date | string
+  export type ParticipanteUpdateManyWithWhereWithoutMetaInput = {
+    where: ParticipanteScalarWhereInput
+    data: XOR<ParticipanteUpdateManyMutationInput, ParticipanteUncheckedUpdateManyWithoutMetaInput>
   }
 
   export type ParcelaUpsertWithWhereUniqueWithoutMetaInput = {
@@ -6782,19 +8461,188 @@ export namespace Prisma {
     data: XOR<ParcelaUpdateManyMutationInput, ParcelaUncheckedUpdateManyWithoutMetaInput>
   }
 
-  export type ParcelaScalarWhereInput = {
-    AND?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
-    OR?: ParcelaScalarWhereInput[]
-    NOT?: ParcelaScalarWhereInput | ParcelaScalarWhereInput[]
-    id?: StringFilter<"Parcela"> | string
-    metaId?: StringFilter<"Parcela"> | string
-    numero?: IntFilter<"Parcela"> | number
-    valor?: FloatFilter<"Parcela"> | number
-    dataVencimento?: DateTimeFilter<"Parcela"> | Date | string
-    status?: EnumStatusFilter<"Parcela"> | $Enums.Status
-    valorPago?: FloatNullableFilter<"Parcela"> | number | null
-    responsavel?: EnumResponsavelFilter<"Parcela"> | $Enums.Responsavel
-    dataPagamento?: DateTimeNullableFilter<"Parcela"> | Date | string | null
+  export type MetaCreateWithoutParticipantesInput = {
+    id?: string
+    titulo: string
+    descricao?: string | null
+    categoria: string
+    valorTotal: number
+    valorParcela: number
+    numParcelas: number
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
+    diaVencimento?: number | null
+    diaSemana?: string | null
+    horario?: string | null
+    dataInicio: Date | string
+    dataFim?: Date | string | null
+    numExecucoes?: number | null
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    usuarioCriador: UserCreateNestedOneWithoutMetasCriadasInput
+    parcelas?: ParcelaCreateNestedManyWithoutMetaInput
+  }
+
+  export type MetaUncheckedCreateWithoutParticipantesInput = {
+    id?: string
+    titulo: string
+    descricao?: string | null
+    categoria: string
+    valorTotal: number
+    valorParcela: number
+    numParcelas: number
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
+    diaVencimento?: number | null
+    diaSemana?: string | null
+    horario?: string | null
+    dataInicio: Date | string
+    dataFim?: Date | string | null
+    numExecucoes?: number | null
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
+    usuarioCriadorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parcelas?: ParcelaUncheckedCreateNestedManyWithoutMetaInput
+  }
+
+  export type MetaCreateOrConnectWithoutParticipantesInput = {
+    where: MetaWhereUniqueInput
+    create: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput>
+  }
+
+  export type UserCreateWithoutParticipacoesInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    avatar?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    metasCriadas?: MetaCreateNestedManyWithoutUsuarioCriadorInput
+    parcelas?: ParcelaCreateNestedManyWithoutResponsavelInput
+  }
+
+  export type UserUncheckedCreateWithoutParticipacoesInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    avatar?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    metasCriadas?: MetaUncheckedCreateNestedManyWithoutUsuarioCriadorInput
+    parcelas?: ParcelaUncheckedCreateNestedManyWithoutResponsavelInput
+  }
+
+  export type UserCreateOrConnectWithoutParticipacoesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutParticipacoesInput, UserUncheckedCreateWithoutParticipacoesInput>
+  }
+
+  export type MetaUpsertWithoutParticipantesInput = {
+    update: XOR<MetaUpdateWithoutParticipantesInput, MetaUncheckedUpdateWithoutParticipantesInput>
+    create: XOR<MetaCreateWithoutParticipantesInput, MetaUncheckedCreateWithoutParticipantesInput>
+    where?: MetaWhereInput
+  }
+
+  export type MetaUpdateToOneWithWhereWithoutParticipantesInput = {
+    where?: MetaWhereInput
+    data: XOR<MetaUpdateWithoutParticipantesInput, MetaUncheckedUpdateWithoutParticipantesInput>
+  }
+
+  export type MetaUpdateWithoutParticipantesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    categoria?: StringFieldUpdateOperationsInput | string
+    valorTotal?: FloatFieldUpdateOperationsInput | number
+    valorParcela?: FloatFieldUpdateOperationsInput | number
+    numParcelas?: IntFieldUpdateOperationsInput | number
+    recorrente?: BoolFieldUpdateOperationsInput | boolean
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
+    diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
+    diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
+    horario?: NullableStringFieldUpdateOperationsInput | string | null
+    dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usuarioCriador?: UserUpdateOneRequiredWithoutMetasCriadasNestedInput
+    parcelas?: ParcelaUpdateManyWithoutMetaNestedInput
+  }
+
+  export type MetaUncheckedUpdateWithoutParticipantesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    categoria?: StringFieldUpdateOperationsInput | string
+    valorTotal?: FloatFieldUpdateOperationsInput | number
+    valorParcela?: FloatFieldUpdateOperationsInput | number
+    numParcelas?: IntFieldUpdateOperationsInput | number
+    recorrente?: BoolFieldUpdateOperationsInput | boolean
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
+    diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
+    diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
+    horario?: NullableStringFieldUpdateOperationsInput | string | null
+    dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    usuarioCriadorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parcelas?: ParcelaUncheckedUpdateManyWithoutMetaNestedInput
+  }
+
+  export type UserUpsertWithoutParticipacoesInput = {
+    update: XOR<UserUpdateWithoutParticipacoesInput, UserUncheckedUpdateWithoutParticipacoesInput>
+    create: XOR<UserCreateWithoutParticipacoesInput, UserUncheckedCreateWithoutParticipacoesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutParticipacoesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutParticipacoesInput, UserUncheckedUpdateWithoutParticipacoesInput>
+  }
+
+  export type UserUpdateWithoutParticipacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    metasCriadas?: MetaUpdateManyWithoutUsuarioCriadorNestedInput
+    parcelas?: ParcelaUpdateManyWithoutResponsavelNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutParticipacoesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    metasCriadas?: MetaUncheckedUpdateManyWithoutUsuarioCriadorNestedInput
+    parcelas?: ParcelaUncheckedUpdateManyWithoutResponsavelNestedInput
   }
 
   export type MetaCreateWithoutParcelasInput = {
@@ -6805,17 +8653,22 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
-    dataCriacao?: Date | string
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     usuarioCriador: UserCreateNestedOneWithoutMetasCriadasInput
-    participantes?: UserCreateNestedManyWithoutMetasInput
+    participantes?: ParticipanteCreateNestedManyWithoutMetaInput
   }
 
   export type MetaUncheckedCreateWithoutParcelasInput = {
@@ -6826,22 +8679,56 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
     usuarioCriadorId: string
-    dataCriacao?: Date | string
-    participantes?: UserUncheckedCreateNestedManyWithoutMetasInput
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    participantes?: ParticipanteUncheckedCreateNestedManyWithoutMetaInput
   }
 
   export type MetaCreateOrConnectWithoutParcelasInput = {
     where: MetaWhereUniqueInput
     create: XOR<MetaCreateWithoutParcelasInput, MetaUncheckedCreateWithoutParcelasInput>
+  }
+
+  export type UserCreateWithoutParcelasInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    avatar?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    metasCriadas?: MetaCreateNestedManyWithoutUsuarioCriadorInput
+    participacoes?: ParticipanteCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UserUncheckedCreateWithoutParcelasInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    avatar?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    metasCriadas?: MetaUncheckedCreateNestedManyWithoutUsuarioCriadorInput
+    participacoes?: ParticipanteUncheckedCreateNestedManyWithoutUsuarioInput
+  }
+
+  export type UserCreateOrConnectWithoutParcelasInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutParcelasInput, UserUncheckedCreateWithoutParcelasInput>
   }
 
   export type MetaUpsertWithoutParcelasInput = {
@@ -6864,16 +8751,21 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     usuarioCriador?: UserUpdateOneRequiredWithoutMetasCriadasNestedInput
-    participantes?: UserUpdateManyWithoutMetasNestedInput
+    participantes?: ParticipanteUpdateManyWithoutMetaNestedInput
   }
 
   export type MetaUncheckedUpdateWithoutParcelasInput = {
@@ -6885,16 +8777,56 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
     usuarioCriadorId?: StringFieldUpdateOperationsInput | string
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
-    participantes?: UserUncheckedUpdateManyWithoutMetasNestedInput
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participantes?: ParticipanteUncheckedUpdateManyWithoutMetaNestedInput
+  }
+
+  export type UserUpsertWithoutParcelasInput = {
+    update: XOR<UserUpdateWithoutParcelasInput, UserUncheckedUpdateWithoutParcelasInput>
+    create: XOR<UserCreateWithoutParcelasInput, UserUncheckedCreateWithoutParcelasInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutParcelasInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutParcelasInput, UserUncheckedUpdateWithoutParcelasInput>
+  }
+
+  export type UserUpdateWithoutParcelasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    metasCriadas?: MetaUpdateManyWithoutUsuarioCriadorNestedInput
+    participacoes?: ParticipanteUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutParcelasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    metasCriadas?: MetaUncheckedUpdateManyWithoutUsuarioCriadorNestedInput
+    participacoes?: ParticipanteUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
   export type MetaCreateManyUsuarioCriadorInput = {
@@ -6905,15 +8837,41 @@ export namespace Prisma {
     valorTotal: number
     valorParcela: number
     numParcelas: number
-    recorrente: boolean
-    frequencia?: $Enums.Frequencia | null
+    recorrente?: boolean
+    frequencia?: string | null
+    intervalo?: number | null
     diaVencimento?: number | null
     diaSemana?: string | null
     horario?: string | null
     dataInicio: Date | string
     dataFim?: Date | string | null
     numExecucoes?: number | null
-    dataCriacao?: Date | string
+    distribuicaoTipo?: string
+    valorMinParcela?: number | null
+    valorMaxParcela?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ParticipanteCreateManyUsuarioInput = {
+    id?: string
+    metaId: string
+    percentual: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ParcelaCreateManyResponsavelInput = {
+    id?: string
+    metaId: string
+    numero: number
+    valor: number
+    dataVencimento: Date | string
+    status?: string
+    valorPago?: number | null
+    dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type MetaUpdateWithoutUsuarioCriadorInput = {
@@ -6925,15 +8883,20 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
-    participantes?: UserUpdateManyWithoutMetasNestedInput
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participantes?: ParticipanteUpdateManyWithoutMetaNestedInput
     parcelas?: ParcelaUpdateManyWithoutMetaNestedInput
   }
 
@@ -6946,15 +8909,20 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
-    participantes?: UserUncheckedUpdateManyWithoutMetasNestedInput
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    participantes?: ParticipanteUncheckedUpdateManyWithoutMetaNestedInput
     parcelas?: ParcelaUncheckedUpdateManyWithoutMetaNestedInput
   }
 
@@ -6967,76 +8935,90 @@ export namespace Prisma {
     valorParcela?: FloatFieldUpdateOperationsInput | number
     numParcelas?: IntFieldUpdateOperationsInput | number
     recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
+    frequencia?: NullableStringFieldUpdateOperationsInput | string | null
+    intervalo?: NullableIntFieldUpdateOperationsInput | number | null
     diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
     diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
     horario?: NullableStringFieldUpdateOperationsInput | string | null
     dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
+    distribuicaoTipo?: StringFieldUpdateOperationsInput | string
+    valorMinParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    valorMaxParcela?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MetaUpdateWithoutParticipantesInput = {
+  export type ParticipanteUpdateWithoutUsuarioInput = {
     id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    categoria?: StringFieldUpdateOperationsInput | string
-    valorTotal?: FloatFieldUpdateOperationsInput | number
-    valorParcela?: FloatFieldUpdateOperationsInput | number
-    numParcelas?: IntFieldUpdateOperationsInput | number
-    recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
-    diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
-    diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
-    horario?: NullableStringFieldUpdateOperationsInput | string | null
-    dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
-    usuarioCriador?: UserUpdateOneRequiredWithoutMetasCriadasNestedInput
-    parcelas?: ParcelaUpdateManyWithoutMetaNestedInput
+    percentual?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    meta?: MetaUpdateOneRequiredWithoutParticipantesNestedInput
   }
 
-  export type MetaUncheckedUpdateWithoutParticipantesInput = {
+  export type ParticipanteUncheckedUpdateWithoutUsuarioInput = {
     id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    categoria?: StringFieldUpdateOperationsInput | string
-    valorTotal?: FloatFieldUpdateOperationsInput | number
-    valorParcela?: FloatFieldUpdateOperationsInput | number
-    numParcelas?: IntFieldUpdateOperationsInput | number
-    recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
-    diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
-    diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
-    horario?: NullableStringFieldUpdateOperationsInput | string | null
-    dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    usuarioCriadorId?: StringFieldUpdateOperationsInput | string
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
-    parcelas?: ParcelaUncheckedUpdateManyWithoutMetaNestedInput
+    metaId?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MetaUncheckedUpdateManyWithoutParticipantesInput = {
+  export type ParticipanteUncheckedUpdateManyWithoutUsuarioInput = {
     id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    categoria?: StringFieldUpdateOperationsInput | string
-    valorTotal?: FloatFieldUpdateOperationsInput | number
-    valorParcela?: FloatFieldUpdateOperationsInput | number
-    numParcelas?: IntFieldUpdateOperationsInput | number
-    recorrente?: BoolFieldUpdateOperationsInput | boolean
-    frequencia?: NullableEnumFrequenciaFieldUpdateOperationsInput | $Enums.Frequencia | null
-    diaVencimento?: NullableIntFieldUpdateOperationsInput | number | null
-    diaSemana?: NullableStringFieldUpdateOperationsInput | string | null
-    horario?: NullableStringFieldUpdateOperationsInput | string | null
-    dataInicio?: DateTimeFieldUpdateOperationsInput | Date | string
-    dataFim?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    numExecucoes?: NullableIntFieldUpdateOperationsInput | number | null
-    usuarioCriadorId?: StringFieldUpdateOperationsInput | string
-    dataCriacao?: DateTimeFieldUpdateOperationsInput | Date | string
+    metaId?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParcelaUpdateWithoutResponsavelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    numero?: IntFieldUpdateOperationsInput | number
+    valor?: FloatFieldUpdateOperationsInput | number
+    dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
+    dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    meta?: MetaUpdateOneRequiredWithoutParcelasNestedInput
+  }
+
+  export type ParcelaUncheckedUpdateWithoutResponsavelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    metaId?: StringFieldUpdateOperationsInput | string
+    numero?: IntFieldUpdateOperationsInput | number
+    valor?: FloatFieldUpdateOperationsInput | number
+    dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
+    dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParcelaUncheckedUpdateManyWithoutResponsavelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    metaId?: StringFieldUpdateOperationsInput | string
+    numero?: IntFieldUpdateOperationsInput | number
+    valor?: FloatFieldUpdateOperationsInput | number
+    dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
+    dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParticipanteCreateManyMetaInput = {
+    id?: string
+    usuarioId: string
+    percentual: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ParcelaCreateManyMetaInput = {
@@ -7044,37 +9026,34 @@ export namespace Prisma {
     numero: number
     valor: number
     dataVencimento: Date | string
-    status: $Enums.Status
+    status?: string
     valorPago?: number | null
-    responsavel: $Enums.Responsavel
+    responsavelId: string
     dataPagamento?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type UserUpdateWithoutMetasInput = {
+  export type ParticipanteUpdateWithoutMetaInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
+    percentual?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    metasCriadas?: MetaUpdateManyWithoutUsuarioCriadorNestedInput
+    usuario?: UserUpdateOneRequiredWithoutParticipacoesNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutMetasInput = {
+  export type ParticipanteUncheckedUpdateWithoutMetaInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    metasCriadas?: MetaUncheckedUpdateManyWithoutUsuarioCriadorNestedInput
   }
 
-  export type UserUncheckedUpdateManyWithoutMetasInput = {
+  export type ParticipanteUncheckedUpdateManyWithoutMetaInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
+    usuarioId?: StringFieldUpdateOperationsInput | string
+    percentual?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7084,10 +9063,12 @@ export namespace Prisma {
     numero?: IntFieldUpdateOperationsInput | number
     valor?: FloatFieldUpdateOperationsInput | number
     dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    status?: StringFieldUpdateOperationsInput | string
     valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
-    responsavel?: EnumResponsavelFieldUpdateOperationsInput | $Enums.Responsavel
     dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    responsavel?: UserUpdateOneRequiredWithoutParcelasNestedInput
   }
 
   export type ParcelaUncheckedUpdateWithoutMetaInput = {
@@ -7095,10 +9076,12 @@ export namespace Prisma {
     numero?: IntFieldUpdateOperationsInput | number
     valor?: FloatFieldUpdateOperationsInput | number
     dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    status?: StringFieldUpdateOperationsInput | string
     valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
-    responsavel?: EnumResponsavelFieldUpdateOperationsInput | $Enums.Responsavel
+    responsavelId?: StringFieldUpdateOperationsInput | string
     dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ParcelaUncheckedUpdateManyWithoutMetaInput = {
@@ -7106,10 +9089,12 @@ export namespace Prisma {
     numero?: IntFieldUpdateOperationsInput | number
     valor?: FloatFieldUpdateOperationsInput | number
     dataVencimento?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    status?: StringFieldUpdateOperationsInput | string
     valorPago?: NullableFloatFieldUpdateOperationsInput | number | null
-    responsavel?: EnumResponsavelFieldUpdateOperationsInput | $Enums.Responsavel
+    responsavelId?: StringFieldUpdateOperationsInput | string
     dataPagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

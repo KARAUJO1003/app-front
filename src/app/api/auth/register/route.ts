@@ -33,13 +33,3 @@ export async function POST(request: Request) {
     data: newUser,
   });
 }
-
-export async function GET() {
-  const response = await prisma.user.findMany({});
-
-  return Response.json({
-    status: 200,
-    message: "Users fetched successfully",
-    data: response,
-  });
-}

@@ -15,70 +15,73 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  name         String?
-  email        String?  @unique
-  password     String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  metasCriadas Meta[]   @relation("UsuarioCriador") // Relacionamento com metas criadas
-  metas        Meta[]   @relation("Participantes") // Relacionamento com metas como participante
+  id            String         @id @default(cuid())
+  name          String?
+  email         String?        @unique
+  password      String?
+  avatar        String?
+  metasCriadas  Meta[]         @relation("CriadorMeta")
+  participacoes Participante[]
+  parcelas      Parcela[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Meta {
-  id               String      @id @default(cuid())
+  id               String         @id @default(cuid())
   titulo           String
   descricao        String?
   categoria        String
   valorTotal       Float
   valorParcela     Float
   numParcelas      Int
-  recorrente       Boolean
-  frequencia       Frequencia? // Enum para frequência
+  recorrente       Boolean        @default(false)
+  frequencia       String?
+  intervalo        Int?
   diaVencimento    Int?
   diaSemana        String?
   horario          String?
   dataInicio       DateTime
   dataFim          DateTime?
   numExecucoes     Int?
+  distribuicaoTipo String         @default("igual")
+  valorMinParcela  Float?
+  valorMaxParcela  Float?
   usuarioCriadorId String
-  usuarioCriador   User        @relation("UsuarioCriador", fields: [usuarioCriadorId], references: [id])
-  participantes    User[]      @relation("Participantes")
-  dataCriacao      DateTime    @default(now())
-  parcelas         Parcela[] // Relacionamento com as parcelas
+  usuarioCriador   User           @relation("CriadorMeta", fields: [usuarioCriadorId], references: [id])
+  participantes    Participante[]
+  parcelas         Parcela[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model Participante {
+  id         String   @id @default(cuid())
+  metaId     String
+  meta       Meta     @relation(fields: [metaId], references: [id], onDelete: Cascade)
+  usuarioId  String
+  usuario    User     @relation(fields: [usuarioId], references: [id])
+  percentual Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([metaId, usuarioId])
 }
 
 model Parcela {
-  id             String      @id @default(cuid())
+  id             String    @id @default(cuid())
   metaId         String
+  meta           Meta      @relation(fields: [metaId], references: [id], onDelete: Cascade)
   numero         Int
   valor          Float
   dataVencimento DateTime
-  status         Status // Enum para status
+  status         String    @default("Pendente")
   valorPago      Float?
-  responsavel    Responsavel // Enum para responsável
+  responsavelId  String
+  responsavel    User      @relation(fields: [responsavelId], references: [id])
   dataPagamento  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  // Relacionamento com Meta
-  meta Meta @relation(fields: [metaId], references: [id])
-}
-
-// Enum para frequência
-enum Frequencia {
-  diaria
-  semanal
-  mensal
-}
-
-// Enum para status da parcela
-enum Status {
-  Pendente
-  Paga
-}
-
-// Enum para responsável pela parcela
-enum Responsavel {
-  usuario1
-  usuario2
-  ambos
+  @@unique([metaId, numero, responsavelId])
 }

@@ -1,14 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { registerUser } from "@/lib/actions"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { registerUser } from "@/lib/actions";
 
 const formSchema = z
   .object({
@@ -26,11 +33,11 @@ const formSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem.",
     path: ["confirmPassword"],
-  })
+  });
 
 export function RegisterForm() {
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,27 +47,31 @@ export function RegisterForm() {
       password: "",
       confirmPassword: "",
     },
-  })
+    mode: "onChange",
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       await registerUser({
         name: values.name,
         email: values.email,
         password: values.password,
-      })
-      router.push("/login?registered=true")
+      });
+      router.push("/login?registered=true");
     } catch (error) {
-      console.error("Erro ao registrar:", error)
+      console.error("Erro ao registrar:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -68,7 +79,10 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Nome</FormLabel>
               <FormControl>
-                <Input placeholder="Seu nome" {...field} />
+                <Input
+                  placeholder="Seu nome"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,7 +95,11 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="seu@email.com" type="email" {...field} />
+                <Input
+                  placeholder="seu@email.com"
+                  type="email"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,7 +112,11 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input placeholder="********" type="password" {...field} />
+                <Input
+                  placeholder="********"
+                  type="password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,16 +129,24 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Confirmar Senha</FormLabel>
               <FormControl>
-                <Input placeholder="********" type="password" {...field} />
+                <Input
+                  placeholder="********"
+                  type="password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isLoading}
+        >
           {isLoading ? "Registrando..." : "Registrar"}
         </Button>
       </form>
     </Form>
-  )
+  );
 }

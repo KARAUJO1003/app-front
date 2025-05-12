@@ -122,6 +122,7 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
+  avatar: 'avatar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -136,14 +137,28 @@ exports.Prisma.MetaScalarFieldEnum = {
   numParcelas: 'numParcelas',
   recorrente: 'recorrente',
   frequencia: 'frequencia',
+  intervalo: 'intervalo',
   diaVencimento: 'diaVencimento',
   diaSemana: 'diaSemana',
   horario: 'horario',
   dataInicio: 'dataInicio',
   dataFim: 'dataFim',
   numExecucoes: 'numExecucoes',
+  distribuicaoTipo: 'distribuicaoTipo',
+  valorMinParcela: 'valorMinParcela',
+  valorMaxParcela: 'valorMaxParcela',
   usuarioCriadorId: 'usuarioCriadorId',
-  dataCriacao: 'dataCriacao'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ParticipanteScalarFieldEnum = {
+  id: 'id',
+  metaId: 'metaId',
+  usuarioId: 'usuarioId',
+  percentual: 'percentual',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ParcelaScalarFieldEnum = {
@@ -154,8 +169,10 @@ exports.Prisma.ParcelaScalarFieldEnum = {
   dataVencimento: 'dataVencimento',
   status: 'status',
   valorPago: 'valorPago',
-  responsavel: 'responsavel',
-  dataPagamento: 'dataPagamento'
+  responsavelId: 'responsavelId',
+  dataPagamento: 'dataPagamento',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -167,26 +184,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.Frequencia = exports.$Enums.Frequencia = {
-  diaria: 'diaria',
-  semanal: 'semanal',
-  mensal: 'mensal'
-};
 
-exports.Status = exports.$Enums.Status = {
-  Pendente: 'Pendente',
-  Paga: 'Paga'
-};
-
-exports.Responsavel = exports.$Enums.Responsavel = {
-  usuario1: 'usuario1',
-  usuario2: 'usuario2',
-  ambos: 'ambos'
-};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Meta: 'Meta',
+  Participante: 'Participante',
   Parcela: 'Parcela'
 };
 
