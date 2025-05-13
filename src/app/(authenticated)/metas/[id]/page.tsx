@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Root } from "./components/interfaces";
 
 export default async function MetaDetalhes({
   params,
@@ -42,16 +43,14 @@ export default async function MetaDetalhes({
   params: { id: string };
 }) {
   const fetchData = async () => {
-    const res: any = await fetch(
-      `http://localhost:3000/api/metas/${params.id}`
-    );
+    const res = await fetch(`http://localhost:3000/api/metas/${params.id}`);
     if (!res.ok) {
       throw new Error("Erro ao buscar a meta");
     }
     return res.json();
   };
 
-  const data = await fetchData();
+  const data: Root = await fetchData();
 
   console.log("fetch", data);
 
@@ -70,7 +69,7 @@ export default async function MetaDetalhes({
     console.log("Novas Parcelas:", novasParcelas);
   };
 
-  const parcelas: any[] = [];
+  const parcelas: any[] = data.parcelas || [];
 
   const totalParcelas = parcelas.length;
   const parcelasPagas = parcelas.filter((p) => p.status === "Paga").length;
@@ -117,7 +116,7 @@ export default async function MetaDetalhes({
             Voltar
           </Button>
         </Link>
-        <h1 className="ml-4 font-bold text-2xl">Viagem de Férias</h1>
+        <h1 className="ml-4 font-bold text-2xl">{data.meta.titulo}</h1>
         <div className="flex space-x-2 ml-auto">
           <Button
             variant="outline"
@@ -330,7 +329,7 @@ export default async function MetaDetalhes({
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      onClick={() => handleMarcarPago(parcela)}
+                                      // onClick={() => handleMarcarPago(parcela)}
                                     >
                                       Marcar como pago
                                     </Button>
@@ -379,7 +378,9 @@ export default async function MetaDetalhes({
                                       </div>
                                     </div>
                                     <DialogFooter>
-                                      <Button onClick={confirmarPagamento}>
+                                      <Button
+                                      // onClick={confirmarPagamento}
+                                      >
                                         Confirmar pagamento
                                       </Button>
                                     </DialogFooter>
@@ -440,7 +441,7 @@ export default async function MetaDetalhes({
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => handleMarcarPago(parcela)}
+                                    // onClick={() => handleMarcarPago(parcela)}
                                   >
                                     Marcar como pago
                                   </Button>
@@ -489,7 +490,9 @@ export default async function MetaDetalhes({
                                     </div>
                                   </div>
                                   <DialogFooter>
-                                    <Button onClick={confirmarPagamento}>
+                                    <Button
+                                    // onClick={confirmarPagamento}
+                                    >
                                       Confirmar pagamento
                                     </Button>
                                   </DialogFooter>
@@ -608,9 +611,9 @@ export default async function MetaDetalhes({
                                       <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() =>
-                                          handleMarcarPago(parcela)
-                                        }
+                                        // onClick={() =>
+                                        //   handleMarcarPago(parcela)
+                                        // }
                                       >
                                         Marcar como pago
                                       </Button>
@@ -659,7 +662,9 @@ export default async function MetaDetalhes({
                                         </div>
                                       </div>
                                       <DialogFooter>
-                                        <Button onClick={confirmarPagamento}>
+                                        <Button
+                                        // onClick={confirmarPagamento}
+                                        >
                                           Confirmar pagamento
                                         </Button>
                                       </DialogFooter>
