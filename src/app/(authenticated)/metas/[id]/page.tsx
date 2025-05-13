@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,132 +36,41 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
-export default function MetaDetalhes({ params }: { params: { id: string } }) {
-  const [parcelas, setParcelas] = useState([
-    {
-      id: 1,
-      numero: 1,
-      valor: 500,
-      dataVencimento: "10/01/2025",
-      status: "Paga",
-      valorPago: 500,
-      responsavel: "ambos",
-      dataPagamento: "08/01/2025",
-    },
-    {
-      id: 2,
-      numero: 2,
-      valor: 500,
-      dataVencimento: "10/02/2025",
-      status: "Paga",
-      valorPago: 550,
-      responsavel: "usuario1",
-      dataPagamento: "09/02/2025",
-    },
-    {
-      id: 3,
-      numero: 3,
-      valor: 500,
-      dataVencimento: "10/03/2025",
-      status: "Paga",
-      valorPago: 450,
-      responsavel: "usuario2",
-      dataPagamento: "10/03/2025",
-    },
-    {
-      id: 4,
-      numero: 4,
-      valor: 500,
-      dataVencimento: "10/04/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "usuario1",
-      dataPagamento: null,
-    },
-    {
-      id: 5,
-      numero: 5,
-      valor: 500,
-      dataVencimento: "10/05/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "usuario2",
-      dataPagamento: null,
-    },
-    {
-      id: 6,
-      numero: 6,
-      valor: 500,
-      dataVencimento: "10/06/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "ambos",
-      dataPagamento: null,
-    },
-    {
-      id: 7,
-      numero: 7,
-      valor: 500,
-      dataVencimento: "10/07/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "usuario1",
-      dataPagamento: null,
-    },
-    {
-      id: 8,
-      numero: 8,
-      valor: 500,
-      dataVencimento: "10/08/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "usuario2",
-      dataPagamento: null,
-    },
-    {
-      id: 9,
-      numero: 9,
-      valor: 500,
-      dataVencimento: "10/09/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "ambos",
-      dataPagamento: null,
-    },
-    {
-      id: 10,
-      numero: 10,
-      valor: 500,
-      dataVencimento: "10/10/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "usuario1",
-      dataPagamento: null,
-    },
-    {
-      id: 11,
-      numero: 11,
-      valor: 500,
-      dataVencimento: "10/11/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "usuario2",
-      dataPagamento: null,
-    },
-    {
-      id: 12,
-      numero: 12,
-      valor: 500,
-      dataVencimento: "10/12/2025",
-      status: "Pendente",
-      valorPago: null,
-      responsavel: "ambos",
-      dataPagamento: null,
-    },
-  ]);
+export default async function MetaDetalhes({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const fetchData = async () => {
+    const res: any = await fetch(
+      `http://localhost:3000/api/metas/${params.id}`
+    );
+    if (!res.ok) {
+      throw new Error("Erro ao buscar a meta");
+    }
+    return res.json();
+  };
 
-  const [parcelaAtual, setParcelaAtual] = useState<any>(null);
-  const [valorPago, setValorPago] = useState("");
+  const data = await fetchData();
+
+  console.log("fetch", data);
+
+  // const [parcelaAtual, setParcelaAtual] = useState<any>(null);
+  // const [valorPago, setValorPago] = useState("");
+
+  const valorPago = "0";
+  const setValorPago = (valor: string) => {
+    console.log("Valor Pago:", valor);
+  };
+  const setParcelaAtual = (parcela: any) => {
+    console.log("Parcela Atual:", parcela);
+  };
+  const parcelaAtual: any = null;
+  const setParcelas = (novasParcelas: any) => {
+    console.log("Novas Parcelas:", novasParcelas);
+  };
+
+  const parcelas: any[] = [];
 
   const totalParcelas = parcelas.length;
   const parcelasPagas = parcelas.filter((p) => p.status === "Paga").length;
@@ -199,38 +106,38 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="mx-auto px-4 py-8 container">
       <div className="flex items-center mb-6">
         <Link href="/">
           <Button
             variant="ghost"
             size="sm"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft className="mr-2 w-4 h-4" />
             Voltar
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold ml-4">Viagem de Férias</h1>
-        <div className="ml-auto flex space-x-2">
+        <h1 className="ml-4 font-bold text-2xl">Viagem de Férias</h1>
+        <div className="flex space-x-2 ml-auto">
           <Button
             variant="outline"
             size="sm"
           >
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit className="mr-2 w-4 h-4" />
             Editar
           </Button>
           <Button
             variant="outline"
             size="sm"
           >
-            <Share2 className="mr-2 h-4 w-4" />
+            <Share2 className="mr-2 w-4 h-4" />
             Compartilhar
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-3">
-        <div className="md:col-span-2 space-y-8">
+      <div className="gap-8 grid md:grid-cols-3">
+        <div className="space-y-8 md:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Resumo da Meta</CardTitle>
@@ -240,27 +147,27 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Progresso</span>
-                  <span className="text-sm font-medium">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium text-sm">Progresso</span>
+                  <span className="font-medium text-sm">
                     {parcelasPagas}/{totalParcelas} parcelas
                   </span>
                 </div>
                 <Progress value={progresso} />
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
+              <div className="gap-6 grid grid-cols-2">
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
-                      <div className="p-2 bg-green-100 rounded-full dark:bg-green-900">
-                        <DollarSign className="h-6 w-6 text-green-700 dark:text-green-300" />
+                      <div className="bg-green-100 dark:bg-green-900 p-2 rounded-full">
+                        <DollarSign className="w-6 h-6 text-green-700 dark:text-green-300" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">
+                        <p className="font-medium text-muted-foreground text-sm">
                           Valor Total
                         </p>
-                        <p className="text-2xl font-bold">
+                        <p className="font-bold text-2xl">
                           R$ {valorTotal.toFixed(2)}
                         </p>
                       </div>
@@ -271,14 +178,14 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
-                      <div className="p-2 bg-blue-100 rounded-full dark:bg-blue-900">
-                        <CheckCircle2 className="h-6 w-6 text-blue-700 dark:text-blue-300" />
+                      <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
+                        <CheckCircle2 className="w-6 h-6 text-blue-700 dark:text-blue-300" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">
+                        <p className="font-medium text-muted-foreground text-sm">
                           Valor Acumulado
                         </p>
-                        <p className="text-2xl font-bold">
+                        <p className="font-bold text-2xl">
                           R$ {valorPagoTotal.toFixed(2)}
                         </p>
                       </div>
@@ -287,9 +194,9 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                 </Card>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
+              <div className="gap-6 grid grid-cols-2">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="font-medium text-muted-foreground text-sm">
                     Categoria
                   </p>
                   <div className="flex items-center">
@@ -303,32 +210,32 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="font-medium text-muted-foreground text-sm">
                     Frequência
                   </p>
                   <div className="flex items-center">
-                    <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <Calendar className="mr-2 w-4 h-4 text-muted-foreground" />
                     <span>Mensal (todo dia 10)</span>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="font-medium text-muted-foreground text-sm">
                     Valor por Parcela
                   </p>
                   <p className="font-medium">R$ 500,00</p>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="font-medium text-muted-foreground text-sm">
                     Participantes
                   </p>
                   <div className="flex items-center">
                     <div className="flex -space-x-2">
-                      <Avatar className="h-8 w-8 border-2 border-background">
+                      <Avatar className="border-2 border-background w-8 h-8">
                         <AvatarFallback>JD</AvatarFallback>
                       </Avatar>
-                      <Avatar className="h-8 w-8 border-2 border-background">
+                      <Avatar className="border-2 border-background w-8 h-8">
                         <AvatarFallback>MC</AvatarFallback>
                       </Avatar>
                     </div>
@@ -376,7 +283,7 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                   {parcelas.map((parcela) => (
                     <Card key={parcela.id}>
                       <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
+                        <div className="flex justify-between items-center">
                           <div className="flex items-center space-x-4">
                             <div
                               className={`p-2 rounded-full ${
@@ -386,17 +293,17 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                               }`}
                             >
                               {parcela.status === "Paga" ? (
-                                <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
                               ) : (
-                                <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                                <Clock className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                               )}
                             </div>
                             <div>
                               <p className="font-medium">
                                 Parcela {parcela.numero}
                               </p>
-                              <div className="flex items-center text-sm text-muted-foreground">
-                                <Calendar className="h-3 w-3 mr-1" />
+                              <div className="flex items-center text-muted-foreground text-sm">
+                                <Calendar className="mr-1 w-3 h-3" />
                                 <span>
                                   Vencimento: {parcela.dataVencimento}
                                 </span>
@@ -410,7 +317,7 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 R$ {parcela.valor.toFixed(2)}
                               </p>
                               {parcela.status === "Paga" && (
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                   Pago: R$ {parcela.valorPago?.toFixed(2)}
                                 </p>
                               )}
@@ -459,10 +366,10 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                         <div
                                           className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}
                                         >
-                                          <DollarSign className="h-4 w-4 text-gray-500" />
+                                          <DollarSign className="w-4 h-4 text-gray-500" />
                                         </div>
                                         <div>
-                                          <p className="text-sm text-muted-foreground">
+                                          <p className="text-muted-foreground text-sm">
                                             Valor esperado
                                           </p>
                                           <p className="font-medium">
@@ -481,7 +388,7 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                               ) : (
                                 <Badge
                                   variant="outline"
-                                  className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
+                                  className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
                                 >
                                   Pago em {parcela.dataPagamento}
                                 </Badge>
@@ -503,17 +410,17 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                     .map((parcela) => (
                       <Card key={parcela.id}>
                         <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
+                          <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-4">
-                              <div className="p-2 rounded-full bg-gray-100 dark:bg-gray-800">
-                                <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                              <div className="bg-gray-100 dark:bg-gray-800 p-2 rounded-full">
+                                <Clock className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                               </div>
                               <div>
                                 <p className="font-medium">
                                   Parcela {parcela.numero}
                                 </p>
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                  <Calendar className="h-3 w-3 mr-1" />
+                                <div className="flex items-center text-muted-foreground text-sm">
+                                  <Calendar className="mr-1 w-3 h-3" />
                                   <span>
                                     Vencimento: {parcela.dataVencimento}
                                   </span>
@@ -569,10 +476,10 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                       <div
                                         className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}
                                       >
-                                        <DollarSign className="h-4 w-4 text-gray-500" />
+                                        <DollarSign className="w-4 h-4 text-gray-500" />
                                       </div>
                                       <div>
-                                        <p className="text-sm text-muted-foreground">
+                                        <p className="text-muted-foreground text-sm">
                                           Valor esperado
                                         </p>
                                         <p className="font-medium">
@@ -604,17 +511,17 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                     .map((parcela) => (
                       <Card key={parcela.id}>
                         <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
+                          <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-4">
-                              <div className="p-2 rounded-full bg-green-100 dark:bg-green-900">
-                                <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                              <div className="bg-green-100 dark:bg-green-900 p-2 rounded-full">
+                                <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
                               </div>
                               <div>
                                 <p className="font-medium">
                                   Parcela {parcela.numero}
                                 </p>
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                  <Calendar className="h-3 w-3 mr-1" />
+                                <div className="flex items-center text-muted-foreground text-sm">
+                                  <Calendar className="mr-1 w-3 h-3" />
                                   <span>
                                     Vencimento: {parcela.dataVencimento}
                                   </span>
@@ -627,14 +534,14 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 <p className="font-medium">
                                   R$ {parcela.valor.toFixed(2)}
                                 </p>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-muted-foreground text-sm">
                                   Pago: R$ {parcela.valorPago?.toFixed(2)}
                                 </p>
                               </div>
 
                               <Badge
                                 variant="outline"
-                                className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
+                                className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
                               >
                                 Pago em {parcela.dataPagamento}
                               </Badge>
@@ -654,7 +561,7 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                     .map((parcela) => (
                       <Card key={parcela.id}>
                         <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
+                          <div className="flex justify-between items-center">
                             <div className="flex items-center space-x-4">
                               <div
                                 className={`p-2 rounded-full ${
@@ -664,17 +571,17 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 }`}
                               >
                                 {parcela.status === "Paga" ? (
-                                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
                                 ) : (
-                                  <Clock className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                                  <Clock className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                 )}
                               </div>
                               <div>
                                 <p className="font-medium">
                                   Parcela {parcela.numero}
                                 </p>
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                  <Calendar className="h-3 w-3 mr-1" />
+                                <div className="flex items-center text-muted-foreground text-sm">
+                                  <Calendar className="mr-1 w-3 h-3" />
                                   <span>
                                     Vencimento: {parcela.dataVencimento}
                                   </span>
@@ -688,7 +595,7 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                   R$ {parcela.valor.toFixed(2)}
                                 </p>
                                 {parcela.status === "Paga" && (
-                                  <p className="text-sm text-muted-foreground">
+                                  <p className="text-muted-foreground text-sm">
                                     Pago: R$ {parcela.valorPago?.toFixed(2)}
                                   </p>
                                 )}
@@ -739,10 +646,10 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                           <div
                                             className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}
                                           >
-                                            <DollarSign className="h-4 w-4 text-gray-500" />
+                                            <DollarSign className="w-4 h-4 text-gray-500" />
                                           </div>
                                           <div>
-                                            <p className="text-sm text-muted-foreground">
+                                            <p className="text-muted-foreground text-sm">
                                               Valor esperado
                                             </p>
                                             <p className="font-medium">
@@ -761,7 +668,7 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                                 ) : (
                                   <Badge
                                     variant="outline"
-                                    className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800"
+                                    className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
                                   >
                                     Pago em {parcela.dataPagamento}
                                   </Badge>
@@ -779,33 +686,33 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
         </div>
 
         <div>
-          <Card className="sticky top-4">
+          <Card className="top-4 sticky">
             <CardHeader>
               <CardTitle>Participantes</CardTitle>
               <CardDescription>Pessoas envolvidas nesta meta</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
                   <Avatar>
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="font-medium">João Doe</p>
-                    <p className="text-sm text-muted-foreground">Você</p>
+                    <p className="text-muted-foreground text-sm">Você</p>
                   </div>
                 </div>
                 <Badge>Criador</Badge>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
                   <Avatar>
                     <AvatarFallback>MC</AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="font-medium">Maria Costa</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       maria@exemplo.com
                     </p>
                   </div>
@@ -818,7 +725,7 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
                 variant="outline"
                 className="w-full"
               >
-                <Users className="mr-2 h-4 w-4" />
+                <Users className="mr-2 w-4 h-4" />
                 Convidar Participante
               </Button>
             </CardFooter>
@@ -831,23 +738,23 @@ export default function MetaDetalhes({ params }: { params: { id: string } }) {
             <CardContent className="space-y-2">
               <Button
                 variant="outline"
-                className="w-full justify-start"
+                className="justify-start w-full"
               >
-                <Edit className="mr-2 h-4 w-4" />
+                <Edit className="mr-2 w-4 h-4" />
                 Editar Meta
               </Button>
               <Button
                 variant="outline"
-                className="w-full justify-start"
+                className="justify-start w-full"
               >
-                <Share2 className="mr-2 h-4 w-4" />
+                <Share2 className="mr-2 w-4 h-4" />
                 Compartilhar Meta
               </Button>
               <Button
                 variant="outline"
-                className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                className="justify-start hover:bg-red-50 dark:hover:bg-red-950 w-full text-red-500 hover:text-red-600"
               >
-                <Trash2 className="mr-2 h-4 w-4" />
+                <Trash2 className="mr-2 w-4 h-4" />
                 Excluir Meta
               </Button>
             </CardContent>

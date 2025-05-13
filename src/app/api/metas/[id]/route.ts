@@ -1,45 +1,6 @@
+import prisma from '@/lib/prisma'
 import { NextResponse } from "next/server"
-
-// Simulação de banco de dados em memória (mesmos tipos do arquivo route.ts principal)
-// Na implementação real, esses dados viriam de um banco de dados
-
-// Dados de exemplo para simulação
-const metasExemplo = [
-  {
-    id: "meta_1",
-    titulo: "Viagem de Férias",
-    descricao: "Viagem para a praia no final do ano",
-    categoria: "viagem",
-    valorTotal: 6000,
-    valorParcela: 500,
-    numParcelas: 12,
-    recorrente: true,
-    frequencia: "mensal",
-    diaVencimento: 10,
-    dataInicio: "2025-01-10",
-    numExecucoes: 12,
-    usuarioCriador: "usuario1",
-    participantes: ["usuario1", "usuario2"],
-    dataCriacao: "2024-12-15T10:30:00Z",
-  },
-]
-
-const parcelasExemplo = Array.from({ length: 12 }, (_, i) => {
-  const dataVencimento = new Date("2025-01-10")
-  dataVencimento.setMonth(dataVencimento.getMonth() + i)
-
-  return {
-    id: `parcela_${i + 1}`,
-    metaId: "meta_1",
-    numero: i + 1,
-    valor: 500,
-    dataVencimento: dataVencimento.toISOString().split("T")[0],
-    status: i < 3 ? "Paga" : "Pendente",
-    valorPago: i < 3 ? 500 : null,
-    responsavel: i % 3 === 0 ? "ambos" : i % 3 === 1 ? "usuario1" : "usuario2",
-    dataPagamento: i < 3 ? "2025-0" + (i + 1) + "-08" : null,
-  }
-})
+import { Meta } from '../../../../../generated/prisma'
 
 // Endpoint para obter detalhes de uma meta específica
 export async function GET(request: Request, { params }: { params: { id: string } }) {
@@ -47,14 +8,17 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const id = params.id
 
     // Busca a meta pelo ID
-    const meta = metasExemplo.find((m) => m.id === id || m.id === `meta_${id}`)
+    const meta: Meta | null = await prisma.meta.findUnique({ where: { id } })
 
     if (!meta) {
       return NextResponse.json({ error: "Meta não encontrada" }, { status: 404 })
     }
 
     // Busca as parcelas relacionadas a esta meta
-    const metaParcelas = parcelasExemplo.filter((p) => p.metaId === meta.id)
+    const metaParcelas = await prisma.parcela.findMany({
+      where: { metaId: id },
+      orderBy: { numero: "asc" },
+    })
 
     // Calcula informações adicionais
     const parcelasPagas = metaParcelas.filter((p) => p.status === "Paga").length
