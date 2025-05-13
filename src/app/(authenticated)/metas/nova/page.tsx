@@ -59,13 +59,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+type IResponsavel = {
+  id?: string;
+  usuarioId: string;
+  nome: string;
+  email: string;
+  percentual: number;
+};
+
 type Parcela = {
   numero: number;
   valor: number;
   dataVencimento: string;
   status: string;
   valorPago: number | null;
-  responsavel: string;
+  responsavel: IResponsavel;
   dataPagamento: string | null;
 };
 
@@ -138,6 +146,7 @@ export default function NovaMeta() {
     useFieldArray({
       control,
       name: "participantes",
+      keyName: "_id",
     });
 
   // Atualiza o número de execuções quando o número de parcelas muda
@@ -339,9 +348,9 @@ export default function NovaMeta() {
           valor: valorParcelaParticipante,
           dataVencimento: format(dataVencimento, "dd/MM/yyyy"),
           status: "Pendente",
-          valorPago: null,
-          responsavel: participante.usuarioId,
-          dataPagamento: null,
+          valorPago: 0,
+          responsavel: participante,
+          dataPagamento: "",
         });
       }
     }
@@ -359,6 +368,7 @@ export default function NovaMeta() {
         gerarPreviewParcelas();
       }
 
+      console.log("Dados do formulário:", data);
       // Enviar dados para a API
       const response = await fetch("/api/metas", {
         method: "POST",
@@ -367,11 +377,13 @@ export default function NovaMeta() {
         },
         body: JSON.stringify({
           ...data,
-          parcelas: previewParcelas,
-          participantes: data.participantes.map(
-            (p) => p.id
-            // percentual: p.percentual,
-          ),
+          parcelas: [
+            ...previewParcelas.map((parcela) => ({
+              ...parcela,
+              responsavel: parcela.responsavel.id,
+            })),
+          ],
+          participantes: data.participantes,
         }),
       });
 
@@ -1080,7 +1092,7 @@ export default function NovaMeta() {
                               Minhas (
                               {
                                 previewParcelas.filter(
-                                  (p) => p.responsavel === "usuario1"
+                                  (p) => p.responsavel.usuarioId === "usuario1"
                                 ).length
                               }
                               )
@@ -1093,7 +1105,8 @@ export default function NovaMeta() {
                                 Parceiro (
                                 {
                                   previewParcelas.filter(
-                                    (p) => p.responsavel === "usuario2"
+                                    (p) =>
+                                      p.responsavel.usuarioId === "usuario2"
                                   ).length
                                 }
                                 )
@@ -1109,7 +1122,7 @@ export default function NovaMeta() {
                               <div
                                 key={`${parcela.numero}-${parcela.responsavel}-${index}`}
                                 className={`p-3 border rounded-md ${
-                                  parcela.responsavel === "usuario1"
+                                  parcela.responsavel.usuarioId === "usuario1"
                                     ? "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
                                     : "bg-pink-50 border-pink-200 dark:bg-pink-950 dark:border-pink-800"
                                 }`}
@@ -1119,7 +1132,8 @@ export default function NovaMeta() {
                                     Parcela {parcela.numero}
                                   </span>
                                   <Badge variant="outline">
-                                    {parcela.responsavel === "usuario1"
+                                    {parcela.responsavel.usuarioId ===
+                                    "usuario1"
                                       ? "Você"
                                       : "Maria"}
                                   </Badge>
@@ -1147,7 +1161,9 @@ export default function NovaMeta() {
                             className="space-y-3 mt-3"
                           >
                             {previewParcelas
-                              .filter((p) => p.responsavel === "usuario1")
+                              .filter(
+                                (p) => p.responsavel.usuarioId === "usuario1"
+                              )
                               .map((parcela, index) => (
                                 <div
                                   key={`${parcela.numero}-${parcela.responsavel}-${index}`}
@@ -1183,7 +1199,9 @@ export default function NovaMeta() {
                               className="space-y-3 mt-3"
                             >
                               {previewParcelas
-                                .filter((p) => p.responsavel === "usuario2")
+                                .filter(
+                                  (p) => p.responsavel.usuarioId === "usuario2"
+                                )
                                 .map((parcela, index) => (
                                   <div
                                     key={`${parcela.numero}-${parcela.responsavel}-${index}`}
