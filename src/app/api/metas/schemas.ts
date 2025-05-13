@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 // Schema para validar os dados de uma parcela
 export const parcelaSchema = z.object({
@@ -11,7 +11,7 @@ export const parcelaSchema = z.object({
   valorPago: z.number().nullable(),
   responsavel: z.array(z.string()),
   dataPagamento: z.string().nullable(),
-})
+});
 
 // Schema para validar os dados de uma meta
 export const metaSchema = z.object({
@@ -33,7 +33,7 @@ export const metaSchema = z.object({
   usuarioCriador: z.string(),
   participantes: z.array(z.string()),
   dataCriacao: z.string(),
-})
+});
 
 // Schema para validar o corpo da requisição de criação de uma meta
 export const criarMetaSchema = z.object({
@@ -53,10 +53,9 @@ export const criarMetaSchema = z.object({
   numExecucoes: z.number().optional(),
   usuarioCriador: z.string().optional(),
   parcelas: z.array(parcelaSchema).optional(),
-  participantes: z.array(z.string()).optional(),
-})
+  participantes: z.array(z.string()),
+});
 
-
-export type ParcelaType = z.infer<typeof parcelaSchema>
-export type MetaType = z.infer<typeof metaSchema>
-export type CriarMetaType = z.infer<typeof criarMetaSchema>
+export type ParcelaType = z.infer<typeof parcelaSchema>;
+export type MetaType = z.infer<typeof metaSchema>;
+export type CriarMetaType = z.infer<typeof criarMetaSchema>;
