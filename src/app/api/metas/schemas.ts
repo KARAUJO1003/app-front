@@ -1,61 +1,47 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-// Schema para validar os dados de uma parcela
-export const parcelaSchema = z.object({
-  id: z.string(),
-  metaId: z.string(),
-  numero: z.number(),
-  valor: z.number(),
-  dataVencimento: z.string(),
-  status: z.enum(["Pendente", "Paga"]),
-  valorPago: z.number().nullable(),
-  responsavel: z.array(z.string()),
-  dataPagamento: z.string().nullable(),
-});
-
-// Schema para validar os dados de uma meta
-export const metaSchema = z.object({
-  id: z.string(),
-  titulo: z.string(),
-  descricao: z.string().nullable(),
-  categoria: z.string(),
-  valorTotal: z.number(),
-  valorParcela: z.number(),
-  numParcelas: z.number(),
-  recorrente: z.boolean(),
-  frequencia: z.enum(["diaria", "semanal", "mensal"]).optional(),
-  diaVencimento: z.number().optional(),
-  diaSemana: z.string().optional(),
-  horario: z.string().optional(),
-  dataInicio: z.string(),
-  dataFim: z.string().optional(),
-  numExecucoes: z.number().optional(),
-  usuarioCriador: z.string(),
-  participantes: z.array(z.string()),
-  dataCriacao: z.string(),
-});
-
-// Schema para validar o corpo da requisição de criação de uma meta
 export const criarMetaSchema = z.object({
   titulo: z.string(),
+  valorTotal: z.number(),
+  numParcelas: z.number(),
   descricao: z.string().nullable().optional(),
   categoria: z.string().optional(),
-  valorTotal: z.number(),
   valorParcela: z.number().optional(),
-  numParcelas: z.number(),
   recorrente: z.boolean().optional(),
-  frequencia: z.enum(["diaria", "semanal", "mensal"]).optional(),
-  diaVencimento: z.number().optional(),
-  diaSemana: z.string().optional(),
-  horario: z.string().optional(),
-  dataInicio: z.string().optional(),
-  dataFim: z.string().optional(),
-  numExecucoes: z.number().optional(),
-  usuarioCriador: z.string().optional(),
-  parcelas: z.array(parcelaSchema).optional(),
-  participantes: z.array(z.string()),
+  dataInicio: z.string(),
+  distribuicaoTipo: z.string(),
+  valorMinParcela: z.number().nullable().optional(),
+  valorMaxParcela: z.number().nullable().optional(),
+  usuarioCriador: z.string(),
+  repeticao: z
+    .object({
+      frequencia: z.string().nullable().optional(),
+      intervalo: z.number().nullable().optional(),
+      diaVencimento: z.number().nullable().optional(),
+      diaSemana: z.string().nullable().optional(),
+      horario: z.string().nullable().optional(),
+      dataFim: z.string().nullable().optional(),
+      numExecucoes: z.number().nullable().optional(),
+    })
+    .optional(),
+  participantes: z.array(
+    z.object({
+      id: z.string(),
+      usuarioId: z.string(),
+      percentual: z.number(),
+    })
+  ),
+  parcelas: z
+    .array(
+      z.object({
+        numero: z.number(),
+        valor: z.number(),
+        dataVencimento: z.string(),
+        status: z.string(),
+        valorPago: z.number().optional(),
+        responsavel: z.string().optional(),
+        dataPagamento: z.string().optional(),
+      })
+    )
+    .optional(),
 });
-
-export type ParcelaType = z.infer<typeof parcelaSchema>;
-export type MetaType = z.infer<typeof metaSchema>;
-export type CriarMetaType = z.infer<typeof criarMetaSchema>;
