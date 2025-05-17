@@ -1,11 +1,12 @@
-import prisma from '@/lib/prisma'
-import { NextResponse } from "next/server"
-import { Meta } from '../../../../../generated/prisma'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import prisma from '@/lib/prisma';
+import { NextResponse } from "next/server";
+import { Meta } from '../../../../../generated/prisma';
 
 // Endpoint para obter detalhes de uma meta específica
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }>; }) {
   try {
-    const id = params.id
+    const { id } = await params
 
     // Busca a meta pelo ID
     const meta: Meta | null = await prisma.meta.findUnique({ where: { id } })
@@ -42,9 +43,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
 }
 
 // Endpoint para atualizar uma meta
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }>; }) {
   try {
-    const id = params.id
+    const { id } = await params
     const body = await request.json()
 
     // Na implementação real, aqui atualizaríamos a meta no banco de dados
@@ -60,9 +61,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 // Endpoint para excluir uma meta
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }>; }) {
   try {
-    const id = params.id
+    const { id } = await params
 
     // Na implementação real, aqui excluiríamos a meta e suas parcelas do banco de dados
 

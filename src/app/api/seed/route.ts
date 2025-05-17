@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 // Endpoint para popular o banco de dados com dados iniciais
 export async function POST() {

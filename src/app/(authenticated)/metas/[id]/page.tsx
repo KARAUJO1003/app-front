@@ -35,15 +35,21 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Root } from "./components/interfaces";
+import { Root } from "../components/interfaces";
 
 export default async function MetaDetalhes({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
+
   const fetchData = async () => {
-    const res = await fetch(`http://localhost:3000/api/metas/${params.id}`);
+    if (!id) {
+      throw new Error("ID da meta não fornecido");
+    }
+
+    const res = await fetch(`http://localhost:3000/api/metas/${id}`);
     if (!res.ok) {
       throw new Error("Erro ao buscar a meta");
     }
@@ -61,13 +67,13 @@ export default async function MetaDetalhes({
   const setValorPago = (valor: string) => {
     console.log("Valor Pago:", valor);
   };
-  const setParcelaAtual = (parcela: any) => {
-    console.log("Parcela Atual:", parcela);
-  };
-  const parcelaAtual: any = null;
-  const setParcelas = (novasParcelas: any) => {
-    console.log("Novas Parcelas:", novasParcelas);
-  };
+  // const setParcelaAtual = (parcela: any) => {
+  //   console.log("Parcela Atual:", parcela);
+  // };
+  // const parcelaAtual: any = null;
+  // const setParcelas = (novasParcelas: any) => {
+  //   console.log("Novas Parcelas:", novasParcelas);
+  // };
 
   const parcelas: any[] = data.parcelas || [];
 

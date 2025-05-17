@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Separator } from "@/components/ui/separator";
@@ -1031,7 +1032,7 @@ export default function NovaMeta() {
                       render={({ field }) => (
                         <RepetitionConfig
                           config={{
-                            ...field.value,
+                            ...(field.value as any),
                             numExecucoes: numParcelas,
                           }}
                           onChange={field.onChange}
