@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import axios from "axios";
-import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
+import { AuthService } from "./auth-service";
 
 // Simulação de ações do servidor - em produção, estas funções interagiriam com o banco de dados
 
@@ -12,18 +12,15 @@ export async function registerUser(data: {
   email: string;
   password: string;
 }) {
-  const response = await axios.post(
-    "http://localhost:3000/api/users/register",
-    {
-      ...data,
-    }
-  );
+  const response = await axios.post("http://localhost:3000/api/auth/register", {
+    ...data,
+  });
   return response.data;
 }
 
 export async function loginUser(data: { email: string; password: string }) {
   await axios
-    .post("http://localhost:3000/api/users/login", {
+    .post("http://localhost:3000/api/auth/login", {
       ...data,
     })
     .then(async (res) => {
@@ -31,25 +28,18 @@ export async function loginUser(data: { email: string; password: string }) {
         throw new Error("JWT_SECRET is not defined in environment variables");
       }
 
-      const token = jwt.sign(
-        { id: res?.data?.user?.id },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "7d",
-        }
-      );
+      console.log("res", res?.data);
+      if (!res.data.data) {
+        throw new Error("User not found");
+      }
+      const { password, ...user } = res.data.data;
 
-      (await cookies()).set("sessionId", token, {
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-      });
-
+      await AuthService.createSessionToken(user);
       return {
         status: res.status,
         message: res.data.message,
         data: {
           ...res.data.data,
-          token,
         },
       };
     });

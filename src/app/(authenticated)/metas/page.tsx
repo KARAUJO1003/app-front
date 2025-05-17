@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -28,10 +29,10 @@ export default async function Home() {
   const data = await getData();
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    <div className="flex flex-col  w-full min-h-screen">
       <main className="flex-1">
-        <section className="py-12 md:py-24 lg:py-32 w-full">
-          <div className="px-4 md:px-6 container">
+        <section className="py-12 md:py-24 w-full">
+          <div className="px-4 md:px-6 container mx-auto">
             <div className="flex flex-col justify-center items-center space-y-4 text-center">
               <div className="space-y-2">
                 <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl tracking-tighter">
@@ -53,8 +54,8 @@ export default async function Home() {
             </div>
           </div>
         </section>
-        <section className="bg-secondary/20 py-12 md:py-24 lg:py-32 w-full">
-          <div className="px-4 md:px-6 container">
+        <section className="bg-secondary/20 py-12 w-full">
+          <div className="px-4 md:px-6 container mx-auto">
             <h2 className="mb-8 font-bold text-2xl sm:text-3xl tracking-tighter">
               Metas Ativas
             </h2>

@@ -80,29 +80,29 @@ export default async function MetaDetalhes({
   );
   const progresso = (parcelasPagas / totalParcelas) * 100;
 
-  const handleMarcarPago = (parcela: any) => {
-    setParcelaAtual(parcela);
-    setValorPago(parcela.valor.toString());
-  };
+  // const handleMarcarPago = (parcela: any) => {
+  //   setParcelaAtual(parcela);
+  //   setValorPago(parcela.valor.toString());
+  // };
 
-  const confirmarPagamento = () => {
-    if (parcelaAtual) {
-      const novasParcelas = parcelas.map((p) => {
-        if (p.id === parcelaAtual.id) {
-          return {
-            ...p,
-            status: "Paga",
-            valorPago: Number.parseFloat(valorPago),
-            dataPagamento: new Date().toLocaleDateString("pt-BR"),
-          };
-        }
-        return p;
-      });
+  // const confirmarPagamento = () => {
+  //   if (parcelaAtual) {
+  //     const novasParcelas = parcelas.map((p) => {
+  //       if (p.id === parcelaAtual.id) {
+  //         return {
+  //           ...p,
+  //           status: "Paga",
+  //           valorPago: Number.parseFloat(valorPago),
+  //           dataPagamento: new Date().toLocaleDateString("pt-BR"),
+  //         };
+  //       }
+  //       return p;
+  //     });
 
-      setParcelas(novasParcelas);
-      setParcelaAtual(null);
-    }
-  };
+  //     setParcelas(novasParcelas);
+  //     setParcelaAtual(null);
+  //   }
+  // };
 
   return (
     <div className="mx-auto px-4 py-8 container">

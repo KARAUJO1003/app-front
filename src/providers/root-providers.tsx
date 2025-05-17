@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { useEffect, useState } from "react";
+import { UserProvider } from "@/context/user-context";
 
 export const queryClient = new QueryClient();
 
@@ -27,7 +28,7 @@ export const RootProviders = ({ children }: { children: React.ReactNode }) => {
     >
       <NuqsAdapter>
         <QueryClientProvider client={queryClient}>
-          {children}
+          <UserProvider>{children}</UserProvider>
           <ReactQueryDevtools
             initialIsOpen={process.env.APP_ENV === "development"}
           />
