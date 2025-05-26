@@ -15,10 +15,10 @@ import { PlusCircle, ArrowRight } from "lucide-react";
 import { Parcela } from "@/lib/types";
 
 async function getData() {
-  if (typeof window === "undefined") {
-    // Retorna dados mockados ou um fallback durante a build
-    return { metas: [] };
-  }
+  // if (typeof window === "undefined") {
+  //   // Retorna dados mockados ou um fallback durante a build
+  //   return { metas: [] };
+  // }
 
   const res = await fetch("http://localhost:3000/api/metas");
   const data = await res.json();

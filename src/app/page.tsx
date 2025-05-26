@@ -44,7 +44,7 @@ export default async function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/register">
+                  <Link href="/metas">
                     <Button
                       size="lg"
                       className="w-full"

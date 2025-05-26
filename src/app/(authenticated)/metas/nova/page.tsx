@@ -30,15 +30,15 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import {
   ArrowLeft,
   Info,
-  Users,
   AlertCircle,
   HelpCircle,
   Loader2,
+  X,
+  Plus,
 } from "lucide-react";
 import { RepetitionConfig } from "@/components/repetition-config";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -59,6 +59,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { AsyncSelect } from "@/components/extensions/async-select";
+import { useUser } from "@/context/user-context";
 
 type IResponsavel = {
   id?: string;
@@ -66,6 +76,7 @@ type IResponsavel = {
   nome: string;
   email: string;
   percentual: number;
+  avatar?: string;
 };
 
 type Parcela = {
@@ -82,7 +93,8 @@ export default function NovaMeta() {
   const router = useRouter();
   const [previewParcelas, setPreviewParcelas] = useState<Parcela[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [incluirParceiro, setIncluirParceiro] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { user, loading } = useUser();
 
   const form = useForm<MetaFormValues>({
     resolver: zodResolver(metaSchema),
@@ -97,25 +109,8 @@ export default function NovaMeta() {
       recorrente: false,
       dataInicio: format(new Date(), "yyyy-MM-dd"),
       distribuicaoTipo: "igual",
-      usuarioCriador: "cmakc29i40000tn7ss2kh3bsd",
-      participantes: [
-        {
-          id: "cmakc29i40000tn7ss2kh3bsd",
-          usuarioId: "usuario1",
-          nome: "João Doe",
-          email: "joao@exemplo.com",
-          avatar: "JD",
-          percentual: 50,
-        },
-        {
-          id: "cmakc29m50001tn7senqs30th",
-          usuarioId: "usuario2",
-          nome: "Maria Costa",
-          email: "maria@exemplo.com",
-          avatar: "MC",
-          percentual: 50,
-        },
-      ],
+      usuarioCriador: user?.id || "",
+      participantes: [],
       repeticao: {
         frequencia: "mensal",
         intervalo: 1,
@@ -143,12 +138,37 @@ export default function NovaMeta() {
   const participantes = watch("participantes");
 
   // Configurar o field array para participantes
-  const { fields: participantesFields, update: updateParticipante } =
-    useFieldArray({
-      control,
-      name: "participantes",
-      keyName: "_id",
-    });
+  const {
+    fields: participantesFields,
+    append: appendParticipante,
+    remove: removeParticipante,
+    update: updateParticipante,
+  } = useFieldArray({
+    control,
+    name: "participantes",
+    keyName: "_id",
+  });
+
+  // Adiciona o usuário criador automaticamente quando o user estiver disponível
+  useEffect(() => {
+    if (user && !loading && participantesFields.length === 0) {
+      setValue("usuarioCriador", user.id);
+      appendParticipante({
+        id: user.id,
+        usuarioId: user.id,
+        nome: user.name || user.email,
+        email: user.email,
+        avatar: user.name
+          ? user.name
+              .split(" ")
+              .map((n: string) => n[0])
+              .join("")
+              .toUpperCase()
+          : user.email?.[0]?.toUpperCase() || "?",
+        percentual: 100,
+      });
+    }
+  }, [user, loading, participantesFields.length, setValue, appendParticipante]);
 
   // Atualiza o número de execuções quando o número de parcelas muda
   useEffect(() => {
@@ -156,29 +176,6 @@ export default function NovaMeta() {
       form.setValue("repeticao.numExecucoes", numParcelas);
     }
   }, [numParcelas, form]);
-
-  // Atualiza os percentuais dos participantes quando o parceiro é incluído/removido
-  useEffect(() => {
-    if (incluirParceiro) {
-      // Se incluir parceiro, divide igualmente
-      const novoPercentual = 100 / participantesFields.length;
-      participantesFields.forEach((p, index) => {
-        updateParticipante(index, {
-          ...p,
-          percentual: Number(novoPercentual.toFixed()),
-        });
-      });
-    } else {
-      // Se remover parceiro, o usuário principal fica com 100%
-      participantesFields.forEach((p, index) => {
-        updateParticipante(index, {
-          ...p,
-          percentual: p.usuarioId === "usuario1" ? 100 : 0,
-        });
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [incluirParceiro]);
 
   // Atualiza o valor da parcela quando o valor total ou número de parcelas muda
   useEffect(() => {
@@ -195,31 +192,73 @@ export default function NovaMeta() {
   }, [valorParcela, numParcelas, metodoCalculo, setValue]);
 
   // Função para atualizar o percentual de um participante
-  const handlePercentualChange = (id: string, percentual: number) => {
-    // Atualiza o percentual do participante selecionado
-    const participanteIndex = participantesFields.findIndex(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (p: any) => p.usuarioId === id
+  const handlePercentualChange = (index: number, novoPercentual: number) => {
+    const participanteAtual = participantesFields[index];
+    const outrosParticipantes = participantesFields.filter(
+      (_, i) => i !== index
     );
-    if (participanteIndex === -1) return;
 
-    const outroParticipanteIndex = participantesFields.findIndex(
-      (p) => p.usuarioId !== id
+    // Calcula o percentual restante para distribuir entre os outros
+    const percentualRestante = 100 - novoPercentual;
+    const totalOutrosPercentuais = outrosParticipantes.reduce(
+      (sum, p) => sum + p.percentual,
+      0
     );
-    if (outroParticipanteIndex === -1) return;
 
-    // Calcula o novo percentual do outro participante
-    const novoPercentualOutro = 100 - percentual;
-
-    // Atualiza os participantes
-    updateParticipante(participanteIndex, {
-      ...participantesFields[participanteIndex],
-      percentual,
+    // Atualiza o participante atual
+    updateParticipante(index, {
+      ...participanteAtual,
+      percentual: novoPercentual,
     });
 
-    updateParticipante(outroParticipanteIndex, {
-      ...participantesFields[outroParticipanteIndex],
-      percentual: novoPercentualOutro,
+    // Redistribui proporcionalmente entre os outros participantes
+    if (outrosParticipantes.length > 0 && totalOutrosPercentuais > 0) {
+      outrosParticipantes.forEach((participante, originalIndex) => {
+        const realIndex = participantesFields.findIndex(
+          (p) => p.usuarioId === participante.usuarioId
+        );
+        if (realIndex !== -1 && realIndex !== index) {
+          const proporcao = participante.percentual / totalOutrosPercentuais;
+          const novoPercentualOutro = Math.round(
+            percentualRestante * proporcao
+          );
+
+          updateParticipante(realIndex, {
+            ...participante,
+            percentual: novoPercentualOutro,
+          });
+        }
+      });
+    } else if (outrosParticipantes.length === 1) {
+      // Se há apenas um outro participante, ele fica com o restante
+      const outroIndex = participantesFields.findIndex(
+        (p) => p.usuarioId !== participanteAtual.usuarioId
+      );
+      if (outroIndex !== -1) {
+        updateParticipante(outroIndex, {
+          ...participantesFields[outroIndex],
+          percentual: percentualRestante,
+        });
+      }
+    }
+  };
+
+  // Função para redistribuir percentuais igualmente
+  const redistribuirPercentuaisIgualmente = () => {
+    const percentualPorParticipante = Math.floor(
+      100 / participantesFields.length
+    );
+    const resto = 100 - percentualPorParticipante * participantesFields.length;
+
+    participantesFields.forEach((participante, index) => {
+      const percentual =
+        index === 0
+          ? percentualPorParticipante + resto
+          : percentualPorParticipante;
+      updateParticipante(index, {
+        ...participante,
+        percentual,
+      });
     });
   };
 
@@ -232,13 +271,11 @@ export default function NovaMeta() {
     const valores: number[] = [];
 
     if (tipo === "igual") {
-      // Distribuição igual
       const valorParcela = valorTotal / numParcelas;
       for (let i = 0; i < numParcelas; i++) {
         valores.push(valorParcela);
       }
     } else if (tipo === "crescente") {
-      // Distribuição crescente
       const amplitude = valorMaxParcela - valorMinParcela;
       const incremento = amplitude / (numParcelas - 1 || 1);
 
@@ -249,13 +286,11 @@ export default function NovaMeta() {
         somaValores += valor;
       }
 
-      // Ajusta os valores para que a soma seja igual ao valor total
       const fatorAjuste = valorTotal / somaValores;
       for (let i = 0; i < numParcelas; i++) {
         valores[i] = valores[i] * fatorAjuste;
       }
     } else if (tipo === "decrescente") {
-      // Distribuição decrescente
       const amplitude = valorMaxParcela - valorMinParcela;
       const decremento = amplitude / (numParcelas - 1 || 1);
 
@@ -266,13 +301,11 @@ export default function NovaMeta() {
         somaValores += valor;
       }
 
-      // Ajusta os valores para que a soma seja igual ao valor total
       const fatorAjuste = valorTotal / somaValores;
       for (let i = 0; i < numParcelas; i++) {
         valores[i] = valores[i] * fatorAjuste;
       }
     } else if (tipo === "aleatoria") {
-      // Distribuição aleatória entre min e max
       let somaValores = 0;
       for (let i = 0; i < numParcelas; i++) {
         const valor =
@@ -281,7 +314,6 @@ export default function NovaMeta() {
         somaValores += valor;
       }
 
-      // Ajusta os valores para que a soma seja igual ao valor total
       const fatorAjuste = valorTotal / somaValores;
       for (let i = 0; i < numParcelas; i++) {
         valores[i] = valores[i] * fatorAjuste;
@@ -293,21 +325,22 @@ export default function NovaMeta() {
 
   // Função para gerar prévia das parcelas
   const gerarPreviewParcelas = () => {
-    // Gera os valores das parcelas de acordo com o tipo de distribuição
+    if (!valorTotal || !numParcelas || participantesFields.length === 0) {
+      return;
+    }
+
     const valoresParcelas = gerarValoresParcelas(
       numParcelas,
       valorTotal,
       distribuicaoTipo
     );
 
-    // Gera as parcelas para cada participante
     const parcelas: Parcela[] = [];
     const dataInicio = new Date(form.getValues("dataInicio"));
 
     // Filtra participantes ativos (com percentual > 0)
-    const participantesAtivos = participantes.filter(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (p: any) => p.percentual > 0
+    const participantesAtivos = participantesFields.filter(
+      (p: any) => p?.percentual > 0
     );
 
     for (let i = 0; i < numParcelas; i++) {
@@ -334,13 +367,11 @@ export default function NovaMeta() {
           }
         }
       } else {
-        // Para metas não recorrentes, apenas incrementa o mês
         dataVencimento.setMonth(dataVencimento.getMonth() + i);
       }
 
       // Cria uma parcela para cada participante ativo
       for (const participante of participantesAtivos) {
-        // Calcula o valor da parcela para este participante
         const valorParcelaParticipante =
           valoresParcelas[i] * (participante.percentual / 100);
 
@@ -359,64 +390,172 @@ export default function NovaMeta() {
     setPreviewParcelas(parcelas);
   };
 
+  // Gera preview automaticamente quando os dados relevantes mudam
+  useEffect(() => {
+    if (valorTotal > 0 && numParcelas > 0 && participantesFields.length > 0) {
+      gerarPreviewParcelas();
+    }
+  }, [
+    valorTotal,
+    numParcelas,
+    distribuicaoTipo,
+    participantesFields,
+    valorMinParcela,
+    valorMaxParcela,
+    recorrente,
+  ]);
+
+  console.log("Preview de parcelas:", previewParcelas);
+  console.log("form values:", form.getValues());
+  console.log("form erros:", form.formState.errors);
+
   // Função para lidar com a submissão do formulário
   const onSubmit = async (data: MetaFormValues) => {
     try {
       setIsSubmitting(true);
 
-      // Gera as parcelas finais se ainda não foram geradas
-      if (previewParcelas.length === 0) {
-        gerarPreviewParcelas();
+      // Validação adicional
+      const totalPercentual = participantesFields.reduce(
+        (sum, p) => sum + p.percentual,
+        0
+      );
+      if (totalPercentual !== 100) {
+        alert("A soma dos percentuais deve ser igual a 100%");
+        return;
       }
 
-      console.log("Dados do formulário:", data);
-      // Enviar dados para a API
+      console.log("Dados do formulário:", {
+        ...data,
+        parcelas: previewParcelas,
+        participantes: participantesFields,
+      });
+
+      // Aqui você faria a chamada para a API
       const response = await fetch("/api/metas", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
-          parcelas: [
-            ...previewParcelas.map((parcela) => ({
-              ...parcela,
-              responsavel: parcela.responsavel.id,
-            })),
-          ],
-          participantes: data.participantes,
+          parcelas: previewParcelas,
+          participantes: participantesFields,
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Erro ao criar meta");
-      }
-
+      if (!response.ok) throw new Error("Erro ao criar meta");
       const metaCriada = await response.json();
-
-      // Redireciona para a página de detalhes da meta
       router.push(`/metas/${metaCriada.id}`);
     } catch (error) {
       console.error("Erro ao criar meta:", error);
-      // Aqui você poderia mostrar uma mensagem de erro para o usuário
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  async function fetchDataAsync(query = ""): Promise<any[]> {
+    try {
+      const url = query
+        ? `http://localhost:3000/api/auth/users?search=${encodeURIComponent(query)}`
+        : `http://localhost:3000/api/auth/users`;
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Erro ao buscar usuários");
+
+      const data = await response.json();
+      return data?.data || [];
+    } catch (error) {
+      console.error("Erro ao buscar usuários:", error);
+      return [];
+    }
+  }
+
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+
+  // Função para adicionar participante
+  const handleAddParticipante = async () => {
+    if (!selectedUserId) return;
+
+    // Verifica se o usuário já está na lista
+    if (participantesFields.find((p: any) => p.usuarioId === selectedUserId)) {
+      alert("Este usuário já está na lista de participantes");
+      setSelectedUserId("");
+      return;
+    }
+
+    try {
+      const users = await fetchDataAsync();
+      const user = users.find((u) => u.id === selectedUserId);
+
+      if (user) {
+        appendParticipante({
+          id: user.id,
+          usuarioId: user.id,
+          nome: user.name || user.email,
+          email: user.email,
+          avatar: user.name
+            ? user.name
+                .split(" ")
+                .map((n: string) => n[0])
+                .join("")
+                .toUpperCase()
+            : user.email?.[0]?.toUpperCase() || "?",
+          percentual: 0,
+        });
+
+        // Redistribui percentuais automaticamente
+        setTimeout(() => {
+          redistribuirPercentuaisIgualmente();
+        }, 100);
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar participante:", error);
+    }
+
+    setSelectedUserId("");
+    setDialogOpen(false);
+  };
+
+  // Função para remover participante
+  const handleRemoveParticipante = (index: number) => {
+    const participante = participantesFields[index];
+
+    // Não permite remover o criador da meta
+    if (participante.usuarioId === user?.id) {
+      alert("Não é possível remover o criador da meta");
+      return;
+    }
+
+    removeParticipante(index);
+
+    // Redistribui percentuais após remoção
+    setTimeout(() => {
+      redistribuirPercentuaisIgualmente();
+    }, 100);
+  };
+
+  const totalPercentual = participantesFields.reduce(
+    (sum, p) => sum + p.percentual,
+    0
+  );
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto px-4 py-8 container">
       <div className="flex items-center mb-6">
-        <Link href="/">
-          <Button
-            variant="ghost"
-            size="sm"
-          >
-            <ArrowLeft className="mr-2 w-4 h-4" />
-            Voltar
-          </Button>
-        </Link>
+        <Button
+          onClick={() => router.back()}
+          variant="ghost"
+          size="sm"
+        >
+          <ArrowLeft className="mr-2 w-4 h-4" />
+          Voltar
+        </Button>
         <h1 className="ml-4 font-bold text-2xl">Nova Meta Financeira</h1>
       </div>
 
@@ -555,7 +694,7 @@ export default function NovaMeta() {
                             value={field.value}
                             onValueChange={(value) => {
                               field.onChange(value);
-                              if (value === "valorTotal") {
+                              if (value === "total") {
                                 setValue("valorParcela", 0);
                               } else {
                                 setValue("valorTotal", 0);
@@ -920,99 +1059,194 @@ export default function NovaMeta() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-3">
-                        <Avatar>
-                          <AvatarFallback>JD</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium">João Doe</p>
-                          <p className="text-muted-foreground text-sm">Você</p>
-                        </div>
-                      </div>
-                      <Badge>Criador</Badge>
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-3">
-                        <Avatar>
-                          <AvatarFallback>MC</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium">Maria Costa</p>
-                          <p className="text-muted-foreground text-sm">
-                            maria@exemplo.com
-                          </p>
-                        </div>
-                      </div>
-                      <Checkbox
-                        id="incluirParceiro"
-                        checked={incluirParceiro}
-                        onCheckedChange={(checked) =>
-                          setIncluirParceiro(!!checked)
-                        }
-                      />
-                    </div>
-
-                    {incluirParceiro && (
-                      <div className="space-y-4 bg-muted p-4 rounded-md">
-                        <Label className="font-medium">
-                          Distribuição de Responsabilidades
-                        </Label>
-                        <p className="mb-4 text-muted-foreground text-sm">
-                          Defina a porcentagem do valor total que cada
-                          participante será responsável
-                        </p>
-
-                        <div className="space-y-6">
-                          {participantesFields.map((participante) => (
-                            <div
-                              key={participante.id}
-                              className="space-y-2"
-                            >
-                              <div className="flex justify-between items-center">
-                                <Label
-                                // htmlFor={`percentual-${participante.id}`}
-                                >
-                                  {participante.nome} ({participante.percentual}
-                                  %)
-                                </Label>
+                    {/* Lista de participantes */}
+                    <div className="space-y-4">
+                      {participantesFields.map((participante, index) => (
+                        <div
+                          key={participante.id}
+                          className="bg-muted p-4 rounded-md"
+                        >
+                          <div className="flex justify-between items-start mb-4">
+                            <div className="flex items-center space-x-3">
+                              <Avatar>
+                                <AvatarFallback>
+                                  {participante.avatar}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <p className="font-medium">
+                                  {participante.nome}
+                                </p>
+                                <p className="text-muted-foreground text-sm">
+                                  {participante.email}
+                                </p>
                               </div>
-                              <Slider
-                                // id={`percentual-${participante.id}`}
-                                min={0}
-                                max={100}
-                                step={5}
-                                value={[participante.percentual]}
-                                onValueChange={(value) =>
-                                  handlePercentualChange(
-                                    participante.usuarioId,
-                                    value[0]
-                                  )
-                                }
-                                disabled={participante.usuarioId !== "usuario1"}
-                              />
                             </div>
-                          ))}
+                            <div className="flex items-center space-x-2">
+                              {participante.usuarioId === user?.id && (
+                                <Badge>Criador</Badge>
+                              )}
+                              {participante.usuarioId !== user?.id && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() =>
+                                    handleRemoveParticipante(index)
+                                  }
+                                  title="Remover participante"
+                                >
+                                  <X className="w-4 h-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Controle de percentual */}
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <Label>Percentual de responsabilidade</Label>
+                              <span className="font-medium text-sm">
+                                {participante.percentual}%
+                              </span>
+                            </div>
+                            <Slider
+                              min={0}
+                              max={100}
+                              step={1}
+                              value={[participante.percentual]}
+                              onValueChange={(value) =>
+                                handlePercentualChange(index, value[0])
+                              }
+                              className="w-full"
+                            />
+                            <div className="flex justify-between text-xs text-muted-foreground">
+                              <span>0%</span>
+                              <span>100%</span>
+                            </div>
+                          </div>
+
+                          {/* Valor calculado */}
+                          {valorTotal > 0 && (
+                            <div className="mt-3 pt-3 border-t">
+                              <div className="flex justify-between items-center text-sm">
+                                <span>Valor de responsabilidade:</span>
+                                <span className="font-medium">
+                                  R${" "}
+                                  {(
+                                    (valorTotal * participante.percentual) /
+                                    100
+                                  ).toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+                          )}
                         </div>
+                      ))}
+                    </div>
 
-                        <Alert className="mt-4">
-                          <Info className="w-4 h-4" />
-                          <AlertDescription>
-                            Cada participante terá suas próprias parcelas para
-                            pagar de acordo com sua porcentagem.
-                          </AlertDescription>
-                        </Alert>
+                    {/* Resumo dos percentuais */}
+                    <div className="bg-muted p-3 rounded-md">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-sm">
+                          Total dos percentuais:
+                        </span>
+                        <span
+                          className={`font-bold ${totalPercentual === 100 ? "text-green-600" : "text-red-600"}`}
+                        >
+                          {totalPercentual}%
+                        </span>
                       </div>
-                    )}
+                      {totalPercentual !== 100 && (
+                        <p className="text-red-600 text-xs mt-1">
+                          A soma deve ser igual a 100%
+                        </p>
+                      )}
+                    </div>
 
-                    <Button
-                      variant="outline"
-                      className="mt-2 w-full"
-                    >
-                      <Users className="mr-2 w-4 h-4" />
-                      Convidar Outro Participante
-                    </Button>
+                    {/* Botões de ação */}
+                    <div className="flex gap-2">
+                      <Dialog
+                        open={dialogOpen}
+                        onOpenChange={setDialogOpen}
+                      >
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="flex-1"
+                          >
+                            <Plus className="mr-2 w-4 h-4" />
+                            Convidar Participante
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Convidar Participante</DialogTitle>
+                            <DialogDescription>
+                              Busque e selecione um usuário para adicionar à
+                              meta
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <AsyncSelect
+                              label="Usuário"
+                              value={selectedUserId}
+                              onChange={setSelectedUserId}
+                              preload
+                              fetcher={fetchDataAsync}
+                              renderOption={(user: any) => (
+                                <div className="flex items-center space-x-2">
+                                  <Avatar>
+                                    <AvatarFallback>
+                                      {user.name?.[0] || user.email?.[0] || "?"}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div>
+                                    <span>{user.name || user.email}</span>
+                                    <span className="block text-xs text-muted-foreground">
+                                      {user.email}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                              getDisplayValue={(user) =>
+                                user?.name || user?.email || ""
+                              }
+                              getOptionValue={(user) => user?.id || ""}
+                            />
+                            <div className="flex justify-end space-x-2">
+                              <Button
+                                variant="outline"
+                                onClick={() => setDialogOpen(false)}
+                              >
+                                Cancelar
+                              </Button>
+                              <Button
+                                onClick={handleAddParticipante}
+                                disabled={!selectedUserId}
+                              >
+                                Adicionar
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+
+                      <Button
+                        variant="outline"
+                        onClick={redistribuirPercentuaisIgualmente}
+                        disabled={participantesFields.length === 0}
+                      >
+                        Distribuir Igualmente
+                      </Button>
+                    </div>
+
+                    <Alert>
+                      <Info className="w-4 h-4" />
+                      <AlertDescription>
+                        Cada participante terá suas próprias parcelas para pagar
+                        de acordo com sua porcentagem.
+                      </AlertDescription>
+                    </Alert>
                   </div>
                 </CardContent>
               </Card>
@@ -1045,6 +1279,7 @@ export default function NovaMeta() {
               )}
             </div>
 
+            {/* Preview das Parcelas */}
             <div>
               <Card className="top-4 sticky">
                 <CardHeader>
@@ -1060,12 +1295,6 @@ export default function NovaMeta() {
                       <p className="mb-4 text-muted-foreground text-sm">
                         Configure sua meta para visualizar as parcelas
                       </p>
-                      <Button
-                        variant="outline"
-                        onClick={gerarPreviewParcelas}
-                      >
-                        Gerar Prévia
-                      </Button>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -1086,33 +1315,26 @@ export default function NovaMeta() {
                             >
                               Todas ({previewParcelas.length})
                             </TabsTrigger>
-                            <TabsTrigger
-                              value="minhas"
-                              className="flex-1"
-                            >
-                              Minhas (
-                              {
-                                previewParcelas.filter(
-                                  (p) => p.responsavel.usuarioId === "usuario1"
-                                ).length
-                              }
-                              )
-                            </TabsTrigger>
-                            {incluirParceiro && (
+                            {participantesFields.map((participante) => (
                               <TabsTrigger
-                                value="parceiro"
+                                key={participante.usuarioId}
+                                value={participante.usuarioId}
                                 className="flex-1"
                               >
-                                Parceiro (
+                                {participante.usuarioId === user?.id
+                                  ? "Minhas"
+                                  : participante.nome.split(" ")[0]}{" "}
+                                (
                                 {
                                   previewParcelas.filter(
                                     (p) =>
-                                      p.responsavel.usuarioId === "usuario2"
+                                      p.responsavel.usuarioId ===
+                                      participante.usuarioId
                                   ).length
                                 }
                                 )
                               </TabsTrigger>
-                            )}
+                            ))}
                           </TabsList>
 
                           <TabsContent
@@ -1121,9 +1343,9 @@ export default function NovaMeta() {
                           >
                             {previewParcelas.map((parcela, index) => (
                               <div
-                                key={`${parcela.numero}-${parcela.responsavel}-${index}`}
+                                key={`${parcela.numero}-${parcela.responsavel.usuarioId}-${index}`}
                                 className={`p-3 border rounded-md ${
-                                  parcela.responsavel.usuarioId === "usuario1"
+                                  parcela.responsavel.usuarioId === user?.id
                                     ? "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
                                     : "bg-pink-50 border-pink-200 dark:bg-pink-950 dark:border-pink-800"
                                 }`}
@@ -1133,10 +1355,9 @@ export default function NovaMeta() {
                                     Parcela {parcela.numero}
                                   </span>
                                   <Badge variant="outline">
-                                    {parcela.responsavel.usuarioId ===
-                                    "usuario1"
+                                    {parcela.responsavel.usuarioId === user?.id
                                       ? "Você"
-                                      : "Maria"}
+                                      : parcela.responsavel.nome.split(" ")[0]}
                                   </Badge>
                                 </div>
                                 <div className="gap-2 grid grid-cols-2 text-sm">
@@ -1157,62 +1378,39 @@ export default function NovaMeta() {
                             ))}
                           </TabsContent>
 
-                          <TabsContent
-                            value="minhas"
-                            className="space-y-3 mt-3"
-                          >
-                            {previewParcelas
-                              .filter(
-                                (p) => p.responsavel.usuarioId === "usuario1"
-                              )
-                              .map((parcela, index) => (
-                                <div
-                                  key={`${parcela.numero}-${parcela.responsavel}-${index}`}
-                                  className="bg-blue-50 dark:bg-blue-950 p-3 border border-blue-200 dark:border-blue-800 rounded-md"
-                                >
-                                  <div className="flex justify-between items-center mb-2">
-                                    <span className="font-medium">
-                                      Parcela {parcela.numero}
-                                    </span>
-                                    <Badge variant="outline">Você</Badge>
-                                  </div>
-                                  <div className="gap-2 grid grid-cols-2 text-sm">
-                                    <div>
-                                      <span className="text-muted-foreground">
-                                        Valor:
-                                      </span>
-                                      <p>R$ {parcela.valor.toFixed(2)}</p>
-                                    </div>
-                                    <div>
-                                      <span className="text-muted-foreground">
-                                        Vencimento:
-                                      </span>
-                                      <p>{parcela.dataVencimento}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                          </TabsContent>
-
-                          {incluirParceiro && (
+                          {participantesFields.map((participante) => (
                             <TabsContent
-                              value="parceiro"
+                              key={participante.usuarioId}
+                              value={participante.usuarioId}
                               className="space-y-3 mt-3"
                             >
                               {previewParcelas
                                 .filter(
-                                  (p) => p.responsavel.usuarioId === "usuario2"
+                                  (p) =>
+                                    p.responsavel.usuarioId ===
+                                    participante.usuarioId
                                 )
                                 .map((parcela, index) => (
                                   <div
-                                    key={`${parcela.numero}-${parcela.responsavel}-${index}`}
-                                    className="bg-pink-50 dark:bg-pink-950 p-3 border border-pink-200 dark:border-pink-800 rounded-md"
+                                    key={`${parcela.numero}-${parcela.responsavel.usuarioId}-${index}`}
+                                    className={`p-3 border rounded-md ${
+                                      parcela.responsavel.usuarioId === user?.id
+                                        ? "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
+                                        : "bg-pink-50 border-pink-200 dark:bg-pink-950 dark:border-pink-800"
+                                    }`}
                                   >
                                     <div className="flex justify-between items-center mb-2">
                                       <span className="font-medium">
                                         Parcela {parcela.numero}
                                       </span>
-                                      <Badge variant="outline">Maria</Badge>
+                                      <Badge variant="outline">
+                                        {parcela.responsavel.usuarioId ===
+                                        user?.id
+                                          ? "Você"
+                                          : parcela.responsavel.nome.split(
+                                              " "
+                                            )[0]}
+                                      </Badge>
                                     </div>
                                     <div className="gap-2 grid grid-cols-2 text-sm">
                                       <div>
@@ -1231,7 +1429,7 @@ export default function NovaMeta() {
                                   </div>
                                 ))}
                             </TabsContent>
-                          )}
+                          ))}
                         </Tabs>
                       </div>
 
@@ -1247,37 +1445,27 @@ export default function NovaMeta() {
                             <span>R$ {valorTotal.toFixed(2)}</span>
                           </div>
 
-                          {incluirParceiro && (
-                            <>
-                              <div className="flex justify-between text-sm">
-                                <span>Sua responsabilidade:</span>
-                                <span>
-                                  R${" "}
-                                  {(
-                                    (valorTotal *
-                                      participantes.find(
-                                        (p) => p.usuarioId === "usuario1"
-                                      )!.percentual) /
-                                    100
-                                  ).toFixed(2)}
-                                </span>
-                              </div>
-
-                              <div className="flex justify-between text-sm">
-                                <span>Responsabilidade do parceiro:</span>
-                                <span>
-                                  R${" "}
-                                  {(
-                                    (valorTotal *
-                                      participantes.find(
-                                        (p) => p.usuarioId === "usuario2"
-                                      )!.percentual) /
-                                    100
-                                  ).toFixed(2)}
-                                </span>
-                              </div>
-                            </>
-                          )}
+                          {participantesFields.map((participante) => (
+                            <div
+                              key={participante.usuarioId}
+                              className="flex justify-between text-sm"
+                            >
+                              <span>
+                                {participante.usuarioId === user?.id
+                                  ? "Sua"
+                                  : `${participante.nome.split(" ")[0]}`}{" "}
+                                responsabilidade:
+                              </span>
+                              <span>
+                                R${" "}
+                                {(
+                                  (valorTotal * participante.percentual) /
+                                  100
+                                ).toFixed(2)}{" "}
+                                ({participante.percentual}%)
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -1299,7 +1487,7 @@ export default function NovaMeta() {
             <Button
               type="submit"
               size="lg"
-              disabled={isSubmitting}
+              disabled={isSubmitting || totalPercentual !== 100}
             >
               {isSubmitting && (
                 <Loader2 className="mr-2 w-4 h-4 animate-spin" />

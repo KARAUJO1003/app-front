@@ -1,5 +1,6 @@
 import { decodeJwt } from "jose";
 import { cookies } from "next/headers";
+import { AuthService } from "@/lib/auth-service";
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -9,19 +10,23 @@ export async function GET() {
     return Response.json({ user: null }, { status: 401 });
   }
 
-  // try {
-  //   const { payload } = await jwtVerify(
-  //     token,
-  //     new TextEncoder().encode(process.env.JWT_SECRET)
-  //   );
-  //   return Response.json({ user: payload });
-  // } catch {
-  //   return Response.json({ user: null }, { status: 401 });
-  // }
+  const verifySession = AuthService.isSessionValid();
+
+  if (!verifySession) {
+    return Response.json(
+      { message: "Session expired", user: null },
+      {
+        status: 401,
+      }
+    );
+  }
+
   const decoded = decodeJwt(token);
   if (!decoded) {
     return Response.json({ user: null }, { status: 401 });
   }
-  return Response.json({ user: decoded }, { status: 200 });
-  // return Response.json({ user: decoded }, { status: 200 });
+  return Response.json(
+    { message: "Session ok", user: decoded },
+    { status: 200 }
+  );
 }
