@@ -168,7 +168,8 @@ export default function NovaMeta() {
         percentual: 100,
       });
     }
-  }, [user, loading, participantesFields.length, setValue, appendParticipante]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading, participantesFields.length]);
 
   // Atualiza o número de execuções quando o número de parcelas muda
   useEffect(() => {
@@ -378,7 +379,7 @@ export default function NovaMeta() {
         parcelas.push({
           numero: i + 1,
           valor: valorParcelaParticipante,
-          dataVencimento: format(dataVencimento, "dd/MM/yyyy"),
+          dataVencimento: format(dataVencimento, "yyyy-MM-dd"),
           status: "Pendente",
           valorPago: 0,
           responsavel: participante,

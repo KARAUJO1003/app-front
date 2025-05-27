@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const criarMetaSchema = z.object({
   titulo: z.string(),
@@ -39,7 +39,7 @@ export const criarMetaSchema = z.object({
         dataVencimento: z.string(),
         status: z.string(),
         valorPago: z.number().optional(),
-        responsavel: z.string().optional(),
+        responsavel: z.any().optional(),
         dataPagamento: z.string().optional(),
       })
     )
