@@ -67,8 +67,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AsyncSelect } from "@/components/extensions/async-select";
 import { useUser } from "@/context/user-context";
+import { useQuery } from "@tanstack/react-query";
 
 type IResponsavel = {
   id?: string;
@@ -135,7 +135,6 @@ export default function NovaMeta() {
   const distribuicaoTipo = watch("distribuicaoTipo");
   const valorMinParcela = watch("valorMinParcela") || 100;
   const valorMaxParcela = watch("valorMaxParcela") || 500;
-  const participantes = watch("participantes");
 
   // Configurar o field array para participantes
   const {
@@ -214,7 +213,7 @@ export default function NovaMeta() {
 
     // Redistribui proporcionalmente entre os outros participantes
     if (outrosParticipantes.length > 0 && totalOutrosPercentuais > 0) {
-      outrosParticipantes.forEach((participante, originalIndex) => {
+      outrosParticipantes.forEach((participante) => {
         const realIndex = participantesFields.findIndex(
           (p) => p.usuarioId === participante.usuarioId
         );
@@ -396,6 +395,7 @@ export default function NovaMeta() {
     if (valorTotal > 0 && numParcelas > 0 && participantesFields.length > 0) {
       gerarPreviewParcelas();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     valorTotal,
     numParcelas,
@@ -470,6 +470,12 @@ export default function NovaMeta() {
   }
 
   const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const { data: users, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => fetchDataAsync(),
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5, // 5 minutos
+  });
 
   // Função para adicionar participante
   const handleAddParticipante = async () => {
@@ -1064,7 +1070,7 @@ export default function NovaMeta() {
                     <div className="space-y-4">
                       {participantesFields.map((participante, index) => (
                         <div
-                          key={participante.id}
+                          key={index}
                           className="bg-muted p-4 rounded-md"
                         >
                           <div className="flex justify-between items-start mb-4">
@@ -1174,6 +1180,7 @@ export default function NovaMeta() {
                           <Button
                             variant="outline"
                             className="flex-1"
+                            type="button"
                           >
                             <Plus className="mr-2 w-4 h-4" />
                             Convidar Participante
@@ -1188,32 +1195,41 @@ export default function NovaMeta() {
                             </DialogDescription>
                           </DialogHeader>
                           <div className="space-y-4">
-                            <AsyncSelect
-                              label="Usuário"
+                            <Select
                               value={selectedUserId}
-                              onChange={setSelectedUserId}
-                              preload
-                              fetcher={fetchDataAsync}
-                              renderOption={(user: any) => (
-                                <div className="flex items-center space-x-2">
-                                  <Avatar>
-                                    <AvatarFallback>
-                                      {user.name?.[0] || user.email?.[0] || "?"}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <div>
-                                    <span>{user.name || user.email}</span>
-                                    <span className="block text-xs text-muted-foreground">
-                                      {user.email}
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
-                              getDisplayValue={(user) =>
-                                user?.name || user?.email || ""
-                              }
-                              getOptionValue={(user) => user?.id || ""}
-                            />
+                              onValueChange={setSelectedUserId}
+                              disabled={isLoading}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Selecione um usuário" />
+                              </SelectTrigger>
+
+                              <SelectContent>
+                                {users?.map((user) => (
+                                  <SelectItem
+                                    key={user.id}
+                                    value={user.id}
+                                  >
+                                    <div className="flex items-center space-x-2">
+                                      <Avatar>
+                                        <AvatarFallback>
+                                          {user.name?.[0] ||
+                                            user.email?.[0] ||
+                                            "?"}
+                                        </AvatarFallback>
+                                      </Avatar>
+                                      <div>
+                                        <span>{user.name || user.email}</span>
+                                        <span className="block text-xs text-muted-foreground">
+                                          {user.email}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+
                             <div className="flex justify-end space-x-2">
                               <Button
                                 variant="outline"
@@ -1316,26 +1332,28 @@ export default function NovaMeta() {
                             >
                               Todas ({previewParcelas.length})
                             </TabsTrigger>
-                            {participantesFields.map((participante) => (
-                              <TabsTrigger
-                                key={participante.usuarioId}
-                                value={participante.usuarioId}
-                                className="flex-1"
-                              >
-                                {participante.usuarioId === user?.id
-                                  ? "Minhas"
-                                  : participante.nome.split(" ")[0]}{" "}
-                                (
-                                {
-                                  previewParcelas.filter(
-                                    (p) =>
-                                      p.responsavel.usuarioId ===
-                                      participante.usuarioId
-                                  ).length
-                                }
-                                )
-                              </TabsTrigger>
-                            ))}
+                            {participantesFields.map(
+                              (participante, idx: number) => (
+                                <TabsTrigger
+                                  key={idx}
+                                  value={participante.usuarioId}
+                                  className="flex-1"
+                                >
+                                  {participante.usuarioId === user?.id
+                                    ? "Minhas"
+                                    : participante.nome.split(" ")[0]}{" "}
+                                  (
+                                  {
+                                    previewParcelas.filter(
+                                      (p) =>
+                                        p.responsavel.usuarioId ===
+                                        participante.usuarioId
+                                    ).length
+                                  }
+                                  )
+                                </TabsTrigger>
+                              )
+                            )}
                           </TabsList>
 
                           <TabsContent
@@ -1379,58 +1397,61 @@ export default function NovaMeta() {
                             ))}
                           </TabsContent>
 
-                          {participantesFields.map((participante) => (
-                            <TabsContent
-                              key={participante.usuarioId}
-                              value={participante.usuarioId}
-                              className="space-y-3 mt-3"
-                            >
-                              {previewParcelas
-                                .filter(
-                                  (p) =>
-                                    p.responsavel.usuarioId ===
-                                    participante.usuarioId
-                                )
-                                .map((parcela, index) => (
-                                  <div
-                                    key={`${parcela.numero}-${parcela.responsavel.usuarioId}-${index}`}
-                                    className={`p-3 border rounded-md ${
-                                      parcela.responsavel.usuarioId === user?.id
-                                        ? "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
-                                        : "bg-pink-50 border-pink-200 dark:bg-pink-950 dark:border-pink-800"
-                                    }`}
-                                  >
-                                    <div className="flex justify-between items-center mb-2">
-                                      <span className="font-medium">
-                                        Parcela {parcela.numero}
-                                      </span>
-                                      <Badge variant="outline">
-                                        {parcela.responsavel.usuarioId ===
+                          {participantesFields.map(
+                            (participante, idx: number) => (
+                              <TabsContent
+                                key={idx}
+                                value={participante.usuarioId}
+                                className="space-y-3 mt-3"
+                              >
+                                {previewParcelas
+                                  .filter(
+                                    (p) =>
+                                      p.responsavel.usuarioId ===
+                                      participante.usuarioId
+                                  )
+                                  .map((parcela, index) => (
+                                    <div
+                                      key={`${parcela.numero}-${parcela.responsavel.usuarioId}-${index}`}
+                                      className={`p-3 border rounded-md ${
+                                        parcela.responsavel.usuarioId ===
                                         user?.id
-                                          ? "Você"
-                                          : parcela.responsavel.nome.split(
-                                              " "
-                                            )[0]}
-                                      </Badge>
-                                    </div>
-                                    <div className="gap-2 grid grid-cols-2 text-sm">
-                                      <div>
-                                        <span className="text-muted-foreground">
-                                          Valor:
+                                          ? "bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800"
+                                          : "bg-pink-50 border-pink-200 dark:bg-pink-950 dark:border-pink-800"
+                                      }`}
+                                    >
+                                      <div className="flex justify-between items-center mb-2">
+                                        <span className="font-medium">
+                                          Parcela {parcela.numero}
                                         </span>
-                                        <p>R$ {parcela.valor.toFixed(2)}</p>
+                                        <Badge variant="outline">
+                                          {parcela.responsavel.usuarioId ===
+                                          user?.id
+                                            ? "Você"
+                                            : parcela.responsavel.nome.split(
+                                                " "
+                                              )[0]}
+                                        </Badge>
                                       </div>
-                                      <div>
-                                        <span className="text-muted-foreground">
-                                          Vencimento:
-                                        </span>
-                                        <p>{parcela.dataVencimento}</p>
+                                      <div className="gap-2 grid grid-cols-2 text-sm">
+                                        <div>
+                                          <span className="text-muted-foreground">
+                                            Valor:
+                                          </span>
+                                          <p>R$ {parcela.valor.toFixed(2)}</p>
+                                        </div>
+                                        <div>
+                                          <span className="text-muted-foreground">
+                                            Vencimento:
+                                          </span>
+                                          <p>{parcela.dataVencimento}</p>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                ))}
-                            </TabsContent>
-                          ))}
+                                  ))}
+                              </TabsContent>
+                            )
+                          )}
                         </Tabs>
                       </div>
 
@@ -1446,27 +1467,29 @@ export default function NovaMeta() {
                             <span>R$ {valorTotal.toFixed(2)}</span>
                           </div>
 
-                          {participantesFields.map((participante) => (
-                            <div
-                              key={participante.usuarioId}
-                              className="flex justify-between text-sm"
-                            >
-                              <span>
-                                {participante.usuarioId === user?.id
-                                  ? "Sua"
-                                  : `${participante.nome.split(" ")[0]}`}{" "}
-                                responsabilidade:
-                              </span>
-                              <span>
-                                R${" "}
-                                {(
-                                  (valorTotal * participante.percentual) /
-                                  100
-                                ).toFixed(2)}{" "}
-                                ({participante.percentual}%)
-                              </span>
-                            </div>
-                          ))}
+                          {participantesFields.map(
+                            (participante, idx: number) => (
+                              <div
+                                key={idx}
+                                className="flex justify-between text-sm"
+                              >
+                                <span>
+                                  {participante.usuarioId === user?.id
+                                    ? "Sua"
+                                    : `${participante.nome.split(" ")[0]}`}{" "}
+                                  responsabilidade:
+                                </span>
+                                <span>
+                                  R${" "}
+                                  {(
+                                    (valorTotal * participante.percentual) /
+                                    100
+                                  ).toFixed(2)}{" "}
+                                  ({participante.percentual}%)
+                                </span>
+                              </div>
+                            )
+                          )}
                         </div>
                       )}
                     </div>

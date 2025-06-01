@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { useEffect, useState } from "react";
 import { UserProvider } from "@/context/user-context";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const queryClient = new QueryClient();
 
@@ -28,7 +29,9 @@ export const RootProviders = ({ children }: { children: React.ReactNode }) => {
     >
       <NuqsAdapter>
         <QueryClientProvider client={queryClient}>
-          <UserProvider>{children}</UserProvider>
+          <UserProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </UserProvider>
           <ReactQueryDevtools
             initialIsOpen={process.env.APP_ENV === "development"}
           />
