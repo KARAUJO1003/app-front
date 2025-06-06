@@ -35,6 +35,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { DeleteGoalButton } from "../components/deleteGoalButton";
+import { MarkAsPaidDialog } from "../components/mark-as-paid-dialog";
 
 export default async function MetaDetalhes({
   params,
@@ -347,78 +348,20 @@ export default async function MetaDetalhes({
 
                             <div>
                               {parcela.status === "Pendente" ? (
-                                <Dialog>
-                                  <DialogTrigger asChild>
-                                    <Button
-                                      variant="secondary"
-                                      size="sm"
-                                      // className="w-8 sm:w-auto text-emerald-600"
-                                      // onClick={() => handleMarcarPago(parcela)}
-                                    >
-                                      Marcar como pago
-                                      {/* <span className="hidden sm:visible">
-                                      </span>
-                                      <CheckCircle2 className="w-4 h-4 sm:hidden" /> */}
-                                    </Button>
-                                  </DialogTrigger>
-                                  <DialogContent>
-                                    <DialogHeader>
-                                      <DialogTitle>
-                                        Marcar parcela como paga
-                                      </DialogTitle>
-                                      <DialogDescription>
-                                        Informe o valor que foi depositado para
-                                        esta parcela.
-                                      </DialogDescription>
-                                    </DialogHeader>
-                                    <div className="space-y-4 py-4">
-                                      <div className="space-y-2">
-                                        <Label htmlFor="valorPago">
-                                          Valor pago (R$)
-                                        </Label>
-                                        <Input
-                                          id="valorPago"
-                                          type="number"
-                                          min="0"
-                                          step="0.01"
-                                          value={valorPago}
-                                          // onChange={(e) =>
-                                          //   setValorPago(e.target.value)
-                                          // }
-                                        />
-                                      </div>
-
-                                      <div className="flex items-center space-x-2">
-                                        <div
-                                          className={`p-2 rounded-full bg-gray-100 dark:bg-gray-800`}
-                                        >
-                                          <DollarSign className="w-4 h-4 text-gray-500" />
-                                        </div>
-                                        <div>
-                                          <p className="text-muted-foreground text-sm">
-                                            Valor esperado
-                                          </p>
-                                          <p className="font-medium">
-                                            R$ {parcela.valor.toFixed(2)}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <DialogFooter>
-                                      <Button
-                                      // onClick={confirmarPagamento}
-                                      >
-                                        Confirmar pagamento
-                                      </Button>
-                                    </DialogFooter>
-                                  </DialogContent>
-                                </Dialog>
+                                <MarkAsPaidDialog parcela={parcela} />
                               ) : (
                                 <Badge
                                   variant="outline"
                                   className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
                                 >
-                                  Pago em {parcela.dataPagamento}
+                                  Pago em{" "}
+                                  {new Intl.DateTimeFormat("pt-BR", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }).format(new Date(parcela.dataPagamento))}
                                 </Badge>
                               )}
                             </div>

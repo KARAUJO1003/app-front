@@ -13,14 +13,14 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { PlusCircle, ArrowRight } from "lucide-react";
 import { Parcela } from "@/lib/types";
-import axiosInstance from "@/lib/axions-instance";
+import { api } from "@/lib/axions-instance";
 import { cookies } from "next/headers";
 
 // Exemplo em Server Component ou getServerSideProps
 
 async function getData() {
   const cookie = cookies().toString(); // Pega todos os cookies da requisição SSR
-  const res = await axiosInstance.get("/metas", {
+  const res = await api.get("/metas", {
     headers: {
       cookie, // Passa o cookie manualmente
     },

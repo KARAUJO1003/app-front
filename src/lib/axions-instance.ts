@@ -22,4 +22,4 @@ if (typeof window !== "undefined") {
   });
 }
 
-export default axiosInstance;
+export const api = axiosInstance;
