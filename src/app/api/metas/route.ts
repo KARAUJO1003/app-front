@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import { criarMetaSchema } from './schemas';
+import { cookies } from "next/headers";
+import { criarMetaSchema } from "./schemas";
+import { AuthService } from "@/lib/auth-service";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -47,21 +49,33 @@ export async function POST(request: Request) {
     }
 
     // Verifica se todos os responsáveis das parcelas existem
-    const responsaveisIds = dadosValidados.parcelas?.map(
-      (parcela) => parcela.responsavel
-    )[0];
+    const responsaveisIds = [
+      ...new Set(
+        dadosValidados.parcelas
+          ?.map((parcela) => parcela.responsavel?.id)
+          .filter((id) => !!id)
+      ),
+    ]; // Remove duplicados
 
-    const responsaveisExistentes = await prisma.user.findFirst({
-      where: { id: responsaveisIds },
-    });
+    if (responsaveisIds && responsaveisIds.length > 0) {
+      const responsaveisExistentes = await prisma.user.findMany({
+        where: { id: { in: responsaveisIds } },
+      });
 
-    if (!responsaveisIds || !responsaveisExistentes) {
-      return NextResponse.json(
-        {
-          error: "Um ou mais responsáveis das parcelas não foram encontrados",
-        },
-        { status: 400 }
-      );
+      if (responsaveisExistentes.length !== responsaveisIds.length) {
+        const idsExistentes = responsaveisExistentes.map((p) => p.id);
+        const idsAusentes = responsaveisIds.filter(
+          (id) => !idsExistentes.includes(id)
+        );
+
+        return NextResponse.json(
+          {
+            error: "Um ou mais responsáveis das parcelas não foram encontrados",
+            idsAusentes,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Criação da meta
@@ -98,20 +112,47 @@ export async function POST(request: Request) {
     });
 
     // Criação das parcelas
-    if (dadosValidados.parcelas && dadosValidados.parcelas.length > 0) {
+    if (
+      dadosValidados.parcelas &&
+      novaMeta.id &&
+      dadosValidados.parcelas.length > 0
+    ) {
+      console.log("Criando parcelas para a meta:", novaMeta.id);
       await prisma.parcela.createMany({
-        data: dadosValidados.parcelas.map((parcela) => ({
-          metaId: novaMeta.id,
-          numero: parcela.numero,
-          valor: parcela.valor,
-          dataVencimento: new Date(parcela.dataVencimento),
-          status: parcela.status,
-          valorPago: parcela.valorPago || 0,
-          responsavelId: parcela.responsavel || "",
-          dataPagamento: parcela.dataPagamento
-            ? new Date(parcela.dataPagamento)
-            : null,
-        })),
+        data: (dadosValidados.parcelas as any).map((parcela: any) => {
+          // Corrige dataVencimento e dataPagamento
+          let dataVencimento: Date | null = null;
+          if (parcela.dataVencimento) {
+            // Aceita tanto ISO quanto dd/MM/yyyy
+            if (parcela.dataVencimento.includes("/")) {
+              const [dia, mes, ano] = parcela.dataVencimento.split("/");
+              dataVencimento = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+            } else {
+              dataVencimento = new Date(parcela.dataVencimento);
+            }
+          }
+
+          let dataPagamento: Date | null = null;
+          if (parcela.dataPagamento && parcela.dataPagamento !== "") {
+            if (parcela.dataPagamento.includes("/")) {
+              const [dia, mes, ano] = parcela.dataPagamento.split("/");
+              dataPagamento = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+            } else {
+              dataPagamento = new Date(parcela.dataPagamento);
+            }
+          }
+
+          return {
+            metaId: novaMeta.id,
+            numero: parcela.numero,
+            valor: parcela.valor,
+            dataVencimento,
+            status: parcela.status,
+            valorPago: parcela.valorPago || 0,
+            responsavelId: parcela.responsavel?.id || null,
+            dataPagamento,
+          };
+        }),
       });
     }
 
@@ -126,7 +167,7 @@ export async function POST(request: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.errors }, { status: 400 });
     }
-    console.error("Erro ao criar meta:", error);
+    // console.error("Erro ao criar meta:", error);
     return NextResponse.json(
       { err: "Erro ao processar a solicitação", error },
       { status: 500 }
@@ -135,43 +176,33 @@ export async function POST(request: Request) {
 }
 
 // Endpoint para listar todas as metas
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const sessionCookie = (await cookies()).get("sessionId");
+  console.log("🚀🚀🚀🚀Session cookie recebido:", sessionCookie);
+  if (!sessionCookie) {
+    return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+  }
+  const token = sessionCookie.value;
+  const isValid = await AuthService.isSessionValid();
+  if (!isValid) {
+    return NextResponse.json({ error: "Sessão expirada" }, { status: 401 });
+  }
+  const user = await AuthService.openSessionToken(token);
+
+  // Agora use user.id para buscar as metas
+  const userId = String((user as { id: string | number }).id);
+
   const metas = await prisma.meta.findMany({
+    where: {
+      OR: [
+        { usuarioCriadorId: userId },
+        { participantes: { some: { usuarioId: userId } } },
+      ],
+    },
     include: {
-      usuarioCriador: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          avatar: true,
-        },
-      },
-      participantes: {
-        select: {
-          id: true,
-          usuario: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              avatar: true,
-            },
-          },
-        },
-      },
-      parcelas: {
-        select: {
-          id: true,
-          metaId: true,
-          numero: true,
-          valor: true,
-          dataVencimento: true,
-          status: true,
-          valorPago: true,
-          responsavel: true,
-          dataPagamento: true,
-        },
-      },
+      usuarioCriador: true,
+      participantes: true,
+      parcelas: true,
     },
   });
 

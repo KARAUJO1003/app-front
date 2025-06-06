@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import axios from "axios";
-import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
 // Simulação de ações do servidor - em produção, estas funções interagiriam com o banco de dados
@@ -12,47 +12,39 @@ export async function registerUser(data: {
   email: string;
   password: string;
 }) {
-  const response = await axios.post(
-    "http://localhost:3000/api/users/register",
-    {
-      ...data,
-    }
-  );
+  const response = await axios.post("http://localhost:3000/api/auth/register", {
+    ...data,
+  });
   return response.data;
 }
 
 export async function loginUser(data: { email: string; password: string }) {
-  await axios
-    .post("http://localhost:3000/api/users/login", {
+  const res = await axios
+    .post("http://localhost:3000/api/auth/login", {
       ...data,
     })
-    .then(async (res) => {
-      if (!process.env.JWT_SECRET) {
-        throw new Error("JWT_SECRET is not defined in environment variables");
+    .then(async (response) => {
+      console.log("Login response:", response.data);
+      const { value, exp } = response.data?.token || {};
+
+      if (!value || !exp) {
+        throw new Error("Invalid token received from login");
       }
 
-      const token = jwt.sign(
-        { id: res?.data?.user?.id },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "7d",
-        }
-      );
-
-      (await cookies()).set("sessionId", token, {
+      (await cookies()).set("sessionId", value, {
+        expires: (exp as number) * 1000,
+        path: "/",
         httpOnly: true,
-        maxAge: 60 * 60 * 24 * 7, // 7 days
       });
 
-      return {
-        status: res.status,
-        message: res.data.message,
-        data: {
-          ...res.data.data,
-          token,
-        },
-      };
+      return response;
     });
+
+  if (res.status !== 200) {
+    throw new Error("Login failed");
+  }
+
+  return res.data;
 }
 
 export async function logoutUser() {
