@@ -3,7 +3,7 @@
 "use server";
 
 import axios from "axios";
-import { AuthService } from "./auth-service";
+import { cookies } from "next/headers";
 
 // Simulação de ações do servidor - em produção, estas funções interagiriam com o banco de dados
 
@@ -19,30 +19,32 @@ export async function registerUser(data: {
 }
 
 export async function loginUser(data: { email: string; password: string }) {
-  await axios
+  const res = await axios
     .post("http://localhost:3000/api/auth/login", {
       ...data,
     })
-    .then(async (res) => {
-      if (!process.env.JWT_SECRET) {
-        throw new Error("JWT_SECRET is not defined in environment variables");
+    .then(async (response) => {
+      console.log("Login response:", response.data);
+      const { value, exp } = response.data?.token || {};
+
+      if (!value || !exp) {
+        throw new Error("Invalid token received from login");
       }
 
-      console.log("res", res?.data);
-      if (!res.data.data) {
-        throw new Error("User not found");
-      }
-      const { password, ...user } = res.data.data;
+      (await cookies()).set("sessionId", value, {
+        expires: (exp as number) * 1000,
+        path: "/",
+        httpOnly: true,
+      });
 
-      await AuthService.createSessionToken(user);
-      return {
-        status: res.status,
-        message: res.data.message,
-        data: {
-          ...res.data.data,
-        },
-      };
+      return response;
     });
+
+  if (res.status !== 200) {
+    throw new Error("Login failed");
+  }
+
+  return res.data;
 }
 
 export async function logoutUser() {

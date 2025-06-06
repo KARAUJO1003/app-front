@@ -10,21 +10,19 @@ async function openSessionToken(token: string) {
 
 async function createSessionToken(payload = {}) {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-  const session = await new jose.SignJWT(payload)
+  const token = await new jose.SignJWT(payload)
     .setProtectedHeader({
       alg: "HS256",
     })
     .setExpirationTime("7d")
     .sign(secret);
 
-  const { exp } = await openSessionToken(session);
+  const { exp } = await openSessionToken(token);
 
-  (await cookies()).set("sessionId", session, {
-    expires: (exp as number) * 1000,
-    path: "/",
-
-    httpOnly: true,
-  });
+  return {
+    token: token,
+    exp: exp,
+  };
 }
 
 async function isSessionValid() {

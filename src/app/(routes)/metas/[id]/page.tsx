@@ -30,11 +30,11 @@ import {
   DollarSign,
   Edit,
   Share2,
-  Trash2,
   Users,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { DeleteGoalButton } from "../components/deleteGoalButton";
 
 export default async function MetaDetalhes({
   params,
@@ -55,7 +55,7 @@ export default async function MetaDetalhes({
     return res.json();
   };
 
-  const data = await fetchData();
+  const { data } = (await fetchData()) || { meta: {}, parcelas: [] };
 
   console.log("fetch", data);
 
@@ -110,8 +110,8 @@ export default async function MetaDetalhes({
   // };
 
   return (
-    <div className="mx-auto px-4 py-8 container">
-      <div className="flex items-center mb-6">
+    <div className="mx-auto px-2 py-4 sm:px-4 sm:py-8 container">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center mb-6">
         <Link href="/">
           <Button
             variant="ghost"
@@ -121,8 +121,10 @@ export default async function MetaDetalhes({
             Voltar
           </Button>
         </Link>
-        <h1 className="ml-4 font-bold text-2xl">{data.meta.titulo}</h1>
-        <div className="flex space-x-2 ml-auto">
+        <h1 className="font-bold text-xl sm:text-2xl ml-0 sm:ml-4">
+          {data.meta?.titulo}
+        </h1>
+        <div className="flex space-x-2 mt-2 sm:mt-0 sm:ml-auto">
           <Button
             variant="outline"
             size="sm"
@@ -140,12 +142,14 @@ export default async function MetaDetalhes({
         </div>
       </div>
 
-      <div className="gap-8 grid md:grid-cols-3">
+      <div className="grid gap-4 md:gap-8 md:grid-cols-3">
         <div className="space-y-8 md:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle>Resumo da Meta</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">
+                Resumo da Meta
+              </CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Acompanhe o progresso da sua meta financeira
               </CardDescription>
             </CardHeader>
@@ -160,7 +164,7 @@ export default async function MetaDetalhes({
                 <Progress value={progresso} />
               </div>
 
-              <div className="gap-6 grid grid-cols-2">
+              <div className="gap-4 grid grid-cols-1 sm:grid-cols-2">
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
@@ -198,7 +202,7 @@ export default async function MetaDetalhes({
                 </Card>
               </div>
 
-              <div className="gap-6 grid grid-cols-2">
+              <div className="gap-4 grid grid-cols-1 sm:grid-cols-2">
                 <div className="space-y-2">
                   <p className="font-medium text-muted-foreground text-sm">
                     Categoria
@@ -206,7 +210,7 @@ export default async function MetaDetalhes({
                   <div className="flex items-center">
                     <Badge
                       variant="outline"
-                      className="mr-2"
+                      className="mr-2 text-xs"
                     >
                       Viagem
                     </Badge>
@@ -219,7 +223,9 @@ export default async function MetaDetalhes({
                   </p>
                   <div className="flex items-center">
                     <Calendar className="mr-2 w-4 h-4 text-muted-foreground" />
-                    <span>Mensal (todo dia 10)</span>
+                    <span className="text-xs sm:text-sm">
+                      Mensal (todo dia 10)
+                    </span>
                   </div>
                 </div>
 
@@ -227,7 +233,7 @@ export default async function MetaDetalhes({
                   <p className="font-medium text-muted-foreground text-sm">
                     Valor por Parcela
                   </p>
-                  <p className="font-medium">R$ 500,00</p>
+                  <p className="font-medium text-xs sm:text-base">R$ 500,00</p>
                 </div>
 
                 <div className="space-y-2">
@@ -235,15 +241,23 @@ export default async function MetaDetalhes({
                     Participantes
                   </p>
                   <div className="flex items-center">
-                    <div className="flex -space-x-2">
-                      <Avatar className="border-2 border-background w-8 h-8">
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <Avatar className="border-2 border-background w-8 h-8">
-                        <AvatarFallback>MC</AvatarFallback>
-                      </Avatar>
+                    <div className="flex -space-x-2 overflow-x-auto">
+                      {data.meta?.participantes?.map((participante: any) => (
+                        <Avatar
+                          key={participante.id}
+                          className="w-7 h-7 sm:w-8 sm:h-8"
+                        >
+                          <AvatarFallback>
+                            {participante.usuario?.name?.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                      ))}
                     </div>
-                    <span className="ml-3">Você e Maria</span>
+                    <span className="ml-2 text-xs sm:text-sm">
+                      {data.meta?.participantes?.length === 2
+                        ? `Você e ${data.meta?.participantes[1]?.usuario?.name.split(" ")[0]}`
+                        : `Você e mais ${data.meta?.participantes?.length - 1} pessoas`}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -309,7 +323,11 @@ export default async function MetaDetalhes({
                               <div className="flex items-center text-muted-foreground text-sm">
                                 <Calendar className="mr-1 w-3 h-3" />
                                 <span>
-                                  Vencimento: {parcela.dataVencimento}
+                                  {new Intl.DateTimeFormat("pt-BR", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                  }).format(new Date(parcela.dataVencimento))}
                                 </span>
                               </div>
                             </div>
@@ -332,11 +350,15 @@ export default async function MetaDetalhes({
                                 <Dialog>
                                   <DialogTrigger asChild>
                                     <Button
-                                      variant="outline"
+                                      variant="secondary"
                                       size="sm"
+                                      // className="w-8 sm:w-auto text-emerald-600"
                                       // onClick={() => handleMarcarPago(parcela)}
                                     >
                                       Marcar como pago
+                                      {/* <span className="hidden sm:visible">
+                                      </span>
+                                      <CheckCircle2 className="w-4 h-4 sm:hidden" /> */}
                                     </Button>
                                   </DialogTrigger>
                                   <DialogContent>
@@ -696,10 +718,14 @@ export default async function MetaDetalhes({
         </div>
 
         <div>
-          <Card className="top-4 sticky">
+          <Card className="sticky top-4">
             <CardHeader>
-              <CardTitle>Participantes</CardTitle>
-              <CardDescription>Pessoas envolvidas nesta meta</CardDescription>
+              <CardTitle className="text-base sm:text-lg">
+                Participantes
+              </CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
+                Pessoas envolvidas nesta meta
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
@@ -709,7 +735,7 @@ export default async function MetaDetalhes({
                   </Avatar>
                   <div>
                     <p className="font-medium">
-                      {(data.meta as any).usuarioCriador?.name}
+                      {(data.meta as any)?.usuarioCriador?.name}
                     </p>
                     <p className="text-muted-foreground text-sm">Você</p>
                   </div>
@@ -731,18 +757,18 @@ export default async function MetaDetalhes({
                 </div>
                 <Badge variant="outline">Participante</Badge>
               </div> */}
-              {(data.meta as any).participantes
+              {(data.meta as any)?.participantes
                 ?.filter(
                   (x: any) =>
-                    x?.usuario?.id !== (data.meta as any).usuarioCriador?.id
+                    x?.usuario?.id !== (data.meta as any)?.usuarioCriador?.id
                 )
                 ?.map((participante: any) => (
                   <div
                     key={participante.usuarioId}
-                    className="flex justify-between items-center"
+                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2"
                   >
                     <div className="flex items-center space-x-3">
-                      <Avatar>
+                      <Avatar className="w-7 h-7 sm:w-8 sm:h-8">
                         <AvatarFallback>
                           {participante?.usuario?.name
                             .split(" ")
@@ -753,15 +779,18 @@ export default async function MetaDetalhes({
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium">
+                        <p className="font-medium text-xs sm:text-base">
                           {participante?.usuario?.name}
                         </p>
-                        <p className="text-muted-foreground text-sm">
+                        <p className="text-muted-foreground text-xs sm:text-sm">
                           {participante?.usuario?.email}
                         </p>
                       </div>
                     </div>
-                    <Badge variant="outline">
+                    <Badge
+                      variant="outline"
+                      className="text-xs sm:text-sm"
+                    >
                       {participante?.percentual}% Contribuição
                     </Badge>
                   </div>
@@ -770,7 +799,7 @@ export default async function MetaDetalhes({
             <CardFooter>
               <Button
                 variant="outline"
-                className="w-full"
+                className="w-full text-xs sm:text-base"
               >
                 <Users className="mr-2 w-4 h-4" />
                 Convidar Participante
@@ -797,13 +826,7 @@ export default async function MetaDetalhes({
                 <Share2 className="mr-2 w-4 h-4" />
                 Compartilhar Meta
               </Button>
-              <Button
-                variant="outline"
-                className="justify-start hover:bg-red-50 dark:hover:bg-red-950 w-full text-red-500 hover:text-red-600"
-              >
-                <Trash2 className="mr-2 w-4 h-4" />
-                Excluir Meta
-              </Button>
+              <DeleteGoalButton goalId={id} />
             </CardContent>
           </Card>
         </div>

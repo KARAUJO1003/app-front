@@ -109,7 +109,6 @@ export default function NovaMeta() {
       recorrente: false,
       dataInicio: format(new Date(), "yyyy-MM-dd"),
       distribuicaoTipo: "igual",
-      usuarioCriador: user?.id || "",
       participantes: [],
       repeticao: {
         frequencia: "mensal",
@@ -930,6 +929,7 @@ export default function NovaMeta() {
                             <Button
                               variant="ghost"
                               size="icon"
+                              type="button"
                               className="w-6 h-6"
                             >
                               <HelpCircle className="w-4 h-4" />
@@ -1097,6 +1097,7 @@ export default function NovaMeta() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
+                                  type="button"
                                   onClick={() =>
                                     handleRemoveParticipante(index)
                                   }
@@ -1234,10 +1235,12 @@ export default function NovaMeta() {
                               <Button
                                 variant="outline"
                                 onClick={() => setDialogOpen(false)}
+                                type="button"
                               >
                                 Cancelar
                               </Button>
                               <Button
+                                type="button"
                                 onClick={handleAddParticipante}
                                 disabled={!selectedUserId}
                               >
@@ -1250,6 +1253,7 @@ export default function NovaMeta() {
 
                       <Button
                         variant="outline"
+                        type="button"
                         onClick={redistribuirPercentuaisIgualmente}
                         disabled={participantesFields.length === 0}
                       >

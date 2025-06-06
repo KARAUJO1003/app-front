@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { Meta } from "../../../../../generated/prisma";
 
-// Endpoint para obter detalhes de uma meta específica
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -48,12 +47,15 @@ export async function GET(
       .reduce((total, parcela) => total + (parcela.valorPago || 0), 0);
 
     return NextResponse.json({
-      meta,
-      parcelas: metaParcelas,
-      resumo: {
-        valorPago,
-        parcelasPagas,
-        progresso: (parcelasPagas / meta.numParcelas) * 100,
+      total: metaParcelas.length,
+      data: {
+        meta,
+        parcelas: metaParcelas,
+        resumo: {
+          valorPago,
+          parcelasPagas,
+          progresso: (parcelasPagas / meta.numParcelas) * 100,
+        },
       },
     });
   } catch (error) {
@@ -65,7 +67,6 @@ export async function GET(
   }
 }
 
-// Endpoint para atualizar uma meta
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -89,19 +90,30 @@ export async function PUT(
   }
 }
 
-// Endpoint para excluir uma meta
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+    const metaExists = await prisma.meta.findUnique({
+      where: { id },
+    });
 
-    // Na implementação real, aqui excluiríamos a meta e suas parcelas do banco de dados
+    if (!metaExists) {
+      return NextResponse.json(
+        { error: "Meta não encontrada" },
+        { status: 404 }
+      );
+    }
 
+    await prisma.meta.delete({
+      where: { id },
+    });
     return NextResponse.json({
       message: "Meta excluída com sucesso",
       id,
+      status: 200,
     });
   } catch (error) {
     console.error("Erro ao excluir meta:", error);
