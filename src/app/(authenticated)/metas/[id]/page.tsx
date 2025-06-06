@@ -35,7 +35,6 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Root } from "../components/interfaces";
 
 export default async function MetaDetalhes({
   params,
@@ -56,7 +55,7 @@ export default async function MetaDetalhes({
     return res.json();
   };
 
-  const data: Root = await fetchData();
+  const data = await fetchData();
 
   console.log("fetch", data);
 
@@ -64,9 +63,9 @@ export default async function MetaDetalhes({
   // const [valorPago, setValorPago] = useState("");
 
   const valorPago = "0";
-  const setValorPago = (valor: string) => {
-    console.log("Valor Pago:", valor);
-  };
+  // const setValorPago = (valor: string) => {
+  //   console.log("Valor Pago:", valor);
+  // };
   // const setParcelaAtual = (parcela: any) => {
   //   console.log("Parcela Atual:", parcela);
   // };
@@ -361,9 +360,9 @@ export default async function MetaDetalhes({
                                           min="0"
                                           step="0.01"
                                           value={valorPago}
-                                          onChange={(e) =>
-                                            setValorPago(e.target.value)
-                                          }
+                                          // onChange={(e) =>
+                                          //   setValorPago(e.target.value)
+                                          // }
                                         />
                                       </div>
 
@@ -473,9 +472,9 @@ export default async function MetaDetalhes({
                                         min="0"
                                         step="0.01"
                                         value={valorPago}
-                                        onChange={(e) =>
-                                          setValorPago(e.target.value)
-                                        }
+                                        // onChange={(e) =>
+                                        //   setValorPago(e.target.value)
+                                        // }
                                       />
                                     </div>
 
@@ -645,9 +644,9 @@ export default async function MetaDetalhes({
                                             min="0"
                                             step="0.01"
                                             value={valorPago}
-                                            onChange={(e) =>
-                                              setValorPago(e.target.value)
-                                            }
+                                            // onChange={(e) =>
+                                            //   setValorPago(e.target.value)
+                                            // }
                                           />
                                         </div>
 
@@ -709,15 +708,17 @@ export default async function MetaDetalhes({
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium">João Doe</p>
+                    <p className="font-medium">
+                      {(data.meta as any).usuarioCriador?.name}
+                    </p>
                     <p className="text-muted-foreground text-sm">Você</p>
                   </div>
                 </div>
                 <Badge>Criador</Badge>
               </div>
 
-              <div className="flex justify-between items-center">
-                <div className="flex items-center space-x-3">
+              {/* <div className="flex justify-between items-center"> */}
+              {/* <div className="flex items-center space-x-3">
                   <Avatar>
                     <AvatarFallback>MC</AvatarFallback>
                   </Avatar>
@@ -729,7 +730,42 @@ export default async function MetaDetalhes({
                   </div>
                 </div>
                 <Badge variant="outline">Participante</Badge>
-              </div>
+              </div> */}
+              {(data.meta as any).participantes
+                ?.filter(
+                  (x: any) =>
+                    x?.usuario?.id !== (data.meta as any).usuarioCriador?.id
+                )
+                ?.map((participante: any) => (
+                  <div
+                    key={participante.usuarioId}
+                    className="flex justify-between items-center"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Avatar>
+                        <AvatarFallback>
+                          {participante?.usuario?.name
+                            .split(" ")
+                            .slice(0, 2)
+                            .map((n: string) => n[0])
+                            .join("")
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">
+                          {participante?.usuario?.name}
+                        </p>
+                        <p className="text-muted-foreground text-sm">
+                          {participante?.usuario?.email}
+                        </p>
+                      </div>
+                    </div>
+                    <Badge variant="outline">
+                      {participante?.percentual}% Contribuição
+                    </Badge>
+                  </div>
+                ))}
             </CardContent>
             <CardFooter>
               <Button

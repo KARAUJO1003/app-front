@@ -25,8 +25,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(urlNext);
   }
 
-  console.log("Middleware running token 🚀", token);
-
   // if (isAuthRoute || isApiRoute) {
   //   return;
   // }

@@ -15,9 +15,7 @@ export async function GET() {
   if (!verifySession) {
     return Response.json(
       { message: "Session expired", user: null },
-      {
-        status: 401,
-      }
+      { status: 401 }
     );
   }
 

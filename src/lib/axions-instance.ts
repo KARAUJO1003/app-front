@@ -1,15 +1,25 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
 
-const session = parseCookies()["sessionId"] || null;
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const axiosInstance = axios.create({
-  baseURL: "https://localhost:3002/api", // Replace with your API base URL
-  timeout: 10000, // Set a timeout in milliseconds
+  baseURL,
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${session}`, // Replace with your token if needed
   },
 });
+
+// Interceptor para adicionar token do localStorage (client-side)
+if (typeof window !== "undefined") {
+  axiosInstance.interceptors.request.use((config) => {
+    const token = parseCookies()["sessionId"]; // Obtém o token do cookie
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  });
+}
 
 export default axiosInstance;

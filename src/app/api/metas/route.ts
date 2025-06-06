@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { criarMetaSchema } from "./schemas";
+import { AuthService } from "@/lib/auth-service";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
@@ -174,43 +176,33 @@ export async function POST(request: Request) {
 }
 
 // Endpoint para listar todas as metas
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const sessionCookie = (await cookies()).get("sessionId");
+  console.log("🚀🚀🚀🚀Session cookie recebido:", sessionCookie);
+  if (!sessionCookie) {
+    return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+  }
+  const token = sessionCookie.value;
+  const isValid = await AuthService.isSessionValid();
+  if (!isValid) {
+    return NextResponse.json({ error: "Sessão expirada" }, { status: 401 });
+  }
+  const user = await AuthService.openSessionToken(token);
+
+  // Agora use user.id para buscar as metas
+  const userId = String((user as { id: string | number }).id);
+
   const metas = await prisma.meta.findMany({
+    where: {
+      OR: [
+        { usuarioCriadorId: userId },
+        { participantes: { some: { usuarioId: userId } } },
+      ],
+    },
     include: {
-      usuarioCriador: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          avatar: true,
-        },
-      },
-      participantes: {
-        select: {
-          id: true,
-          usuario: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              avatar: true,
-            },
-          },
-        },
-      },
-      parcelas: {
-        select: {
-          id: true,
-          metaId: true,
-          numero: true,
-          valor: true,
-          dataVencimento: true,
-          status: true,
-          valorPago: true,
-          responsavel: true,
-          dataPagamento: true,
-        },
-      },
+      usuarioCriador: true,
+      participantes: true,
+      parcelas: true,
     },
   });
 

@@ -13,18 +13,20 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { PlusCircle, ArrowRight } from "lucide-react";
 import { Parcela } from "@/lib/types";
+import axiosInstance from "@/lib/axions-instance";
+import { cookies } from "next/headers";
+
+// Exemplo em Server Component ou getServerSideProps
 
 async function getData() {
-  // if (typeof window === "undefined") {
-  //   // Retorna dados mockados ou um fallback durante a build
-  //   return { metas: [] };
-  // }
-
-  const res = await fetch("http://localhost:3000/api/metas");
-  const data = await res.json();
-  return data;
+  const cookie = cookies().toString(); // Pega todos os cookies da requisição SSR
+  const res = await axiosInstance.get("/metas", {
+    headers: {
+      cookie, // Passa o cookie manualmente
+    },
+  });
+  return res.data;
 }
-
 export const metadata: Metadata = {
   title: "Metas Financeiras",
   description: "Sistema de gestão de metas financeiras para casais",

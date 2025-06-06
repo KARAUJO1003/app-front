@@ -168,7 +168,7 @@ export default function NovaMeta() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, loading, participantesFields.length]);
+  }, [user, loading]);
 
   // Atualiza o número de execuções quando o número de parcelas muda
   useEffect(() => {

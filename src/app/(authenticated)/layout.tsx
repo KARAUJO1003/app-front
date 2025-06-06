@@ -1,5 +1,7 @@
 import React from "react";
 import { NavHeader } from "@/components/nav-header";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/providers/root-providers";
 import { UserProvider } from "@/context/user-context";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -12,7 +14,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     <div className="p-4">
       <NavHeader />
-      <UserProvider>{children}</UserProvider>
+      <QueryClientProvider client={queryClient}>
+        <UserProvider>{children}</UserProvider>
+      </QueryClientProvider>
     </div>
   );
 }
