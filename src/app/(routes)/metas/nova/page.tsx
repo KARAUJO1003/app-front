@@ -150,20 +150,39 @@ export default function NovaMeta() {
   // Adiciona o usuário criador automaticamente quando o user estiver disponível
   useEffect(() => {
     if (user && !loading && participantesFields.length === 0) {
-      setValue("usuarioCriador", user.id);
-      appendParticipante({
-        id: user.id,
-        usuarioId: user.id,
-        nome: user.name || user.email,
-        email: user.email,
-        avatar: user.name
-          ? user.name
-              .split(" ")
-              .map((n: string) => n[0])
-              .join("")
-              .toUpperCase()
-          : user.email?.[0]?.toUpperCase() || "?",
-        percentual: 100,
+      // setValue("usuarioCriador", user.id);
+      // appendParticipante({
+      //   id: user.id,
+      //   usuarioId: user.id,
+      //   nome: user.name || user.email,
+      //   email: user.email,
+      //   avatar: user.name
+      //     ? user.name
+      //         .split(" ")
+      //         .map((n: string) => n[0])
+      //         .join("")
+      //         .toUpperCase()
+      //     : user.email?.[0]?.toUpperCase() || "?",
+      //   percentual: 100,
+      // });
+      form.reset({
+        usuarioCriador: user.id,
+        participantes: [
+          {
+            id: user.id,
+            usuarioId: user.id,
+            nome: user.name || user.email,
+            email: user.email,
+            avatar: user.name
+              ? user.name
+                  .split(" ")
+                  .map((n: string) => n[0])
+                  .join("")
+                  .toUpperCase()
+              : user.email?.[0]?.toUpperCase() || "?",
+            percentual: 100,
+          },
+        ],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -405,7 +424,6 @@ export default function NovaMeta() {
     recorrente,
   ]);
 
-  console.log("Preview de parcelas:", previewParcelas);
   console.log("form values:", form.getValues());
   console.log("form erros:", form.formState.errors);
 
@@ -423,12 +441,6 @@ export default function NovaMeta() {
         alert("A soma dos percentuais deve ser igual a 100%");
         return;
       }
-
-      console.log("Dados do formulário:", {
-        ...data,
-        parcelas: previewParcelas,
-        participantes: participantesFields,
-      });
 
       // Aqui você faria a chamada para a API
       const response = await fetch("/api/metas", {

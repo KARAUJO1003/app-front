@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
 import prisma from "@/lib/prisma";
@@ -117,7 +118,6 @@ export async function POST(request: Request) {
       novaMeta.id &&
       dadosValidados.parcelas.length > 0
     ) {
-      console.log("Criando parcelas para a meta:", novaMeta.id);
       await prisma.parcela.createMany({
         data: (dadosValidados.parcelas as any).map((parcela: any) => {
           // Corrige dataVencimento e dataPagamento
@@ -178,7 +178,6 @@ export async function POST(request: Request) {
 // Endpoint para listar todas as metas
 export async function GET(request: NextRequest) {
   const sessionCookie = (await cookies()).get("sessionId");
-  console.log("🚀🚀🚀🚀Session cookie recebido:", sessionCookie);
   if (!sessionCookie) {
     return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
   }

@@ -58,22 +58,10 @@ export default async function MetaDetalhes({
 
   const { data } = (await fetchData()) || { meta: {}, parcelas: [] };
 
-  console.log("fetch", data);
-
   // const [parcelaAtual, setParcelaAtual] = useState<any>(null);
   // const [valorPago, setValorPago] = useState("");
 
   const valorPago = "0";
-  // const setValorPago = (valor: string) => {
-  //   console.log("Valor Pago:", valor);
-  // };
-  // const setParcelaAtual = (parcela: any) => {
-  //   console.log("Parcela Atual:", parcela);
-  // };
-  // const parcelaAtual: any = null;
-  // const setParcelas = (novasParcelas: any) => {
-  //   console.log("Novas Parcelas:", novasParcelas);
-  // };
 
   const parcelas: any[] = data.parcelas || [];
 
@@ -165,9 +153,9 @@ export default async function MetaDetalhes({
                 <Progress value={progresso} />
               </div>
 
-              <div className="gap-4 grid grid-cols-1 sm:grid-cols-2">
+              <div className="gap-4 sticky top-4 z-10 grid grid-cols-1 sm:grid-cols-2">
                 <Card>
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 ">
                     <div className="flex items-center space-x-4">
                       <div className="bg-green-100 dark:bg-green-900 p-2 rounded-full">
                         <DollarSign className="w-6 h-6 text-green-700 dark:text-green-300" />
@@ -246,7 +234,7 @@ export default async function MetaDetalhes({
                       {data.meta?.participantes?.map((participante: any) => (
                         <Avatar
                           key={participante.id}
-                          className="w-7 h-7 sm:w-8 sm:h-8"
+                          className="w-7 h-7 -z-0 sm:w-8 sm:h-8"
                         >
                           <AvatarFallback>
                             {participante.usuario?.name?.charAt(0)}
@@ -265,7 +253,7 @@ export default async function MetaDetalhes({
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="sticky top-4">
             <CardHeader>
               <CardTitle>Parcelas</CardTitle>
               <CardDescription>
@@ -300,7 +288,10 @@ export default async function MetaDetalhes({
                   className="space-y-4"
                 >
                   {parcelas.map((parcela) => (
-                    <Card key={parcela.id}>
+                    <Card
+                      key={parcela.id}
+                      // className="sticky top-4"
+                    >
                       <CardContent className="p-4">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center space-x-4">

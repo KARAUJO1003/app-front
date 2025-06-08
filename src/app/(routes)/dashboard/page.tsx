@@ -5,8 +5,6 @@ import Link from "next/link";
 export default function Dashboard() {
   const { user } = useUser();
 
-  console.log("user", user);
-
   if (user) {
     // Redirecionar ou mostrar uma mensagem se o usuário já estiver logado
     return (

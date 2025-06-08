@@ -15,8 +15,7 @@ export const useDeleteGoalMutate = () => {
       }
       return response.json();
     },
-    onSuccess: (data) => {
-      console.log("Goal deleted successfully:", data);
+    onSuccess: () => {
       toast.success("Meta excluída com sucesso!");
       router.push("/metas");
     },
@@ -39,8 +38,7 @@ export const useMarkAsPaidMutate = () => {
       }
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log("Parcela marcada como paga:", data);
+    onSuccess: () => {
       toast.success("Parcela marcada como paga com sucesso!");
       router.refresh();
     },
